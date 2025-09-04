@@ -3,10 +3,10 @@
  * Defines API endpoints for wallet transaction-related CRUD operations.
  */
 import { Router } from "express";
-import * as WalletTransactionController from "@/modules/wallet_transactions/wallet_transaction.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
-import { UserRole } from "@/generated/prisma/client";
 import validator from "@/middlewares/validator";
+import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as WalletTransactionController from "@/modules/wallet_transactions/wallet_transaction.controller";
 import {
   zCreateWalletTransactionDto,
   zDeleteWalletTransactionDto,

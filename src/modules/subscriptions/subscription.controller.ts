@@ -2,15 +2,14 @@
  * Controller layer for Subscription entity operations.
  * Handles HTTP requests and responses for subscription-related endpoints.
  */
-
-import { Request, Response } from "express";
-import * as subscriptionService from "@/modules/subscriptions/subscription.service";
-import { zUpdateSubscriptionDto } from "@/modules/subscriptions/subscription.dto";
-import { handleErrorResponse } from "@/utils/errorResponseHandler";
 import { z } from "zod";
 import httpStatus from "http-status";
-import { Subscription, SubscriptionStatus } from "@/generated/prisma/client";
+import { Request, Response } from "express";
 import sendResponse from "@/utils/sendResponse";
+import { handleErrorResponse } from "@/utils/errorResponseHandler";
+import { Subscription, SubscriptionStatus } from "@/generated/prisma/client";
+import { zUpdateSubscriptionDto } from "@/modules/subscriptions/subscription.dto";
+import * as subscriptionService from "@/modules/subscriptions/subscription.service";
 
 const subscriptionIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
   message: "Subscription ID must be a positive integer",

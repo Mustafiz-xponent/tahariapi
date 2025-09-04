@@ -1,15 +1,15 @@
+import httpStatus from "http-status";
 import { Request, Response } from "express";
+import asyncHandler from "@/utils/asyncHandler";
+import sendResponse from "@/utils/sendResponse";
+import { Wallet } from "@/generated/prisma/client";
 import * as walletService from "@/modules/wallets/wallet.service";
+import { WalletDepositeResult } from "@/modules/wallets/wallet.interface";
 import {
   DeleteWalletDto,
   GetWalletDto,
   UpdateWalletDto,
 } from "@/modules/wallets/wallet.dto";
-import httpStatus from "http-status";
-import sendResponse from "@/utils/sendResponse";
-import { Wallet } from "@/generated/prisma/client";
-import { WalletDepositeResult } from "@/modules/wallets/wallet.interface";
-import asyncHandler from "@/utils/asyncHandler";
 
 /**
  * Create a new wallet

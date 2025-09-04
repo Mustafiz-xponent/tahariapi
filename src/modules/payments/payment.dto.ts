@@ -2,7 +2,6 @@
  * Data Transfer Objects (DTOs) for the Payment entity
  * These interfaces define the expected shape of data when creating or updating a payment.
  */
-
 import { z } from "zod";
 
 const paymentStatusEnum = z.enum([

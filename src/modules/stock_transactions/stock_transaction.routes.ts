@@ -2,7 +2,6 @@
  * Routes for StockTransaction entity operations.
  * Defines API endpoints for stock transaction-related CRUD operations.
  */
-
 import { Router } from "express";
 import * as StockTransactionController from "@/modules/stock_transactions/stock_transaction.controller";
 

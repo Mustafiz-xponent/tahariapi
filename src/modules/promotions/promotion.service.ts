@@ -1,22 +1,22 @@
-import { Promotion } from "@/generated/prisma/client";
+import httpStatus from "http-status";
+import { AppError } from "@/utils/appError";
 import prisma from "@/prisma-client/prismaClient";
+import { Promotion } from "@/generated/prisma/client";
+import { IMulterFile } from "@/utils/fileUpload/configMulterUpload";
+import { multerFileToFileObject } from "@/utils/fileUpload/configMulterUpload";
 import {
   CreatePromotionDto,
   UpdatePromotionDto,
 } from "@/modules/promotions/promotion.dto";
-import { multerFileToFileObject } from "@/utils/fileUpload/configMulterUpload";
+import {
+  IGetPromotionsResult,
+  PromotionWithUrl,
+} from "@/modules/promotions/promotion.interface";
 import {
   deleteFileFromS3,
   getAccessibleImageUrl,
   uploadFileToS3,
 } from "@/utils/fileUpload/s3Aws";
-import { AppError } from "@/utils/appError";
-import httpStatus from "http-status";
-import { IMulterFile } from "@/utils/fileUpload/configMulterUpload";
-import {
-  IGetPromotionsResult,
-  PromotionWithUrl,
-} from "@/modules/promotions/promotion.interface";
 
 /**
  * Creates a new promotion entry in the database

@@ -1,20 +1,20 @@
-import { getErrorMessage } from "@/utils/errorHandler";
 import prisma from "@/prisma-client/prismaClient";
+import { getErrorMessage } from "@/utils/errorHandler";
 import { Category, Product } from "@/generated/prisma/client";
+import { IMulterFile } from "@/utils/fileUpload/configMulterUpload";
+import { multerFileToFileObject } from "@/utils/fileUpload/configMulterUpload";
 import {
-  UpdateCategoryDto,
-  CreateCategoryDto,
-} from "@/modules/categories/category.dto";
+  uploadFileToS3,
+  getAccessibleImageUrl,
+} from "@/utils/fileUpload/s3Aws";
 import {
   deleteFileFromS3,
   getBatchAccessibleImageUrls,
 } from "@/utils/fileUpload/s3Aws";
 import {
-  uploadFileToS3,
-  getAccessibleImageUrl,
-} from "@/utils/fileUpload/s3Aws";
-import { IMulterFile } from "@/utils/fileUpload/configMulterUpload";
-import { multerFileToFileObject } from "@/utils/fileUpload/configMulterUpload";
+  UpdateCategoryDto,
+  CreateCategoryDto,
+} from "@/modules/categories/category.dto";
 
 export interface ProductWithAccessibleImages extends Product {
   accessibleImageUrls: string[];

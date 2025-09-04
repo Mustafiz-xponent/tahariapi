@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { getDashboardSummary } from "./dashboard.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import { getDashboardSummary } from "@/modules/dashboard/dashboard.controller";
 
 const router = Router();
 router.get(

@@ -1,8 +1,8 @@
-import { handleErrorResponse } from "@/utils/errorResponseHandler";
-import sendResponse from "@/utils/sendResponse";
 import httpStatus from "http-status";
-import * as dasboardService from "@/modules/dashboard/dashboard.services";
 import { Response, Request } from "express";
+import sendResponse from "@/utils/sendResponse";
+import { handleErrorResponse } from "@/utils/errorResponseHandler";
+import * as dasboardService from "@/modules/dashboard/dashboard.services";
 import { DashboardSummary } from "@/modules/dashboard/dashboard.interfaces";
 
 // Controller function

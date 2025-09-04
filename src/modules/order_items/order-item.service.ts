@@ -2,15 +2,14 @@
  * Service layer for OrderItem entity operations.
  * Contains business logic and database interactions for order items.
  */
-
 import prisma from "@/prisma-client/prismaClient";
 import { OrderItem } from "@/generated/prisma/client";
+import { getErrorMessage } from "@/utils/errorHandler";
 import {
   CreateOrderItemDto,
   CreateOrderItemsDto,
   UpdateOrderItemDto,
 } from "@/modules/order_items/order-item.dto";
-import { getErrorMessage } from "@/utils/errorHandler";
 
 /**
  * Create a new order item

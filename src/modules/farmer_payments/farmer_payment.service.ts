@@ -1,17 +1,15 @@
 //src/modules/farmer_payments/farmer_payment.service.ts
-
 /**
  * Service layer for FarmerPayment entity operations.
  * Contains business logic and database interactions for farmer payments.
  */
-
 import prisma from "@/prisma-client/prismaClient";
+import { getErrorMessage } from "@/utils/errorHandler";
 import { FarmerPayment } from "@/generated/prisma/client";
 import {
   CreateFarmerPaymentDto,
   UpdateFarmerPaymentDto,
 } from "@/modules/farmer_payments/farmer_payment.dto";
-import { getErrorMessage } from "@/utils/errorHandler";
 
 /**
  * Create a new farmer payment

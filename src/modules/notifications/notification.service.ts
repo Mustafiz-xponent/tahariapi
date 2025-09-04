@@ -2,7 +2,11 @@
  * Service layer for Notification entity operations.
  * Contains business logic and database interactions for notifications.
  */
+import httpStatus from "http-status";
+import { AppError } from "@/utils/appError";
+import { getSocketId, io } from "@/utils/socket";
 import prisma from "@/prisma-client/prismaClient";
+import { getErrorMessage } from "@/utils/errorHandler";
 import {
   Notification,
   NotificationStatus,
@@ -12,10 +16,6 @@ import {
   CreateNotificationDto,
   UpdateNotificationDto,
 } from "@/modules/notifications/notification.dto";
-import { getErrorMessage } from "@/utils/errorHandler";
-import { getSocketId, io } from "@/utils/socket";
-import { AppError } from "@/utils/appError";
-import httpStatus from "http-status";
 
 interface GetNotificationsResult {
   notifications: Notification[];

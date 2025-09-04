@@ -2,7 +2,6 @@
  * Data Transfer Objects (DTOs) for the Message entity
  * These interfaces define the expected shape of data when creating or updating a message.
  */
-
 import { z } from "zod";
 
 /**

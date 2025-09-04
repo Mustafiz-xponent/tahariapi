@@ -2,8 +2,12 @@
  * Controller layer for Customer authentication operations.
  * Handles HTTP requests and responses for customer authentication endpoints.
  */
+import httpStatus from "http-status";
 import { Request, Response } from "express";
+import sendResponse from "@/utils/sendResponse";
+import { User } from "@/generated/prisma/client";
 import { handleErrorResponse } from "@/utils/errorResponseHandler";
+import * as customerService from "@/modules/auth/customer/customer.service";
 import {
   zCustomerIdParam,
   zCustomerLoginDto,
@@ -12,10 +16,6 @@ import {
   zCustomerUpdateProfileDto,
   zCustomerVerifyOtpDto,
 } from "@/modules/auth/customer/customer.dto";
-import * as customerService from "@/modules/auth/customer/customer.service";
-import httpStatus from "http-status";
-import sendResponse from "@/utils/sendResponse";
-import { Customer, User } from "@/generated/prisma/client";
 
 /**
  * Register a customer

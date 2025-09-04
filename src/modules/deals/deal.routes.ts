@@ -1,8 +1,8 @@
 import { Router } from "express";
-import * as dealController from "@/modules/deals/deal.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import validator from "@/middlewares/validator";
 import { UserRole } from "@/generated/prisma/client";
+import * as dealController from "@/modules/deals/deal.controller";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import {
   zCreateDealDto,
   zDeleteDealDto,

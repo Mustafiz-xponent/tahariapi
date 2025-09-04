@@ -2,13 +2,12 @@
  * Routes for Customer entity operations.
  * Defines API endpoints for customer-related CRUD operations.
  */
-
 import { Router } from "express";
-import * as CustomerController from "@/modules/customers/customer.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
-import { UserRole } from "@/generated/prisma/client";
 import validator from "@/middlewares/validator";
-import { zGetAllCustomersDto } from "./customer.dto";
+import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import { zGetAllCustomersDto } from "@/modules/customers/customer.dto";
+import * as CustomerController from "@/modules/customers/customer.controller";
 
 const router = Router();
 

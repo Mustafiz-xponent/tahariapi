@@ -2,11 +2,11 @@
  * Routes for Subscription entity operations.
  * Defines API endpoints for subscription-related CRUD operations.
  */
-
 import { Router } from "express";
-import * as SubscriptionController from "@/modules/subscriptions/subscription.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import validator from "@/middlewares/validator";
+import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as SubscriptionController from "@/modules/subscriptions/subscription.controller";
 import {
   zCancelSubscriptionDto,
   zCreateSubscriptionDto,
@@ -14,7 +14,6 @@ import {
   zPauseSubscriptionDto,
   zResumeSubscriptionDto,
 } from "@/modules/subscriptions/subscription.dto";
-import { UserRole } from "@/generated/prisma/client";
 
 const router = Router();
 

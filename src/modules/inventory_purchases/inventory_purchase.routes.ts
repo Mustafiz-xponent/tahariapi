@@ -2,11 +2,10 @@
  * Routes for InventoryPurchase entity operations.
  * Defines API endpoints for inventory purchase-related CRUD operations.
  */
-
 import { Router } from "express";
-import * as InventoryPurchaseController from "@/modules/inventory_purchases/inventory_purchase.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as InventoryPurchaseController from "@/modules/inventory_purchases/inventory_purchase.controller";
 
 const router = Router();
 

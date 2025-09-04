@@ -2,17 +2,17 @@
  * Controller layer for Admin authentication operations.
  * Handles HTTP requests and responses for admin authentication endpoints.
  */
+import { z } from "zod";
+import httpStatus from "http-status";
 import { Request, Response } from "express";
+import sendResponse from "@/utils/sendResponse";
+import { User } from "@/generated/prisma/client";
 import { handleErrorResponse } from "@/utils/errorResponseHandler";
+import * as adminService from "@/modules/auth/admin/admin.service";
 import {
   zAdminLoginDto,
   zCreateAdminDto,
 } from "@/modules/auth/admin/admin.dto";
-import * as adminService from "@/modules/auth/admin/admin.service";
-import { z } from "zod";
-import httpStatus from "http-status";
-import sendResponse from "@/utils/sendResponse";
-import { User } from "@/generated/prisma/client";
 
 const adminIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
   message: "Admin ID must be a positive integer",

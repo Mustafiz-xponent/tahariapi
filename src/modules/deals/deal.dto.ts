@@ -1,5 +1,5 @@
-import { DiscountType } from "@/generated/prisma/client";
 import { z } from "zod";
+import { DiscountType } from "@/generated/prisma/client";
 
 /**
  * Returns a Zod schema for a positive integer ID, with the given field name used

@@ -2,7 +2,6 @@
  * Routes for OrderTracking entity operations.
  * Defines API endpoints for order tracking-related CRUD operations.
  */
-
 import { Router } from "express";
 import * as OrderTrackingController from "@/modules/order_tracking/order-tracking.controller";
 

@@ -2,12 +2,11 @@
  * Routes for category operations.
  * Defines API endpoints for categories.
  */
-
 import { Router } from "express";
-import * as CategoryController from "@/modules/categories/category.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import { UserRole } from "@/generated/prisma/client";
 import { upload } from "@/utils/fileUpload/configMulterUpload";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as CategoryController from "@/modules/categories/category.controller";
 
 const router = Router();
 

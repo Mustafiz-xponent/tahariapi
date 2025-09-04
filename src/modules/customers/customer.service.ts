@@ -2,20 +2,15 @@
  * Service layer for Customer entity operations.
  * Contains business logic and database interactions for customers.
  */
-
+import bcrypt from "bcrypt";
 import prisma from "@/prisma-client/prismaClient";
 import { Customer } from "@/generated/prisma/client";
-import {
-  CreateCustomerDto,
-  UpdateCustomerDto,
-} from "@/modules/customers/customer.dto";
 import { getErrorMessage } from "@/utils/errorHandler";
-import bcrypt from "bcrypt";
+import { UpdateCustomerDto } from "@/modules/customers/customer.dto";
 import {
   GetAllCusotmersResult,
   GetAllCustomersPaginationParams,
 } from "@/modules/customers/customer.interface";
-import { Sql } from "@/generated/prisma/client/runtime/library";
 
 /**
  * Create a new customer

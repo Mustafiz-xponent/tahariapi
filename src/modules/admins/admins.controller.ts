@@ -1,11 +1,10 @@
 //src/modules/admins/admins.controller.ts
-import { Request, Response } from "express";
-import * as adminService from "@/modules/admins/admins.service";
-import { CreateAdminDto, UpdateAdminDto } from "@/modules/admins/admins.dto";
-import { getErrorMessage } from "@/utils/errorHandler";
 import httpStatus from "http-status";
+import { Request, Response } from "express";
 import sendResponse from "@/utils/sendResponse";
 import { Admin } from "@/generated/prisma/client";
+import { UpdateAdminDto } from "@/modules/admins/admins.dto";
+import * as adminService from "@/modules/admins/admins.service";
 
 export const getAllAdmins = async (
   _req: Request,

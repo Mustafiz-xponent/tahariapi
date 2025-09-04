@@ -2,11 +2,10 @@
  * Routes for Order entity operations.
  * Defines API endpoints for order-related CRUD operations.
  */
-
 import { Router } from "express";
-import * as OrderController from "@/modules/orders/orders.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as OrderController from "@/modules/orders/orders.controller";
 
 const router = Router();
 

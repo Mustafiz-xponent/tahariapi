@@ -1,21 +1,20 @@
 // src/modules/stock_transactions/stock_transaction.controller.ts
-
 /**
  * Controller layer for StockTransaction entity operations.
  * Handles HTTP requests and responses for stock transaction-related endpoints.
  */
-
-import { Request, Response } from "express";
 import { z } from "zod";
+import httpStatus from "http-status";
+import { Request, Response } from "express";
+import sendResponse from "@/utils/sendResponse";
+import { StockTransaction } from "@/generated/prisma/client";
 import { handleErrorResponse } from "@/utils/errorResponseHandler";
+import * as stockTransactionService from "@/modules/stock_transactions/stock_transaction.service";
 import {
   zCreateStockTransactionArrayDto,
   zUpdateStockTransactionDto,
 } from "@/modules/stock_transactions/stock_transaction.dto";
-import * as stockTransactionService from "@/modules/stock_transactions/stock_transaction.service";
-import httpStatus from "http-status";
-import sendResponse from "@/utils/sendResponse";
-import { StockTransaction } from "@/generated/prisma/client";
+
 const transactionIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
   message: "Transaction ID must be a positive integer",
 });

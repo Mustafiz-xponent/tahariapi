@@ -2,14 +2,13 @@
  * Service layer for FarmerTransaction entity operations.
  * Contains business logic and database interactions for farmer transactions.
  */
-
 import prisma from "@/prisma-client/prismaClient";
+import { getErrorMessage } from "@/utils/errorHandler";
 import { FarmerTransaction } from "@/generated/prisma/client";
 import {
   CreateFarmerTransactionDto,
   UpdateFarmerTransactionDto,
 } from "@/modules/farmer_transactions/farmer_transactions.dto";
-import { getErrorMessage } from "@/utils/errorHandler";
 
 /**
  * Create a new farmer transaction

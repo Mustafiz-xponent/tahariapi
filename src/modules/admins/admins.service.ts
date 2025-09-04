@@ -1,10 +1,9 @@
 //src/modules/admins/admins.service.ts
-
-import prisma from "@/prisma-client/prismaClient";
-import { CreateAdminDto, UpdateAdminDto } from "@/modules/admins/admins.dto";
-import { Admin } from "@/generated/prisma/client";
-import { getErrorMessage } from "@/utils/errorHandler";
 import bcrypt from "bcrypt";
+import { Admin } from "@/generated/prisma/client";
+import prisma from "@/prisma-client/prismaClient";
+import { getErrorMessage } from "@/utils/errorHandler";
+import { UpdateAdminDto } from "@/modules/admins/admins.dto";
 
 // export const createAdmin = async (data: CreateAdminDto): Promise<Admin> =>  {
 //   const saltRounds = 10;

@@ -1,6 +1,6 @@
-import { Decimal } from "@prisma/client/runtime/library";
 import { Deal, Product } from "@/generated/prisma/client";
 import prisma from "@/prisma-client/prismaClient";
+import { Decimal } from "@prisma/client/runtime/library";
 
 interface ProductWithDeal {
   unitPrice: Product["unitPrice"];

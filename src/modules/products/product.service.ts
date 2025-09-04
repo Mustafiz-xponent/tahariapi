@@ -2,9 +2,18 @@
  * Service layer for Product entity operations.
  * Updated to handle image uploads with product creation and updates.
  */
-import { Prisma, Product } from "@/generated/prisma/client";
+import logger from "@/utils/logger";
 import prisma from "@/prisma-client/prismaClient";
 import { getErrorMessage } from "@/utils/errorHandler";
+import { Prisma, Product } from "@/generated/prisma/client";
+import {
+  CreateProductDto,
+  UpdateProductDto,
+} from "@/modules/products/product.dto";
+import {
+  calculateDealPricing,
+  DealPricingResult,
+} from "@/utils/calculateDealPricing";
 import {
   deleteMultipleFilesFromS3,
   extractS3KeyFromUrl,
@@ -13,15 +22,6 @@ import {
   replaceProductImages,
   uploadProductImages,
 } from "@/utils/fileUpload/s3Aws";
-import {
-  CreateProductDto,
-  UpdateProductDto,
-} from "@/modules/products/product.dto";
-import logger from "@/utils/logger";
-import {
-  calculateDealPricing,
-  DealPricingResult,
-} from "@/utils/calculateDealPricing";
 
 // Add interface for product with accessible URLs
 export interface ProductWithAccessibleImages

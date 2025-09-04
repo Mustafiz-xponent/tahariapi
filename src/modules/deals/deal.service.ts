@@ -1,13 +1,13 @@
-import prisma from "@/prisma-client/prismaClient";
-import { AppError } from "@/utils/appError";
 import httpStatus from "http-status";
-import { CreateDealDto, UpdateDealDto } from "@/modules/deals/deal.dto";
+import { AppError } from "@/utils/appError";
 import { Deal } from "@/generated/prisma/client";
+import prisma from "@/prisma-client/prismaClient";
+import { CreateDealDto, UpdateDealDto } from "@/modules/deals/deal.dto";
+import { processProductsWithAccessibleUrls } from "@/utils/fileUpload/s3Aws";
 import {
   DealWithProducts,
   IGetDealsResult,
 } from "@/modules/deals/deal.interface";
-import { processProductsWithAccessibleUrls } from "@/utils/fileUpload/s3Aws";
 
 /**
  * Creates a new deal entry in the database

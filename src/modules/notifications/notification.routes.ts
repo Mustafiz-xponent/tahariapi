@@ -2,18 +2,17 @@
  * Routes for Notification entity operations.
  * Defines API endpoints for notification-related CRUD operations.
  */
-
 import { Router } from "express";
-import * as NotificationController from "@/modules/notifications/notification.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import validator from "@/middlewares/validator";
+import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as NotificationController from "@/modules/notifications/notification.controller";
 import {
   zCreateNotificationDto,
   zDeleteNotificationDto,
   zMarkNotificationAsReadDto,
   zUpdateNotificationDto,
 } from "@/modules/notifications/notification.dto";
-import { UserRole } from "@/generated/prisma/client";
 
 const router = Router();
 

@@ -2,13 +2,12 @@
  * Routes for Product entity operations.
  * Defines API endpoints for product-related CRUD operations.
  */
-
 import { Router } from "express";
-import * as ProductController from "@/modules/products/product.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
-import { UserRole } from "@/generated/prisma/client";
 import validator from "@/middlewares/validator";
-import { zGetAllProductsDto } from "./product.dto";
+import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import { zGetAllProductsDto } from "@/modules/products/product.dto";
+import * as ProductController from "@/modules/products/product.controller";
 
 const router = Router();
 

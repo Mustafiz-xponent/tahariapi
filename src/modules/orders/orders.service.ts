@@ -1,18 +1,18 @@
 /**
- * Service layer for Order entity operations.
- * Contains business logic and database interactions for orders.
+ * Controller layer for Order entity operations.
+ * Handles HTTP requests and responses for order-related endpoints.
  */
+import prisma from "@/prisma-client/prismaClient";
+import { getErrorMessage } from "@/utils/errorHandler";
+import { sendNotification } from "@/utils/sendNotification";
+import { getOrderStatusMessage } from "@/utils/getOrderStatusMessage";
+import { getBatchAccessibleImageUrls } from "@/utils/fileUpload/s3Aws";
 import { Order, OrderStatus, Prisma } from "@/generated/prisma/client";
 import { CreateOrderDto, UpdateOrderDto } from "@/modules/orders/orders.dto";
-import { getErrorMessage } from "@/utils/errorHandler";
-import { getBatchAccessibleImageUrls } from "@/utils/fileUpload/s3Aws";
-import { getOrderStatusMessage } from "@/utils/getOrderStatusMessage";
 import {
   hasInsufficientWalletBalance,
   upcomingDelivery,
 } from "@/utils/processSubscription";
-import prisma from "@/prisma-client/prismaClient";
-import { sendNotification } from "@/utils/sendNotification";
 
 interface CustomerOrdersResult {
   orders: Order[];

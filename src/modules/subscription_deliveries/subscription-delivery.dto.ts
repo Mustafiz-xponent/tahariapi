@@ -2,7 +2,6 @@
  * Data Transfer Objects (DTOs) for the SubscriptionDelivery entity
  * These interfaces define the expected shape of data when creating or updating a subscription delivery.
  */
-
 import { z } from "zod";
 
 const orderStatusEnum = z.enum([

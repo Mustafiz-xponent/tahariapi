@@ -2,18 +2,17 @@
  * Routes for Message entity operations.
  * Defines API endpoints for message-related CRUD operations.
  */
-
 import { Router } from "express";
-import * as MessageController from "@/modules/messages/message.controller";
 import validator from "@/middlewares/validator";
+import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as MessageController from "@/modules/messages/message.controller";
 import {
   zDeleteMessageDto,
   zMarkMessageAsReadDto,
   zSendMessageDto,
   zUpdateMessageDto,
 } from "@/modules/messages/message.dto";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
-import { UserRole } from "@/generated/prisma/client";
 
 const router = Router();
 

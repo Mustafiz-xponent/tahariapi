@@ -2,14 +2,13 @@
  * Service layer for WalletTransaction entity operations.
  * Contains business logic and database interactions for wallet transactions.
  */
-
 import prisma from "@/prisma-client/prismaClient";
+import { getErrorMessage } from "@/utils/errorHandler";
 import { WalletTransaction } from "@/generated/prisma/client";
 import {
   CreateWalletTransactionDto,
   UpdateWalletTransactionDto,
 } from "@/modules/wallet_transactions/wallet_transaction.dto";
-import { getErrorMessage } from "@/utils/errorHandler";
 
 /**
  * Create a new wallet transaction

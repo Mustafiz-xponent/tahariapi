@@ -2,16 +2,11 @@
  * Service layer for Message entity operations.
  * Contains business logic and database interactions for messages.
  */
-
 import prisma from "@/prisma-client/prismaClient";
-
-import {
-  CreateMessageDto,
-  UpdateMessageDto,
-} from "@/modules/messages/message.dto";
 import { getErrorMessage } from "@/utils/errorHandler";
-import { getOnlineAdminSupportSockets, getSocketId, io } from "@/utils/socket";
 import { UserRole, Message } from "@/generated/prisma/client";
+import { CreateMessageDto } from "@/modules/messages/message.dto";
+import { getOnlineAdminSupportSockets, getSocketId, io } from "@/utils/socket";
 
 type GetAllMessagesResult = {
   messages: Message[];

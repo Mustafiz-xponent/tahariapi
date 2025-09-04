@@ -2,21 +2,20 @@
  * Controller layer for Product entity operations.
  * Updated to handle image uploads with product creation and updates.
  */
-
-import { Request, Response } from "express";
 import { z } from "zod";
+import httpStatus from "http-status";
+import { Request, Response } from "express";
+import sendResponse from "@/utils/sendResponse";
+import { Product } from "@/generated/prisma/client";
 import { upload } from "@/utils/fileUpload/configMulterUpload";
 import { handleErrorResponse } from "@/utils/errorResponseHandler";
+import * as productService from "@/modules/products/product.service";
 import {
   GetAllProductsQueryDto,
   productNameSchema,
   zCreateProductDto,
   zUpdateProductDto,
 } from "@/modules/products/product.dto";
-import * as productService from "@/modules/products/product.service";
-import httpStatus from "http-status";
-import sendResponse from "@/utils/sendResponse";
-import { Product } from "@/generated/prisma/client";
 
 const productIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
   message: "Product ID must be a positive integer",

@@ -2,18 +2,17 @@
  * Controller layer for Customer entity operations.
  * Handles HTTP requests and responses for customer-related endpoints.
  */
-
+import { ZodError, z } from "zod";
+import httpStatus from "http-status";
 import { Request, Response } from "express";
+import asyncHandler from "@/utils/asyncHandler";
+import sendResponse from "@/utils/sendResponse";
+import { Customer } from "@/generated/prisma/client";
 import * as customerService from "@/modules/customers/customer.service";
 import {
   GetAllCustomersDto,
   zUpdateCustomerDto,
 } from "@/modules/customers/customer.dto";
-import { ZodError, z } from "zod";
-import httpStatus from "http-status";
-import sendResponse from "@/utils/sendResponse";
-import { Customer } from "@/generated/prisma/client";
-import asyncHandler from "@/utils/asyncHandler";
 
 const customerIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
   message: "Customer ID must be a positive integer",

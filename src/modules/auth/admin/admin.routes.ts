@@ -2,11 +2,10 @@
  * Routes for Admin authentication operations.
  * Defines API endpoints for admin authentication.
  */
-
 import { Router } from "express";
+import { UserRole } from "@/generated/prisma/client";
 import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import * as AdminController from "@/modules/auth/admin/admin.controller";
-import { UserRole } from "@/generated/prisma/client";
 
 const router = Router();
 

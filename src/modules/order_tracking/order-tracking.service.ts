@@ -2,14 +2,13 @@
  * Service layer for OrderTracking entity operations.
  * Contains business logic and database interactions for order tracking entries.
  */
-
 import prisma from "@/prisma-client/prismaClient";
+import { getErrorMessage } from "@/utils/errorHandler";
 import { OrderTracking } from "@/generated/prisma/client";
 import {
   CreateOrderTrackingDto,
   UpdateOrderTrackingDto,
 } from "@/modules/order_tracking/order-tracking.dto";
-import { getErrorMessage } from "@/utils/errorHandler";
 
 /**
  * Create a new order tracking entry

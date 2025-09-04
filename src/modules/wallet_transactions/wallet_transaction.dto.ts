@@ -1,8 +1,8 @@
+import { nativeEnum, z } from "zod";
 import {
   WalletTransactionType,
   PaymentStatus,
 } from "@/generated/prisma/client";
-import { nativeEnum, z } from "zod";
 
 const zBigIntId = (fieldName: string) =>
   z

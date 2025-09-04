@@ -2,7 +2,6 @@
  * Routes for SubscriptionDelivery entity operations.
  * Defines API endpoints for subscription delivery-related CRUD operations.
  */
-
 import { Router } from "express";
 import * as SubscriptionDeliveryController from "@/modules/subscription_deliveries/subscription-delivery.controller";
 

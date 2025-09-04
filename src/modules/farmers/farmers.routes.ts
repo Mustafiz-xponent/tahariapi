@@ -1,9 +1,8 @@
 // src/modules/farmers/farmers.routes.ts
-
 import { Router } from "express";
-import * as FarmerController from "@/modules/farmers/farmers.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as FarmerController from "@/modules/farmers/farmers.controller";
 
 const router = Router();
 

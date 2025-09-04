@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
-import * as promotionService from "@/modules/promotions/promotion.service";
-import { Promotion } from "@/generated/prisma/client";
-import asyncHandler from "@/utils/asyncHandler";
 import httpStatus from "http-status";
+import { Request, Response } from "express";
+import asyncHandler from "@/utils/asyncHandler";
 import sendResponse from "@/utils/sendResponse";
+import { Promotion } from "@/generated/prisma/client";
+import * as promotionService from "@/modules/promotions/promotion.service";
 import { GetAllPromotionsQueryDto } from "@/modules/promotions/promotion.dto";
 
 /**

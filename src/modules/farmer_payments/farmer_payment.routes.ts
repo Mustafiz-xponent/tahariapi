@@ -2,7 +2,6 @@
  * Routes for FarmerPayment entity operations.
  * Defines API endpoints for farmer payment-related CRUD operations.
  */
-
 import { Router } from "express";
 import * as FarmerPaymentController from "@/modules/farmer_payments/farmer_payment.controller";
 

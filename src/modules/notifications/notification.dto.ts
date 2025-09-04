@@ -2,9 +2,9 @@
  * Data Transfer Objects (DTOs) for the Notification entity
  * These interfaces define the expected shape of data when creating or updating a notification.
  */
-
-import { NotificationType } from "@/generated/prisma/client";
 import { z } from "zod";
+import { NotificationType } from "@/generated/prisma/client";
+
 /**
  * Common ID schema: supports string/number -> BigInt and must be > 0.
  */

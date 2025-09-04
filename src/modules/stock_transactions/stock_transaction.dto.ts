@@ -1,11 +1,9 @@
 // src/modules/stock_transactions/stock_transaction.dto.ts
-
 /**
  * Data Transfer Objects (DTOs) for the StockTransaction entity
  * These interfaces define the expected shape of data when creating or updating a stock transaction.
  * You can also use these types with validation libraries like Zod or Joi if needed.
  */
-
 import { z } from "zod";
 
 // Assuming TransactionType enum values (adjust based on your Prisma schema)

@@ -2,7 +2,6 @@
  * Data Transfer Objects (DTOs) for the OrderTracking entity
  * These interfaces define the expected shape of data when creating or updating an order tracking entry.
  */
-
 import { z } from "zod";
 
 // Enum-like validation for OrderStatus

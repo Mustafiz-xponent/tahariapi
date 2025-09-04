@@ -1,10 +1,10 @@
 import httpStatus from "http-status";
 import { Request, Response } from "express";
-import * as dealService from "@/modules/deals/deal.service";
 import asyncHandler from "@/utils/asyncHandler";
 import sendResponse from "@/utils/sendResponse";
 import { Deal } from "@/generated/prisma/client";
 import { GetAllDealsDto } from "@/modules/deals/deal.dto";
+import * as dealService from "@/modules/deals/deal.service";
 
 /**
  * Create a new deal

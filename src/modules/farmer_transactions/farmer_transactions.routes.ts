@@ -2,11 +2,10 @@
  * Routes for FarmerTransaction entity operations.
  * Defines API endpoints for farmer transaction-related CRUD operations.
  */
-
 import { Router } from "express";
-import * as FarmerTransactionController from "@/modules/farmer_transactions/farmer_transactions.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as FarmerTransactionController from "@/modules/farmer_transactions/farmer_transactions.controller";
 
 const router = Router();
 

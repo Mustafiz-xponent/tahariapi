@@ -3,7 +3,6 @@
  * These interfaces define the expected shape of data when creating or updating a customer.
  * You can also use these types with validation libraries like Zod or Joi if needed.
  */
-
 import { z } from "zod";
 
 /**

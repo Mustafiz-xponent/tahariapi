@@ -2,14 +2,13 @@
  * Controller layer for Message entity operations.
  * Handles HTTP requests and responses for message-related endpoints.
  */
-
-import { Request, Response } from "express";
-import * as messageService from "@/modules/messages/message.service";
-import { zCreateMessageDto } from "@/modules/messages/message.dto";
 import { ZodError, z } from "zod";
 import httpStatus from "http-status";
+import { Request, Response } from "express";
 import sendResponse from "@/utils/sendResponse";
 import { Message } from "@/generated/prisma/client";
+import { zCreateMessageDto } from "@/modules/messages/message.dto";
+import * as messageService from "@/modules/messages/message.service";
 
 const messageIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
   message: "Message ID must be a positive integer",

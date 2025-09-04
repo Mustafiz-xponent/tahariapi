@@ -2,9 +2,8 @@
  * Data Transfer Objects (DTOs) for the Product entity
  * Updated to handle image uploads with product operations
  */
-
-import { ProductUnitType } from "@/generated/prisma/client";
 import { z } from "zod";
+import { ProductUnitType } from "@/generated/prisma/client";
 
 /**
  * Schema for validating product name parameter

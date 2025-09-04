@@ -2,11 +2,10 @@
  * Routes for SubscriptionPlan entity operations.
  * Defines API endpoints for subscription plan-related CRUD operations.
  */
-
 import { Router } from "express";
-import * as SubscriptionPlanController from "@/modules/subscription_plans/subscription_plan.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as SubscriptionPlanController from "@/modules/subscription_plans/subscription_plan.controller";
 
 const router = Router();
 

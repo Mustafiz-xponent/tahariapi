@@ -1,7 +1,9 @@
 import { Router } from "express";
-import * as promotionController from "@/modules/promotions/promotion.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import validator from "@/middlewares/validator";
+import { UserRole } from "@/generated/prisma/client";
+import { upload } from "@/utils/fileUpload/configMulterUpload";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as promotionController from "@/modules/promotions/promotion.controller";
 import {
   zCreatePromotionDto,
   zDeletePromotionDto,
@@ -9,8 +11,6 @@ import {
   zGetPromotionDto,
   zUpdatePromotionDto,
 } from "@/modules/promotions/promotion.dto";
-import { upload } from "@/utils/fileUpload/configMulterUpload";
-import { UserRole } from "@/generated/prisma/client";
 
 const router = Router();
 

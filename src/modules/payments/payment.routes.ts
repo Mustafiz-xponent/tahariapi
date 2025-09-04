@@ -2,11 +2,10 @@
  * Routes for Payment entity operations.
  * Defines API endpoints for payment-related CRUD operations.
  */
-
 import { Router } from "express";
-import * as PaymentController from "@/modules/payments/payment.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as PaymentController from "@/modules/payments/payment.controller";
 
 const router = Router();
 

@@ -1,11 +1,9 @@
 // src/modules/inventory_purchases/inventory-purchase.dto.ts
-
 /**
  * Data Transfer Objects (DTOs) for the InventoryPurchase entity
  * These interfaces define the expected shape of data when creating or updating an inventory purchase.
  * You can also use these types with validation libraries like Zod or Joi if needed.
  */
-
 import { z } from "zod";
 
 // Assuming InventoryPurchaseStatus enum values (adjust based on your Prisma schema)

@@ -2,11 +2,10 @@
  * Routes for Customer authentication operations.
  * Defines API endpoints for customer authentication.
  */
-
 import { Router } from "express";
-import * as CustomerController from "@/modules/auth/customer/customer.controller";
-import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import { UserRole } from "@/generated/prisma/client";
+import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+import * as CustomerController from "@/modules/auth/customer/customer.controller";
 
 const router = Router();
 

@@ -2,13 +2,12 @@
  * Controller layer for Notification entity operations.
  * Handles HTTP requests and responses for notification-related endpoints.
  */
-
-import { Request, Response } from "express";
-import * as notificationService from "@/modules/notifications/notification.service";
 import { ZodError, z } from "zod";
 import httpStatus from "http-status";
+import { Request, Response } from "express";
 import sendResponse from "@/utils/sendResponse";
 import { Notification } from "@/generated/prisma/client";
+import * as notificationService from "@/modules/notifications/notification.service";
 
 const notificationIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
   message: "Notification ID must be a positive integer",

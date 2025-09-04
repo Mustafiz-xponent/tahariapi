@@ -2,19 +2,19 @@
  * Controller layer for category operations.
  * Handles HTTP requests and responses for category endpoints.
  */
-
+import { z } from "zod";
+import httpStatus from "http-status";
 import { Request, Response } from "express";
+import sendResponse from "@/utils/sendResponse";
+import { Category } from "@/generated/prisma/client";
+import { upload } from "@/utils/fileUpload/configMulterUpload";
+import { handleErrorResponse } from "@/utils/errorResponseHandler";
 import * as categoryService from "@/modules/categories/category.service";
 import {
   zCreateCategoryDto,
   zUpdateCategoryDto,
 } from "@/modules/categories/category.dto";
-import { handleErrorResponse } from "@/utils/errorResponseHandler";
-import { z } from "zod";
-import { upload } from "@/utils/fileUpload/configMulterUpload";
-import httpStatus from "http-status";
-import sendResponse from "@/utils/sendResponse";
-import { Category } from "@/generated/prisma/client";
+
 const categoryIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
   message: "Category ID must be a positive integer",
 });

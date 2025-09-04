@@ -1,11 +1,9 @@
 // src/farmers/farmer.dto.ts
-
 /**
  * Data Transfer Objects (DTOs) for the Farmer entity
  * These interfaces define the expected shape of data when creating or updating a farmer.
  * You can also use these types with validation libraries like Zod or Joi if needed.
  */
-
 import { z } from "zod";
 
 /**

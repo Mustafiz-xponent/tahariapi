@@ -3,7 +3,6 @@
  * These interfaces define the expected shape of data when creating or updating a farmer transaction.
  * You can also use these types with validation libraries like Zod or Joi if needed.
  */
-
 import { z } from "zod";
 
 // Assuming PaymentStatus enum values (adjust based on your Prisma schema)

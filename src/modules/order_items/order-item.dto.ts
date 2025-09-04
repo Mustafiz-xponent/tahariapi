@@ -3,9 +3,8 @@
  * These interfaces define the expected shape of data when creating or updating an order item.
  * You can also use these types with validation libraries like Zod or Joi if needed.
  */
-
-import { ProductUnitType } from "@/generated/prisma/client";
 import { z } from "zod";
+import { ProductUnitType } from "@/generated/prisma/client";
 
 // Id validation
 const idSchema = z.coerce.bigint().refine((val) => val > 0n, {

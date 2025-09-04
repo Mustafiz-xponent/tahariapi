@@ -2,8 +2,8 @@
  * Service layer for Customer authentication operations.
  * Handles registration, login, OTP generation, verification, and JWT issuance for customers.
  */
-
 import bcrypt from "bcrypt";
+import logger from "@/utils/logger";
 import { User } from "@/generated/prisma/client";
 import prisma from "@/prisma-client/prismaClient";
 import { generateAuthToken } from "@/utils/authToken";
@@ -16,7 +16,6 @@ import {
   CustomerUpdateProfileDto,
   CustomerVerifyOtpDto,
 } from "@/modules/auth/customer/customer.dto";
-import logger from "@/utils/logger";
 
 /**
  * Register new customer with phone number

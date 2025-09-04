@@ -2,19 +2,19 @@
  * Service layer for Wallet entity operations.
  * Contains business logic and database interactions for wallets.
  */
+import httpStatus from "http-status";
+import { AppError } from "@/utils/appError";
 import prisma from "@/prisma-client/prismaClient";
 import { Wallet } from "@/generated/prisma/client";
+import { sendNotification } from "@/utils/sendNotification";
+import { validateSSLCommerzPayment } from "@/utils/processPayment";
+import { WalletDepositeResult } from "@/modules/wallets/wallet.interface";
+import { processSSLCommerzWalletDeposite } from "@/utils/processWalletDeposite";
 import {
   CreateWalletDto,
   DepositeWalletDto,
   UpdateWalletDto,
 } from "@/modules/wallets/wallet.dto";
-import { processSSLCommerzWalletDeposite } from "@/utils/processWalletDeposite";
-import { validateSSLCommerzPayment } from "@/utils/processPayment";
-import { WalletDepositeResult } from "@/modules/wallets/wallet.interface";
-import { AppError } from "@/utils/appError";
-import httpStatus from "http-status";
-import { sendNotification } from "@/utils/sendNotification";
 
 /**
  * Create a new wallet
