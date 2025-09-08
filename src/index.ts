@@ -13,7 +13,7 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 server.listen(PORT, () => {
   logger.info(`Accounting API server running on http://localhost:${PORT}`);

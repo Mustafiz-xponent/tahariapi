@@ -60,7 +60,7 @@ export async function createAdmin(
  */
 export async function loginAdmin(
   data: AdminLoginDto
-): Promise<{ token: string; user: User }> {
+): Promise<{ token: string; user: Omit<User, "passwordHash"> }> {
   try {
     // Validate input
     if (!data.password) throw new Error("Password is required");
@@ -85,13 +85,13 @@ export async function loginAdmin(
     if (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") {
       throw new Error("Invalid credentials");
     }
-
+    const { passwordHash: _, ...userData } = user;
     // Verify password
     const isValid = await bcrypt.compare(data.password, user.passwordHash);
     if (!isValid) throw new Error("Invalid credentials");
 
     // Generate token
-    return generateAuthToken(user);
+    return generateAuthToken(userData);
   } catch (error) {
     throw new Error(`Failed to login admin: ${getErrorMessage(error)}`);
   }
