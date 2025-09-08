@@ -7,15 +7,9 @@ import { AppError } from "@/utils/appError";
 import { getSocketId, io } from "@/utils/socket";
 import prisma from "@/prisma-client/prismaClient";
 import { getErrorMessage } from "@/utils/errorHandler";
-import {
-  Notification,
-  NotificationStatus,
-  UserRole,
-} from "@/generated/prisma/client";
-import {
-  CreateNotificationDto,
-  UpdateNotificationDto,
-} from "@/modules/notifications/notification.dto";
+import { Notification, NotificationStatus, UserRole, } from "@/generated/prisma/client";
+import { CreateNotificationDto, UpdateNotificationDto, } from "@/modules/notifications/notification.dto";
+
 
 interface GetNotificationsResult {
   notifications: Notification[];

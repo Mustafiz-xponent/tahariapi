@@ -59,7 +59,7 @@ export const getAllSubscriptions = async (
     sendResponse<Subscription[]>(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: "Subscriptions retrived successfully",
+      message: "Subscriptions retrieved successfully",
       data: subscriptions,
     });
   } catch (error) {
@@ -83,7 +83,7 @@ export const getSubscriptionById = async (
     sendResponse<Subscription>(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: "Subscription retrived successfully",
+      message: "Subscription retrieved successfully",
       data: subscription,
     });
   } catch (error) {
@@ -117,7 +117,7 @@ export const getCustomerSubscriptions = async (
     sendResponse<Subscription[]>(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: "Subscription retrived successfully",
+      message: "Subscription retrieved successfully",
       data: result.subscriptions,
       pagination: {
         currentPage: result.currentPage,

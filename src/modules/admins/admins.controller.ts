@@ -1,4 +1,5 @@
 //src/modules/admins/admins.controller.ts
+import logger from "@/utils/logger";
 import httpStatus from "http-status";
 import { Request, Response } from "express";
 import sendResponse from "@/utils/sendResponse";
@@ -19,6 +20,7 @@ export const getAllAdmins = async (
       data: admins,
     });
   } catch (error) {
+    logger.error("Error while fetching admins", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -51,6 +53,7 @@ export const getAdminById = async (
       data: admin,
     });
   } catch (error) {
+    logger.error("Error while fetching admin", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -75,6 +78,7 @@ export const updateAdmin = async (
       data: updated,
     });
   } catch (error) {
+    logger.error("Error while updating admin", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -98,6 +102,7 @@ export const deleteAdmin = async (
       data: deleted,
     });
   } catch (error) {
+    logger.error("Error while deleting admin", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,

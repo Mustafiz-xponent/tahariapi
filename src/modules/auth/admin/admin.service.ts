@@ -56,7 +56,7 @@ export async function createAdmin(
 }
 
 /**
- * login admin/superadmin through email/phone with password.
+ * login admin/superAdmin through email/phone with password.
  */
 export async function loginAdmin(
   data: AdminLoginDto
@@ -100,7 +100,7 @@ export async function loginAdmin(
 /**
  * Delete an admin by ID
  * @param adminId The ID of the admin to delete
- * @param requestingUserId The ID of the superadmin making the request
+ * @param requestingUserId The ID of the superAdmin making the request
  * @throws Error if admin not found or if trying to delete self
  */
 export const deleteAdmin = async (
@@ -110,11 +110,11 @@ export const deleteAdmin = async (
   try {
     // Prevent self-deletion
     if (requestingUserId && BigInt(requestingUserId) === adminId) {
-      throw new Error("Superadmin cannot delete themselves");
+      throw new Error("SuperAdmin cannot delete themselves");
     }
 
     return await prisma.$transaction(async (prisma) => {
-      // Verify admin exists and is not a superadmin
+      // Verify admin exists and is not a superAdmin
       const adminToDelete = await prisma.user.findUnique({
         where: { userId: Number(adminId) },
         include: { admin: true },
@@ -125,7 +125,7 @@ export const deleteAdmin = async (
       }
 
       if (adminToDelete.role === "SUPER_ADMIN") {
-        throw new Error("Cannot delete a superadmin");
+        throw new Error("Cannot delete a superAdmin");
       }
 
       // Delete the admin record first if it exists

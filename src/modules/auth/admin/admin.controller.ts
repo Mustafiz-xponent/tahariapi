@@ -37,7 +37,7 @@ export const createAdmin = async (req: Request, res: Response) => {
 };
 
 /**
- * login admin/superadmin through email/phone with password.
+ * login admin/superAdmin through email/phone with password.
  */
 export const loginAdmin = async (req: Request, res: Response) => {
   try {

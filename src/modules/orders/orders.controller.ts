@@ -106,7 +106,7 @@ export const getOrderById = async (
     sendResponse<Order>(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: "Order retrived successfully",
+      message: "Order retrieved successfully",
       data: order,
     });
   } catch (error) {
@@ -196,7 +196,7 @@ export const getCustomerOrders = async (
     sendResponse<Order[]>(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: "Customer orders retrived successfully",
+      message: "Customer orders retrieved successfully",
       data: result.orders,
       pagination: {
         currentPage: result.currentPage,

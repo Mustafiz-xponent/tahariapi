@@ -3,11 +3,13 @@
  * Handles HTTP requests and responses for notification-related endpoints.
  */
 import { ZodError, z } from "zod";
+import logger from "@/utils/logger";
 import httpStatus from "http-status";
 import { Request, Response } from "express";
 import sendResponse from "@/utils/sendResponse";
 import { Notification } from "@/generated/prisma/client";
 import * as notificationService from "@/modules/notifications/notification.service";
+
 
 const notificationIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
   message: "Notification ID must be a positive integer",
@@ -35,6 +37,7 @@ export const createNotification = async (
       data: notification,
     });
   } catch (error) {
+    logger.info("Error while creating notification", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -60,6 +63,7 @@ export const getAllNotifications = async (
       data: notifications,
     });
   } catch (error) {
+    logger.info("Error while retrieving notifications", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -109,6 +113,7 @@ export const getCustomerNotifications = async (
       },
     });
   } catch (error) {
+    logger.info("Error while retrieving notifications", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -155,6 +160,7 @@ export const getAdminNotifications = async (
       },
     });
   } catch (error) {
+    logger.info("Error while retrieving notifications", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -223,6 +229,7 @@ export const updateNotification = async (
       data: updatedNotification,
     });
   } catch (error) {
+    logger.error("Error while updating notification", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -249,6 +256,7 @@ export const deleteNotification = async (
       data: null,
     });
   } catch (error) {
+    logger.error("Error while deleting notification", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -295,6 +303,7 @@ export const markAllNotificationsAsRead = async (
       data: null,
     });
   } catch (error) {
+    logger.error("Error while marking notifications as read", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
@@ -321,6 +330,7 @@ export const markAllNotificationsAsSeen = async (
       data: null,
     });
   } catch (error) {
+    logger.error("Error while marking notifications as seen", error);
     sendResponse<null>(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
