@@ -79,13 +79,11 @@ export const verifyCustomerOtp = async (req: Request, res: Response) => {
     const data = zCustomerVerifyOtpDto.parse(req.body);
     const { token, user } = await customerService.verifyCustomerOtp(data);
 
-    // Exclude passwordHash from the user object manually
-    const { passwordHash, ...sanitizedUser } = user;
     sendResponse<{ token: string; user: Omit<User, "passwordHash"> }>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "OTP verified successfully",
-      data: { token, user: sanitizedUser },
+      data: { token, user },
     });
   } catch (error) {
     handleErrorResponse(error, res, "verify OTP");

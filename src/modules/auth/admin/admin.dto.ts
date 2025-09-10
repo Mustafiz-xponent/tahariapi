@@ -54,3 +54,38 @@ export const zAdminOtpRequestDto = z.object({
  * TypeScript type inferred from login schema.
  */
 export type AdminOtpRequestDto = z.infer<typeof zAdminOtpRequestDto>;
+
+/**
+ * Forgot password schema
+ */
+export const zAdminForgotPasswordDto = {
+  body: z.object({ phone: bangladeshPhoneValidator }),
+};
+
+type AdminForgotPasswordBodyDto = z.infer<typeof zAdminForgotPasswordDto.body>;
+// combined type for usage / services or elsewhere
+export type AdminForgotPasswordDto = {
+  body: AdminForgotPasswordBodyDto;
+};
+
+/**
+ * Reset password schema
+ */
+export const zAdminResetPasswordDto = {
+  body: z.object({
+    otp: z.string().length(6, "OTP must be 6 digits"),
+    phone: bangladeshPhoneValidator,
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+      .regex(/[a-z]/, "Must contain at least one lowercase letter")
+      .regex(/[0-9]/, "Must contain at least one number"),
+  }),
+};
+
+type AdminResetPasswordBodyDto = z.infer<typeof zAdminResetPasswordDto.body>;
+// combined type for usage / services or elsewhere
+export type AdminResetPasswordDto = {
+  body: AdminResetPasswordBodyDto;
+};

@@ -3,11 +3,19 @@
  * Handles admin creation by super admins and login.
  */
 import bcrypt from "bcrypt";
-import { User } from "@/generated/prisma/client";
+import httpStatus from "http-status";
+import { AppError } from "@/utils/appError";
 import prisma from "@/prisma-client/prismaClient";
 import { generateAuthToken } from "@/utils/authToken";
 import { getErrorMessage } from "@/utils/errorHandler";
-import { AdminLoginDto, CreateAdminDto } from "@/modules/auth/admin/admin.dto";
+import { sendOtp, verifyOtp } from "@/utils/otpService";
+import { User, UserRole } from "@/generated/prisma/client";
+import {
+  AdminForgotPasswordDto,
+  AdminLoginDto,
+  AdminResetPasswordDto,
+  CreateAdminDto,
+} from "@/modules/auth/admin/admin.dto";
 
 const SALT_ROUNDS = 10;
 
@@ -97,6 +105,83 @@ export async function loginAdmin(
   }
 }
 
+/**
+ *
+ */
+export const adminForgotPassword = async (
+  phone: AdminForgotPasswordDto["body"]["phone"]
+) => {
+  // check user exits or not
+  const user = await prisma.user.findUnique({
+    where: { phone: phone },
+    select: { userId: true },
+  });
+  if (!user) {
+    throw new AppError("User not found", httpStatus.NOT_FOUND);
+  }
+  // send otp via sms
+  const res = await sendOtp(phone);
+  return res.otp; // TODO: Need to remove this line when in production
+};
+
+/**
+ * Resets an admin's password using a valid OTP sent to their phone.
+ * @throws {AppError} If the OTP is invalid or has expired
+ * @throws {AppError} If the user is not found
+ */
+export const adminResetPassword = async (
+  bodyData: AdminResetPasswordDto["body"]
+) => {
+  const { otp, phone, password } = bodyData;
+  const now = new Date();
+  // Check OTP exits or not
+  const otpRecord = await prisma.otp.findFirst({
+    where: { phone, expiresAt: { gt: now } },
+    orderBy: { createdAt: "desc" },
+  });
+
+  if (!otpRecord) {
+    throw new AppError("Your OTP is not valid", httpStatus.UNAUTHORIZED);
+  }
+  // Check is OTP valid or not
+  const isValidOtp = await verifyOtp(phone, otp);
+  if (!isValidOtp) {
+    throw new AppError("Your OTP is not valid", httpStatus.UNAUTHORIZED);
+  }
+
+  // Check user exits or not
+  const user = await prisma.user.findUnique({
+    where: { phone: phone },
+    select: { userId: true, role: true },
+  });
+
+  if (!user) {
+    throw new AppError("User not found", httpStatus.NOT_FOUND);
+  }
+  // Check user role is ADMIN | SUPER_ADMIN | SUPPORT
+  const validRoles: UserRole[] = [
+    UserRole.ADMIN,
+    UserRole.SUPER_ADMIN,
+    UserRole.SUPPORT,
+  ];
+  if (!validRoles.includes(user.role)) {
+    throw new AppError("You are not permitted", httpStatus.UNAUTHORIZED);
+  }
+  // Update password
+  const SALT_ROUNDS = 10;
+  await prisma.otp.deleteMany({
+    where: { phone: phone },
+  });
+  const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+  await prisma.user.update({
+    where: { phone: phone },
+    data: { passwordHash },
+  });
+  // Delete all OTP records for the user
+  await prisma.otp.deleteMany({
+    where: { phone: phone },
+  });
+};
 /**
  * Delete an admin by ID
  * @param adminId The ID of the admin to delete

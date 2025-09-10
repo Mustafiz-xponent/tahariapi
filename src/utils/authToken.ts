@@ -1,7 +1,5 @@
-import jwt from "jsonwebtoken";
+import jwt, { Secret, SignOptions } from "jsonwebtoken";
 import { User } from "@/generated/prisma/client";
-
-const JWT_EXPIRY = "1d";
 
 /**
  * Generate auth token
@@ -10,8 +8,8 @@ export function generateAuthToken(user: Omit<User, "passwordHash">): {
   token: string;
   user: Omit<User, "passwordHash">;
 } {
-  const jwtSecret = process.env.JWT_SECRET;
-  if (!jwtSecret) throw new Error("JWT_SECRET not configured");
+  const jwtSecret: Secret = process.env.JWT_SECRET as Secret;
+  const options: SignOptions = { expiresIn: 7 * 24 * 60 * 60 }; // 7 days
 
   const token = jwt.sign(
     {
@@ -21,7 +19,7 @@ export function generateAuthToken(user: Omit<User, "passwordHash">): {
       role: user.role,
     },
     jwtSecret,
-    { expiresIn: JWT_EXPIRY }
+    options
   );
 
   return { token, user };

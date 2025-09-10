@@ -1,7 +1,7 @@
-import bcrypt from "bcrypt";
-import prisma from "@/prisma-client/prismaClient";
 import axios from "axios";
+import bcrypt from "bcrypt";
 import logger from "@/utils/logger";
+import prisma from "@/prisma-client/prismaClient";
 
 const OTP_EXPIRY_MINUTES = 5;
 const SALT_ROUNDS = 10;
@@ -53,11 +53,12 @@ async function sendSms(phone: string, message: string): Promise<void> {
 export async function sendOtp(phone: string) {
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
   const otpHash = await bcrypt.hash(otp, SALT_ROUNDS);
-  const expiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000);
+  const expiresAt = new Date(Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000); // 5 minutes
 
   await prisma.otp.create({
     data: { phone, otpHash, expiresAt },
   });
+
   logger.info(`OTP for ${phone}: ${otp}`);
 
   // Send SMS with OTP

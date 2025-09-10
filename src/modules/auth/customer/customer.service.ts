@@ -67,7 +67,7 @@ export async function registerCustomer(
  */
 export async function loginCustomer(
   data: CustomerLoginDto
-): Promise<{ token: string; user: User }> {
+): Promise<{ token: string; user: Omit<User, "passwordHash"> }> {
   // Determine identifier (email or phone)
   const identifier = data.email
     ? { email: data.email }
@@ -119,7 +119,7 @@ export async function otpLoginCustomer(
  */
 export async function verifyCustomerOtp(
   data: CustomerVerifyOtpDto
-): Promise<{ token: string; user: User }> {
+): Promise<{ token: string; user: Omit<User, "passwordHash"> }> {
   const otpRecord = await prisma.otp.findFirst({
     where: { phone: data.phone, expiresAt: { gt: new Date() } },
     orderBy: { createdAt: "desc" },
@@ -170,7 +170,7 @@ export async function verifyCustomerOtp(
       },
     },
   });
-
+  // Delete all OTP records for the user after successful verification
   await prisma.otp.deleteMany({
     where: { phone: data.phone },
   });

@@ -13,7 +13,7 @@ export interface IApiResponse<T> {
   success: boolean;
   statusCode: number;
   message: string;
-  data: T;
+  data?: T;
   pagination?: IPagination;
   meta?: Record<string, unknown>;
 }

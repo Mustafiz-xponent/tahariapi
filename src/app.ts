@@ -52,6 +52,7 @@ app.set("trust proxy", 1);
 const corsOptions = {
   origin: process.env.CLIENT_URL,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  credentials: true,
 };
 app.use(cors(corsOptions));
 // Initialize cron jobs
