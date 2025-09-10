@@ -1,113 +1,62 @@
-//src/modules/admins/admins.controller.ts
-import logger from "@/utils/logger";
 import httpStatus from "http-status";
 import { Request, Response } from "express";
+import asyncHandler from "@/utils/asyncHandler";
 import sendResponse from "@/utils/sendResponse";
 import { Admin } from "@/generated/prisma/client";
 import { UpdateAdminDto } from "@/modules/admins/admins.dto";
 import * as adminService from "@/modules/admins/admins.service";
 
-export const getAllAdmins = async (
-  _req: Request,
-  res: Response
-): Promise<void> => {
-  try {
+// Route to get all admins list
+export const getAllAdmins = asyncHandler(
+  async (_req: Request, res: Response): Promise<void> => {
     const admins = await adminService.getAllAdmins();
+
     sendResponse<Admin[]>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Admins retrieved successfully",
       data: admins,
     });
-  } catch (error) {
-    logger.error("Error while fetching admins", error);
-    sendResponse<null>(res, {
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: "Failed to fetch admins",
-      data: null,
-    });
   }
-};
-
-export const getAdminById = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
+);
+// Route to get an admin by ID
+export const getAdminById = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const id = BigInt(req.params.id);
     const admin = await adminService.getAdminById(id);
-    if (!admin) {
-      sendResponse<null>(res, {
-        success: false,
-        statusCode: httpStatus.NOT_FOUND,
-        message: "Admin not found",
-        data: null,
-      });
-      return;
-    }
+
     sendResponse<Admin>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Admin retrieved successfully",
       data: admin,
     });
-  } catch (error) {
-    logger.error("Error while fetching admin", error);
-    sendResponse<null>(res, {
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: "Failed to fetch admin",
-      data: null,
-    });
   }
-};
-
-export const updateAdmin = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
+);
+// Route to update an admin by ID
+export const updateAdmin = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const id = BigInt(req.params.id);
     const data: UpdateAdminDto = req.body;
     const updated = await adminService.updateAdmin(id, data);
+
     sendResponse<Admin>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Admin updated successfully",
       data: updated,
     });
-  } catch (error) {
-    logger.error("Error while updating admin", error);
-    sendResponse<null>(res, {
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: "Failed to update admin",
-      data: null,
-    });
   }
-};
-
-export const deleteAdmin = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
+);
+// Route to delete an admin by ID
+export const deleteAdmin = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const id = BigInt(req.params.id);
-    const deleted = await adminService.deleteAdmin(id);
-    sendResponse<Admin>(res, {
+    await adminService.deleteAdmin(id);
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Admin deleted successfully",
-      data: deleted,
-    });
-  } catch (error) {
-    logger.error("Error while deleting admin", error);
-    sendResponse<null>(res, {
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: "Failed to delete admin",
-      data: null,
     });
   }
-};
+);
