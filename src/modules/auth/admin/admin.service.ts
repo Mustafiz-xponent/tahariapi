@@ -152,7 +152,7 @@ export const adminResetPassword = async (
   // Check user exits or not
   const user = await prisma.user.findUnique({
     where: { phone: phone },
-    select: { userId: true, role: true },
+    select: { userId: true, role: true, passwordHash: true },
   });
 
   if (!user) {
@@ -166,6 +166,14 @@ export const adminResetPassword = async (
   ];
   if (!validRoles.includes(user.role)) {
     throw new AppError("You are not permitted", httpStatus.UNAUTHORIZED);
+  }
+  // Check user current password is same as new password
+  const isValidPassword = await bcrypt.compare(password, user.passwordHash!);
+  if (isValidPassword) {
+    throw new AppError(
+      "New password cannot be the same as the current password",
+      httpStatus.BAD_REQUEST
+    );
   }
   // Update password
   const SALT_ROUNDS = 10;
