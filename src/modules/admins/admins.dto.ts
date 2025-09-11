@@ -1,35 +1,36 @@
-// src/modules/admins/admins.dto.ts
-import { UserRole, UserStatus } from "@/generated/prisma/client";
+import z from "zod";
 
-export enum AdminRole {
-  SuperAdmin = "SuperAdmin",
-  Admin = "Admin",
-  Support = "Support",
-}
+/**
+ * Returns a Zod schema for a positive integer ID, with the given field name used
+ * for error messages.
+ * @param fieldName The name of the field, used for error messages.
+ * @returns A Zod schema for a positive integer ID.
+ */
+const zBigIntId = (fieldName: string) =>
+  z
+    .union([z.string(), z.number()])
+    .refine((val) => val !== "", { message: `${fieldName} is required` })
+    .transform((val) => BigInt(val))
+    .refine((val) => val > 0n, {
+      message: `${fieldName} must be a positive integer`,
+    });
 
-export enum AdminStatus {
-  Active = "Active",
-  Fired = "Fired",
-  InActive = "InActive",
-}
+/*
+ **   Base Schema: Admin ID Param
+ */
+const zAdminIdParam = z.object({
+  id: zBigIntId("Admin ID"),
+});
+type AdminIdParamsDto = z.infer<typeof zAdminIdParam>;
 
-export interface CreateAdminDto {
-  name: string;
-  email: string;
-  phone?: string;
-  address: string;
-  // role: AdminRole;
-  // status: AdminStatus;
-  role: UserRole;
-  status: UserStatus;
-  password: string;
-}
+/*
+ **  Schema: Get Admin by ID (Route Param)
+ */
+export const zGetAdminDto = { params: zAdminIdParam };
+export type GetAdminDto = { params: AdminIdParamsDto };
 
-export interface UpdateAdminDto {
-  name?: string;
-  phone?: string;
-  address?: string;
-  role?: AdminRole;
-  status?: AdminStatus;
-  password?: string;
-}
+/*
+ **  Schema: Delete Admin by ID (Route Param)
+ */
+export const zDeleteAdminDto = { params: zAdminIdParam };
+export type DeleteAdminDto = { params: AdminIdParamsDto };

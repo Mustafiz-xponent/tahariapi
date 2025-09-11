@@ -1,7 +1,9 @@
 import { Router } from "express";
+import validator from "@/middlewares/validator";
 import { UserRole } from "@/generated/prisma/client";
 import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import * as AdminController from "@/modules/admins/admins.controller";
+import { zDeleteAdminDto, zGetAdminDto } from "@/modules/admins/admins.dto";
 
 const router = Router();
 
@@ -18,15 +20,8 @@ router.get(
   "/:id",
   authMiddleware,
   authorizeRoles(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  validator(zGetAdminDto),
   AdminController.getAdminById
-);
-
-// Route to update an admin by ID
-router.put(
-  "/:id",
-  authMiddleware,
-  authorizeRoles(UserRole.SUPER_ADMIN),
-  AdminController.updateAdmin
 );
 
 // Route to delete an admin by ID
@@ -34,6 +29,7 @@ router.delete(
   "/:id",
   authMiddleware,
   authorizeRoles(UserRole.SUPER_ADMIN),
+  validator(zDeleteAdminDto),
   AdminController.deleteAdmin
 );
 

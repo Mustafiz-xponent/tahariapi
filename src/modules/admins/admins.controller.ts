@@ -3,7 +3,6 @@ import { Request, Response } from "express";
 import asyncHandler from "@/utils/asyncHandler";
 import sendResponse from "@/utils/sendResponse";
 import { Admin } from "@/generated/prisma/client";
-import { UpdateAdminDto } from "@/modules/admins/admins.dto";
 import * as adminService from "@/modules/admins/admins.service";
 
 // Route to get all admins list
@@ -33,21 +32,7 @@ export const getAdminById = asyncHandler(
     });
   }
 );
-// Route to update an admin by ID
-export const updateAdmin = asyncHandler(
-  async (req: Request, res: Response): Promise<void> => {
-    const id = BigInt(req.params.id);
-    const data: UpdateAdminDto = req.body;
-    const updated = await adminService.updateAdmin(id, data);
 
-    sendResponse<Admin>(res, {
-      success: true,
-      statusCode: httpStatus.OK,
-      message: "Admin updated successfully",
-      data: updated,
-    });
-  }
-);
 // Route to delete an admin by ID
 export const deleteAdmin = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
