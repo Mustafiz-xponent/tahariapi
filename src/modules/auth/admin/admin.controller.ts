@@ -57,7 +57,7 @@ export const loginAdmin = async (req: Request, res: Response) => {
     sendResponse<{ token: string; user: Omit<User, "passwordHash"> }>(res, {
       success: true,
       statusCode: httpStatus.OK,
-      message: "Admin logged in successfully",
+      message: "Login successful",
       data: { token, user },
     });
   } catch (error) {
