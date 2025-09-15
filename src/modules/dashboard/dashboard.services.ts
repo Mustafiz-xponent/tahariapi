@@ -1,8 +1,13 @@
 import prisma from "@/prisma-client/prismaClient";
 import { endOfYear, startOfYear, subDays, startOfDay } from "date-fns";
-import { OrderStatus, PaymentStatus } from "@/generated/prisma/client";
 import { GetSalesOverviewDto } from "@/modules/dashboard/dashboard.dto";
 import { DashboardSummaryResult } from "@/modules/dashboard/dashboard.interfaces";
+import {
+  OrderStatus,
+  PaymentStatus,
+  Product,
+  SubscriptionStatus,
+} from "@/generated/prisma/client";
 
 // Service function
 export const getDashboardSummary =
@@ -25,6 +30,9 @@ export const getDashboardSummary =
       previous30DaysTotalOrders,
       recent30DaysTotalCustomers,
       previous30DaysTotalCustomers,
+      recent30DaysActiveSubscriptions,
+      previous30DaysActiveSubscriptions,
+      totalActiveSubscriptions,
     ] = await Promise.all([
       // 1. Count total products
       prisma.product.count(),
@@ -118,7 +126,54 @@ export const getDashboardSummary =
           },
         },
       }),
+      // 14. Recent 30 days customers count
+      prisma.subscription.count({
+        where: {
+          status: SubscriptionStatus.ACTIVE,
+          createdAt: { gte: recent30DaysStart, lte: currentDayStart },
+        },
+      }),
+
+      // 15. Previous 30 days customers count
+      prisma.subscription.count({
+        where: {
+          status: SubscriptionStatus.ACTIVE,
+          createdAt: { gte: previous30DaysStart, lt: recent30DaysStart },
+        },
+      }),
+      // 16. Total active subscriptions
+      prisma.subscription.count({
+        where: {
+          status: SubscriptionStatus.ACTIVE,
+        },
+      }),
     ]);
+
+    const lowStockProducts = await prisma.$queryRaw<
+      {
+        productId: number;
+        name: string;
+        stockQuantity: number;
+        reorderLevel: number;
+        createdAt: Date;
+        farmerId: number;
+        farmerName: string;
+      }[]
+    >`
+  SELECT 
+    p."productId",
+    p."name",
+    p."stockQuantity",
+    p."reorderLevel",
+    p."createdAt",
+    f."farmerId",
+    f."name" as "farmerName"
+  FROM "Product" p
+  JOIN "Farmer" f ON p."farmerId" = f."farmerId"
+  WHERE p."stockQuantity" < p."reorderLevel"
+  ORDER BY p."createdAt" DESC
+  LIMIT 3
+`;
 
     // Helper for calculating % change
     const calcChange = (current: number, prev: number) =>
@@ -169,7 +224,18 @@ export const getDashboardSummary =
         ),
         changeLabel: `Last 30 days`,
       },
+      subscription: {
+        totalActiveSubscriptions,
+        changePercentage: parseFloat(
+          calcChange(
+            recent30DaysActiveSubscriptions,
+            previous30DaysActiveSubscriptions
+          ).toFixed(2)
+        ),
+        changeLabel: `Last 30 days`,
+      },
       recentOrders,
+      lowStockProducts,
     };
   };
 

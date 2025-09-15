@@ -1,4 +1,6 @@
-import { Order } from "@/generated/prisma/client";
+import { Order, Product } from "@/generated/prisma/client";
+
+// type lowStockProducts = Pick<Product, "productId" | "name" | "quantity">
 
 export interface DashboardSummaryResult {
   product: {
@@ -21,7 +23,13 @@ export interface DashboardSummaryResult {
     changePercentage: number;
     changeLabel: string;
   };
+  subscription: {
+    totalActiveSubscriptions: number;
+    changePercentage: number;
+    changeLabel: string;
+  };
   recentOrders: Order[];
+  lowStockProducts: Product[];
 }
 export interface salesOverviewResult {
   data: number[];
