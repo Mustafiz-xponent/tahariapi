@@ -229,7 +229,7 @@ model Product {
   unitPrice                Decimal             @default(0) // Price per smallest unit (e.g. per gram)
   packageSize              Float               @default(1) // Selling unit (e.g. 250 for 250g packages)
   stockQuantity            Int                 @default(0) // Stock stored in units matching unitType
-  reorderLevel             Int                 @default(0)
+  reorderLevel             Int                 @default(0) // Minimum stock level to trigger reorder
   isSubscription           Boolean             @default(false)
   isPreorder               Boolean             @default(false)
   isPrivateImages          Boolean             @default(false)

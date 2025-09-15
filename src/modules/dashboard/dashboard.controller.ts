@@ -1,33 +1,38 @@
 import httpStatus from "http-status";
 import { Response, Request } from "express";
+import asyncHandler from "@/utils/asyncHandler";
 import sendResponse from "@/utils/sendResponse";
-import { handleErrorResponse } from "@/utils/errorResponseHandler";
+import { GetSalesOverviewDto } from "@/modules/dashboard/dashboard.dto";
 import * as dasboardService from "@/modules/dashboard/dashboard.services";
-import { DashboardSummary } from "@/modules/dashboard/dashboard.interfaces";
+import {
+  DashboardSummaryResult,
+  salesOverviewResult,
+} from "@/modules/dashboard/dashboard.interfaces";
 
-// Controller function
-export const getDashboardSummary = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    // Parse year from query parameter, default to current year
-    let year: number | undefined;
+export const getDashboardSummary = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const summary = await dasboardService.getDashboardSummary();
 
-    if (req.query.year) {
-      const yearParam = parseInt(req.query.year as string);
-      year = yearParam;
-    }
-
-    const summary = await dasboardService.getDashboardSummary(year);
-
-    sendResponse<DashboardSummary>(res, {
+    sendResponse<DashboardSummaryResult>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Dashboard summary retrieved successfully",
       data: summary,
     });
-  } catch (error) {
-    handleErrorResponse(error, res, "fetch dashboard summary");
   }
-};
+);
+
+export const getSalesOverview = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const year = req.query
+      .year as unknown as GetSalesOverviewDto["query"]["year"];
+
+    const salesOverview = await dasboardService.getSalesOverview(year);
+    sendResponse<salesOverviewResult>(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Sales overview retrieved successfully",
+      data: salesOverview,
+    });
+  }
+);
