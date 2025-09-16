@@ -6,7 +6,7 @@ interface LowStockProducts {
   stockQuantity: number;
   reorderLevel: number;
   farmerId: number;
-  farmerName: string;
+  farmName: string;
   unitType: ProductUnitType;
 }
 type RecentOrders = Omit<

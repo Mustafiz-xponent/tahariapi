@@ -135,7 +135,7 @@ export const getDashboardSummary =
             unitType: ProductUnitType;
             createdAt: Date;
             farmerId: number;
-            farmerName: string;
+            farmName: string;
           }[]
         >`
       SELECT 
@@ -146,7 +146,7 @@ export const getDashboardSummary =
         p."unitType",
         p."createdAt",
         f."farmerId",
-        f."name" as "farmerName"
+        f."farmName"
       FROM "Product" p
       JOIN "Farmer" f ON p."farmerId" = f."farmerId"
       WHERE p."stockQuantity" < p."reorderLevel"
