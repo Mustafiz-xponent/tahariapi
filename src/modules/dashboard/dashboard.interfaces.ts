@@ -1,7 +1,30 @@
-import { Order, Product } from "@/generated/prisma/client";
+import { Order, ProductUnitType } from "@/generated/prisma/client";
 
-// type lowStockProducts = Pick<Product, "productId" | "name" | "quantity">
-
+interface LowStockProducts {
+  productId: number;
+  name: string;
+  stockQuantity: number;
+  reorderLevel: number;
+  farmerId: number;
+  farmerName: string;
+  unitType: ProductUnitType;
+}
+type RecentOrders = Omit<
+  Order,
+  | "shippingAddress"
+  | "preorderDeliveryDate"
+  | "createdAt"
+  | "updatedAt"
+  | "customerId"
+> & {
+  customer: {
+    customerId: bigint;
+    userId: bigint;
+    user: {
+      name: string | null;
+    };
+  };
+};
 export interface DashboardSummaryResult {
   product: {
     totalProducts: number;
@@ -28,8 +51,8 @@ export interface DashboardSummaryResult {
     changePercentage: number;
     changeLabel: string;
   };
-  recentOrders: Order[];
-  lowStockProducts: Product[];
+  recentOrders: RecentOrders[];
+  lowStockProducts: LowStockProducts[];
 }
 export interface salesOverviewResult {
   data: number[];
