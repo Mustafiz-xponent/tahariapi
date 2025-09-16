@@ -6,7 +6,7 @@ import { GetSalesOverviewDto } from "@/modules/dashboard/dashboard.dto";
 import * as dasboardService from "@/modules/dashboard/dashboard.services";
 import {
   DashboardSummaryResult,
-  salesOverviewResult,
+  SalesOverviewResult,
 } from "@/modules/dashboard/dashboard.interfaces";
 
 export const getDashboardSummary = asyncHandler(
@@ -27,12 +27,17 @@ export const getSalesOverview = asyncHandler(
     const year = req.query
       .year as unknown as GetSalesOverviewDto["query"]["year"];
 
-    const salesOverview = await dasboardService.getSalesOverview(year);
-    sendResponse<salesOverviewResult>(res, {
+    const result = await dasboardService.getSalesOverview(year);
+    sendResponse<Omit<SalesOverviewResult, "meta">>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Sales overview retrieved successfully",
-      data: salesOverview,
+      data: {
+        data: result.data,
+        labels: result.labels,
+        year: result.year,
+      },
+      meta: result.meta,
     });
   }
 );

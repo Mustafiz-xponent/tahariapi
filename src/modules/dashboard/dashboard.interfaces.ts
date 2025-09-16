@@ -54,8 +54,14 @@ export interface DashboardSummaryResult {
   recentOrders: RecentOrders[];
   lowStockProducts: LowStockProducts[];
 }
-export interface salesOverviewResult {
+export interface SalesOverviewResult {
   data: number[];
   labels: string[];
   year: number;
+  meta: {
+    yearRange: {
+      min: number;
+      max: number;
+    };
+  };
 }

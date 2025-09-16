@@ -1,14 +1,18 @@
 import prisma from "@/prisma-client/prismaClient";
 import { endOfYear, startOfYear, subDays, startOfDay } from "date-fns";
 import { GetSalesOverviewDto } from "@/modules/dashboard/dashboard.dto";
-import { DashboardSummaryResult } from "@/modules/dashboard/dashboard.interfaces";
+import {
+  DashboardSummaryResult,
+  SalesOverviewResult,
+} from "@/modules/dashboard/dashboard.interfaces";
 import {
   OrderStatus,
   PaymentStatus,
-  Product,
   ProductUnitType,
   SubscriptionStatus,
 } from "@/generated/prisma/client";
+import { AppError } from "@/utils/appError";
+import httpStatus from "http-status";
 
 // Service function
 export const getDashboardSummary =
@@ -236,7 +240,23 @@ export const getDashboardSummary =
  */
 export const getSalesOverview = async (
   year: GetSalesOverviewDto["query"]["year"]
-) => {
+): Promise<SalesOverviewResult> => {
+  const orderDate = await prisma.order.aggregate({
+    _min: { orderDate: true },
+  });
+
+  const minYear = orderDate._min.orderDate?.getFullYear() ?? null;
+
+  if (minYear === null) {
+    throw new AppError(
+      "No orders found to determine year range",
+      httpStatus.NOT_FOUND
+    );
+  }
+
+  if (year < minYear || year > new Date().getFullYear()) {
+    throw new AppError("Invalid year", httpStatus.BAD_REQUEST);
+  }
   const orderSum = await prisma.order.groupBy({
     by: ["createdAt"],
     where: {
@@ -276,5 +296,11 @@ export const getSalesOverview = async (
     ],
     data: revenueByMonth,
     year,
+    meta: {
+      yearRange: {
+        min: minYear,
+        max: new Date().getFullYear(),
+      },
+    },
   };
 };
