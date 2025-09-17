@@ -45,6 +45,7 @@ export const zGetAllFarmersDto = {
     page: z.coerce.number().int().positive().optional().default(1),
     limit: z.coerce.number().int().positive().max(100).optional().default(10),
     sort: z.enum(["asc", "desc"]).optional().default("desc"),
+    search: z.string().optional(),
   }),
 };
 type GetAllFarmersQueryDto = z.infer<typeof zGetAllFarmersDto.query>;

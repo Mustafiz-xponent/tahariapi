@@ -38,12 +38,16 @@ export const createFarmer = asyncHandler(
  */
 export const getAllFarmers = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const { page, limit, sort } =
+    const { page, limit, sort, search } =
       req.query as unknown as GetAllFarmerDto["query"];
     const skip = (page - 1) * limit;
     const paginationParams = { page, limit, skip, sort };
+    const filterParams = { search };
 
-    const result = await farmerService.getAllFarmers(paginationParams);
+    const result = await farmerService.getAllFarmers(
+      paginationParams,
+      filterParams
+    );
 
     sendResponse<Farmer[]>(res, {
       success: true,

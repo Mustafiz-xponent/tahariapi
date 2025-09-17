@@ -15,19 +15,35 @@ export const createFarmer = async (
 };
 
 // Get all farmers
-export const getAllFarmers = async (paginationParams: {
-  page: number;
-  limit: number;
-  skip: number;
-  sort: string;
-}): Promise<GetAllFarmersResult> => {
+export const getAllFarmers = async (
+  paginationParams: {
+    page: number;
+    limit: number;
+    skip: number;
+    sort: string;
+  },
+  filterParams: { search?: string }
+): Promise<GetAllFarmersResult> => {
   const { page, limit, skip, sort } = paginationParams;
+  const { search } = filterParams;
+
+  const where: any = {};
+  if (search && search.trim() !== "") {
+    where.farmName = {
+      contains: search,
+      mode: "insensitive",
+    };
+  }
+  // Get all farmers
   const farmers = await prisma.farmer.findMany({
+    where,
     take: limit,
     skip: skip,
     orderBy: { createdAt: sort === "asc" ? "asc" : "desc" },
   });
-  const totalFarmers = await prisma.farmer.count();
+  // Count total farmers
+  const totalFarmers = await prisma.farmer.count({ where });
+
   return {
     data: farmers,
     currentPage: page,
