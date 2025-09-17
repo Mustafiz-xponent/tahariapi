@@ -1,14 +1,17 @@
-// src/modules/farmers/farmers.controller.ts
-import { ZodError, z } from "zod";
+import { bigint, z } from "zod";
 import httpStatus from "http-status";
 import { Request, Response } from "express";
 import sendResponse from "@/utils/sendResponse";
 import { Farmer } from "@/generated/prisma/client";
 import * as farmerService from "@/modules/farmers/farmers.service";
 import {
+  CreateFarmerDto,
+  GetAllFarmerDto,
+  GetFarmerDto,
   zCreateFarmerDto,
   zUpdateFarmerDto,
 } from "@/modules/farmers/farmer.dto";
+import asyncHandler from "@/utils/asyncHandler";
 
 const farmerIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
   message: "Farmer ID must be a positive integer",
@@ -17,12 +20,9 @@ const farmerIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
 /**
  * Create a new farmer
  */
-export const createFarmer = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const data = zCreateFarmerDto.parse(req.body);
+export const createFarmer = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const data = req.body as CreateFarmerDto["body"];
     const farmer = await farmerService.createFarmer(data);
     sendResponse<Farmer>(res, {
       success: true,
@@ -30,115 +30,78 @@ export const createFarmer = async (
       message: "Farmer created successfully",
       data: farmer,
     });
-  } catch (error) {
-    if (error instanceof ZodError) {
-      res.status(httpStatus.BAD_REQUEST).json({ errors: error.flatten() });
-      return;
-    }
-    sendResponse<null>(res, {
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: "Failed to create farmer",
-      data: null,
-    });
   }
-};
+);
 
 /**
  * Get all farmers
  */
-export const getAllFarmers = async (
-  _req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const farmers = await farmerService.getAllFarmers();
+export const getAllFarmers = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { page, limit, sort } =
+      req.query as unknown as GetAllFarmerDto["query"];
+    const skip = (page - 1) * limit;
+    const paginationParams = { page, limit, skip, sort };
+
+    const result = await farmerService.getAllFarmers(paginationParams);
+
     sendResponse<Farmer[]>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Farmers retrieved successfully",
-      data: farmers,
-    });
-  } catch (error) {
-    sendResponse<null>(res, {
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: "Failed to fetch farmers",
-      data: null,
+      data: result.data,
+      pagination: {
+        currentPage: result.currentPage,
+        totalPages: result.totalPages,
+        totalItems: result.totalCount,
+        itemsPerPage: limit,
+        hasNextPage: page < result.totalPages,
+        hasPreviousPage: page > 1,
+      },
     });
   }
-};
+);
 
 /**
  * Get a single farmer by ID
  */
-export const getFarmerById = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
+export const getFarmerById = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const farmerId = BigInt(req.params.id);
     const farmer = await farmerService.getFarmerById(farmerId);
-    if (!farmer) {
-      res.status(httpStatus.NOT_FOUND).json({ message: "Farmer not found" });
-      return;
-    }
+
     sendResponse<Farmer>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Farmer retrieved successfully",
       data: farmer,
     });
-  } catch (error) {
-    sendResponse<null>(res, {
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: "Failed to fetch farmer",
-      data: null,
-    });
   }
-};
+);
 
 /**
  * Update a farmer by ID
  */
-export const updateFarmer = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const farmerId = farmerIdSchema.parse(req.params.id);
-    const data = zUpdateFarmerDto.parse(req.body);
-    const updated = await farmerService.updateFarmer(farmerId, data);
+export const updateFarmer = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const farmerId = BigInt(req.params.id);
+    const data = req.body;
+    const updatedFarmer = await farmerService.updateFarmer(farmerId, data);
     sendResponse<Farmer>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Farmer updated successfully",
-      data: updated,
-    });
-  } catch (error) {
-    if (error instanceof ZodError) {
-      res.status(httpStatus.BAD_REQUEST).json({ errors: error.flatten() });
-      return;
-    }
-    sendResponse<null>(res, {
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: "Failed to update farmer",
-      data: null,
+      data: updatedFarmer,
     });
   }
-};
+);
 
 /**
  * Delete a farmer by ID
  */
-export const deleteFarmer = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const farmerId = farmerIdSchema.parse(req.params.id);
+export const deleteFarmer = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const farmerId = BigInt(req.params.id);
     await farmerService.deleteFarmer(farmerId);
     sendResponse<null>(res, {
       success: true,
@@ -146,12 +109,5 @@ export const deleteFarmer = async (
       message: "Farmer deleted successfully",
       data: null,
     });
-  } catch (error) {
-    sendResponse<null>(res, {
-      success: false,
-      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
-      message: "Failed to delete farmer",
-      data: null,
-    });
   }
-};
+);

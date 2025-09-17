@@ -1,64 +1,76 @@
-// src/modules/farmers/farmers.service.ts
 import prisma from "@/prisma-client/prismaClient";
 import { Farmer } from "@/generated/prisma/client";
 import { getErrorMessage } from "@/utils/errorHandler";
 import { CreateFarmerDto, UpdateFarmerDto } from "@/modules/farmers/farmer.dto";
+import { GetAllFarmersResult } from "@/modules/farmers/farmers.interface";
+import { AppError } from "@/utils/appError";
+import httpStatus from "http-status";
 
 // Create a new farmer
-export const createFarmer = async (data: CreateFarmerDto): Promise<Farmer> => {
-  try {
-    return await prisma.farmer.create({
-      data,
-    });
-  } catch (error) {
-    throw new Error(`Error creating farmer: ${getErrorMessage(error)}`);
-  }
+export const createFarmer = async (
+  data: CreateFarmerDto["body"]
+): Promise<Farmer> => {
+  const farmer = await prisma.farmer.create({ data });
+  return farmer;
 };
 
 // Get all farmers
-export const getAllFarmers = async (): Promise<Farmer[]> => {
-  try {
-    return await prisma.farmer.findMany();
-  } catch (error) {
-    throw new Error(`Error fetching farmers: ${getErrorMessage(error)}`);
-  }
+export const getAllFarmers = async (paginationParams: {
+  page: number;
+  limit: number;
+  skip: number;
+  sort: string;
+}): Promise<GetAllFarmersResult> => {
+  const { page, limit, skip, sort } = paginationParams;
+  const farmers = await prisma.farmer.findMany({
+    take: limit,
+    skip: skip,
+    orderBy: { createdAt: sort === "asc" ? "asc" : "desc" },
+  });
+  const totalFarmers = await prisma.farmer.count();
+  return {
+    data: farmers,
+    currentPage: page,
+    totalPages: Math.ceil(totalFarmers / limit),
+    totalCount: totalFarmers,
+  };
 };
 
 // Get a farmer by ID
-export const getFarmerById = async (
-  farmerId: BigInt
-): Promise<Farmer | null> => {
-  try {
-    return await prisma.farmer.findUnique({
-      where: { farmerId: Number(farmerId) }, // Convert BigInt to Number for Prisma compatibility
-    });
-  } catch (error) {
-    throw new Error(`Error fetching farmer by ID: ${getErrorMessage(error)}`);
+export const getFarmerById = async (farmerId: bigint): Promise<Farmer> => {
+  const farmer = await prisma.farmer.findUnique({
+    where: { farmerId },
+  });
+  if (!farmer) {
+    throw new AppError("Farmer not found", httpStatus.BAD_REQUEST);
   }
+  return farmer;
 };
 
 // Update a farmer's details
 export const updateFarmer = async (
   farmerId: bigint,
-  data: UpdateFarmerDto
+  data: UpdateFarmerDto["body"]
 ): Promise<Farmer> => {
-  try {
-    return await prisma.farmer.update({
-      where: { farmerId: Number(farmerId) }, // Convert BigInt to Number for Prisma compatibility
-      data,
-    });
-  } catch (error) {
-    throw new Error(`Error updating farmer: ${getErrorMessage(error)}`);
+  const farmer = await prisma.farmer.findUnique({ where: { farmerId } });
+  if (!farmer) {
+    throw new AppError("Farmer not found", httpStatus.BAD_REQUEST);
   }
+  const updatedFarmer = await prisma.farmer.update({
+    where: { farmerId },
+    data,
+  });
+  return updatedFarmer;
 };
 
 // Delete a farmer
-export const deleteFarmer = async (farmerId: BigInt): Promise<Farmer> => {
-  try {
-    return await prisma.farmer.delete({
-      where: { farmerId: Number(farmerId) }, // Convert BigInt to Number for Prisma compatibility
-    });
-  } catch (error) {
-    throw new Error(`Error deleting farmer: ${getErrorMessage(error)}`);
+export const deleteFarmer = async (farmerId: bigint): Promise<void> => {
+  const farmer = await prisma.farmer.findUnique({ where: { farmerId } });
+
+  if (!farmer) {
+    throw new AppError("Farmer not found", httpStatus.BAD_REQUEST);
   }
+  await prisma.farmer.delete({
+    where: { farmerId },
+  });
 };
