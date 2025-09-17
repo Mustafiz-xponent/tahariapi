@@ -37,6 +37,7 @@ export const getAllFarmers = async (
   // Get all farmers
   const farmers = await prisma.farmer.findMany({
     where,
+    include: { products: { select: { name: true } } },
     take: limit,
     skip: skip,
     orderBy: { createdAt: sort === "asc" ? "asc" : "desc" },
@@ -56,6 +57,7 @@ export const getAllFarmers = async (
 export const getFarmerById = async (farmerId: bigint): Promise<Farmer> => {
   const farmer = await prisma.farmer.findUnique({
     where: { farmerId },
+    include: { products: { select: { name: true } } },
   });
   if (!farmer) {
     throw new AppError("Farmer not found", httpStatus.BAD_REQUEST);
