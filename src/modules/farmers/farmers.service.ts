@@ -1,6 +1,5 @@
 import prisma from "@/prisma-client/prismaClient";
 import { Farmer } from "@/generated/prisma/client";
-import { getErrorMessage } from "@/utils/errorHandler";
 import { CreateFarmerDto, UpdateFarmerDto } from "@/modules/farmers/farmer.dto";
 import { GetAllFarmersResult } from "@/modules/farmers/farmers.interface";
 import { AppError } from "@/utils/appError";

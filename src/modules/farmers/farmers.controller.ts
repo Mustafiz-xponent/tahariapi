@@ -1,21 +1,10 @@
-import { bigint, z } from "zod";
 import httpStatus from "http-status";
 import { Request, Response } from "express";
 import sendResponse from "@/utils/sendResponse";
 import { Farmer } from "@/generated/prisma/client";
 import * as farmerService from "@/modules/farmers/farmers.service";
-import {
-  CreateFarmerDto,
-  GetAllFarmerDto,
-  GetFarmerDto,
-  zCreateFarmerDto,
-  zUpdateFarmerDto,
-} from "@/modules/farmers/farmer.dto";
+import { CreateFarmerDto, GetAllFarmerDto } from "@/modules/farmers/farmer.dto";
 import asyncHandler from "@/utils/asyncHandler";
-
-const farmerIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
-  message: "Farmer ID must be a positive integer",
-});
 
 /**
  * Create a new farmer
