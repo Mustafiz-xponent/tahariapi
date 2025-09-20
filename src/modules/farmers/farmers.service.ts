@@ -82,12 +82,20 @@ export const updateFarmer = async (
 
 // Delete a farmer
 export const deleteFarmer = async (farmerId: bigint): Promise<void> => {
-  const farmer = await prisma.farmer.findUnique({ where: { farmerId } });
+  const farmer = await prisma.farmer.findUnique({
+    where: { farmerId },
+    include: { products: { select: { productId: true } } },
+  });
 
   if (!farmer) {
     throw new AppError("Farmer not found", httpStatus.BAD_REQUEST);
   }
-  await prisma.farmer.delete({
-    where: { farmerId },
-  });
+  await prisma.$transaction([
+    prisma.product.deleteMany({
+      where: { farmerId },
+    }),
+    prisma.farmer.delete({
+      where: { farmerId },
+    }),
+  ]);
 };

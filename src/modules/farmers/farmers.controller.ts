@@ -80,6 +80,7 @@ export const updateFarmer = asyncHandler(
     const farmerId = BigInt(req.params.id);
     const data = req.body;
     const updatedFarmer = await farmerService.updateFarmer(farmerId, data);
+    
     sendResponse<Farmer>(res, {
       success: true,
       statusCode: httpStatus.OK,
