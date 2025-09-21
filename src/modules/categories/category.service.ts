@@ -71,6 +71,7 @@ export const getAllCategories = async (
   // Get all categories
   const categories = await prisma.category.findMany({
     where,
+    include: { products: { select: { name: true } } },
     take: limit,
     skip: skip,
     orderBy: { createdAt: sort === "asc" ? "asc" : "desc" },
@@ -108,7 +109,10 @@ export const getAllCategories = async (
 export const getCategoryById = async (
   categoryId: bigint
 ): Promise<GetCategoryResult> => {
-  const category = await prisma.category.findUnique({ where: { categoryId } });
+  const category = await prisma.category.findUnique({
+    where: { categoryId },
+    include: { products: { select: { name: true } } },
+  });
 
   if (!category) {
     throw new AppError("Category not found", httpStatus.NOT_FOUND);
