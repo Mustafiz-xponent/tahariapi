@@ -1,4 +1,7 @@
+import logger from "@/utils/logger";
 import httpStatus from "http-status";
+import { AppError } from "@/utils/appError";
+import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
 import {
   PrismaClientKnownRequestError,
   PrismaClientUnknownRequestError,
@@ -6,9 +9,6 @@ import {
   PrismaClientInitializationError,
   PrismaClientValidationError,
 } from "@/generated/prisma/client/runtime/library";
-import { Request, Response, NextFunction, ErrorRequestHandler } from "express";
-import { AppError } from "@/utils/appError";
-import logger from "@/utils/logger";
 
 const handlePrismaError = (error: unknown): AppError => {
   let message = "Database operation failed";
@@ -72,6 +72,7 @@ const handleValidationError = (error: any) => {
 };
 
 const sendErrorDev = (err: AppError, res: Response) => {
+  console.log("ERROR:", err);
   res.status(err.statusCode).json({
     success: false,
     error: {

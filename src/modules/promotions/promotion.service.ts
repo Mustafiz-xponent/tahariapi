@@ -1,9 +1,14 @@
 import httpStatus from "http-status";
 import { AppError } from "@/utils/appError";
 import prisma from "@/prisma-client/prismaClient";
-import { Promotion } from "@/generated/prisma/client";
 import { IMulterFile } from "@/utils/fileUpload/configMulterUpload";
 import { multerFileToFileObject } from "@/utils/fileUpload/configMulterUpload";
+import {
+  Prisma,
+  PromoPlacement,
+  PromoTargetType,
+  Promotion,
+} from "@/generated/prisma/client";
 import {
   CreatePromotionDto,
   UpdatePromotionDto,
@@ -66,11 +71,11 @@ export async function createPromotion(
  */
 export async function getAllPromotions(
   paginationParams: { page: number; limit: number; skip: number; sort: string },
-  filterParams: { placement?: string; targetType?: string }
+  filterParams: { placement?: PromoPlacement; targetType?: PromoTargetType }
 ): Promise<IGetPromotionsResult> {
   const { page, limit, skip, sort } = paginationParams;
   const { placement, targetType } = filterParams;
-  const whereConditions: any = {
+  const whereConditions: Prisma.PromotionWhereInput = {
     isActive: true,
     ...(placement ? { placement } : {}),
     ...(targetType ? { targetType } : {}),

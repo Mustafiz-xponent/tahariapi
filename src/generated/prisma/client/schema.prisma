@@ -217,6 +217,9 @@ model Category {
   description    String?
   products       Product[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   @@index([categoryId])
 }
 

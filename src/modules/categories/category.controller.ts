@@ -2,157 +2,120 @@
  * Controller layer for category operations.
  * Handles HTTP requests and responses for category endpoints.
  */
-import { z } from "zod";
 import httpStatus from "http-status";
 import { Request, Response } from "express";
+import asyncHandler from "@/utils/asyncHandler";
 import sendResponse from "@/utils/sendResponse";
 import { Category } from "@/generated/prisma/client";
-import { upload } from "@/utils/fileUpload/configMulterUpload";
-import { handleErrorResponse } from "@/utils/errorResponseHandler";
 import * as categoryService from "@/modules/categories/category.service";
 import {
-  zCreateCategoryDto,
-  zUpdateCategoryDto,
+  CreateCategoryDto,
+  GetCategoriesDto,
+  UpdateCategoryDto,
 } from "@/modules/categories/category.dto";
-
-const categoryIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
-  message: "Category ID must be a positive integer",
-});
 
 /**
  * Create a new category
  */
-export const createCategory = [
-  upload.single("image"),
+export const createCategory = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    try {
-      const data = zCreateCategoryDto.parse(req.body);
-      const file = req.file;
+    const data = req.body as CreateCategoryDto["body"];
+    const file = req.file;
 
-      const category = await categoryService.createCategory({
-        data,
-        file,
-      });
-      sendResponse<Category>(res, {
-        success: true,
-        statusCode: httpStatus.CREATED,
-        message: "Category created successfully",
-        data: category,
-      });
-    } catch (error) {
-      handleErrorResponse(error, res, "create category");
-    }
-  },
-];
+    const category = await categoryService.createCategory({ data, file });
+
+    sendResponse<Category>(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Category created successfully",
+      data: category,
+    });
+  }
+);
 
 /**
  * Get all categories with accessible image URLs for products
  */
-export const getAllCategories = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const generateAccessibleUrls = req.query.generateAccessibleUrls !== "false"; // Default to true
-    const urlExpiresIn = parseInt(req.query.urlExpiresIn as string) || 300; // Default 5 minutes
+export const getAllCategories = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const { page, limit, sort, search } =
+      req.query as unknown as GetCategoriesDto["query"];
+    const skip = (page - 1) * limit;
+    const queryOptions = { page, limit, skip, sort, search };
 
-    const categories = await categoryService.getAllCategories(
-      generateAccessibleUrls,
-      urlExpiresIn
-    );
+    const result = await categoryService.getAllCategories(queryOptions);
+
     sendResponse<Category[]>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Categories retrieved successfully",
-      data: categories,
+      data: result.data,
+      pagination: {
+        currentPage: result.currentPage,
+        totalPages: result.totalPages,
+        totalItems: result.totalCount,
+        itemsPerPage: limit,
+        hasNextPage: page < result.totalPages,
+        hasPreviousPage: page > 1,
+      },
     });
-  } catch (error) {
-    handleErrorResponse(error, res, "fetch categories");
   }
-};
+);
 
 /**
  * Get a single category by ID with accessible image URLs for products
  */
-export const getCategoryById = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
+export const getCategoryById = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const categoryId = BigInt(req.params.id);
-    const generateAccessibleUrls = req.query.generateAccessibleUrls !== "false"; // Default to true
-    const urlExpiresIn = parseInt(req.query.urlExpiresIn as string) || 300; // Default 5 minutes
 
-    const category = await categoryService.getCategoryById(
-      categoryId,
-      generateAccessibleUrls,
-      urlExpiresIn
-    );
+    const category = await categoryService.getCategoryById(categoryId);
 
-    if (!category) {
-      sendResponse<null>(res, {
-        success: false,
-        statusCode: httpStatus.NOT_FOUND,
-        message: "Category not found",
-        data: null,
-      });
-      return;
-    }
     sendResponse<Category>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Category retrieved successfully",
       data: category,
     });
-  } catch (error) {
-    handleErrorResponse(error, res, "fetch category");
   }
-};
+);
 
 /**
  * Update a category by ID
  */
-export const updateCategory = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const categoryId = categoryIdSchema.parse(req.params.id);
-    const data = zUpdateCategoryDto.parse(req.body);
+export const updateCategory = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const categoryId = BigInt(req.params.id);
+    const data = req.body as UpdateCategoryDto["body"];
     const file = req.file;
+
     const updated = await categoryService.updateCategory(
-      BigInt(categoryId),
+      categoryId,
       data,
       file
     );
+
     sendResponse<Category>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Category updated successfully",
       data: updated,
     });
-  } catch (error) {
-    handleErrorResponse(error, res, "update category");
   }
-};
+);
 
 /**
  * Delete a category by ID
  */
-export const deleteCategory = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const categoryId = categoryIdSchema.parse(req.params.id);
+export const deleteCategory = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const categoryId = BigInt(req.params.id);
     await categoryService.deleteCategory(categoryId);
-    sendResponse<null>(res, {
+
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Category deleted successfully",
-      data: null,
     });
-  } catch (error) {
-    handleErrorResponse(error, res, "delete category");
   }
-};
+);

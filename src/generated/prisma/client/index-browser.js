@@ -166,7 +166,9 @@ exports.Prisma.CategoryScalarFieldEnum = {
   name: 'name',
   imageUrl: 'imageUrl',
   isPrivateImage: 'isPrivateImage',
-  description: 'description'
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ProductScalarFieldEnum = {

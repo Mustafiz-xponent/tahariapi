@@ -9603,6 +9603,8 @@ export namespace Prisma {
     imageUrl: string | null
     isPrivateImage: boolean | null
     description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type CategoryMaxAggregateOutputType = {
@@ -9611,6 +9613,8 @@ export namespace Prisma {
     imageUrl: string | null
     isPrivateImage: boolean | null
     description: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
   }
 
   export type CategoryCountAggregateOutputType = {
@@ -9619,6 +9623,8 @@ export namespace Prisma {
     imageUrl: number
     isPrivateImage: number
     description: number
+    createdAt: number
+    updatedAt: number
     _all: number
   }
 
@@ -9637,6 +9643,8 @@ export namespace Prisma {
     imageUrl?: true
     isPrivateImage?: true
     description?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type CategoryMaxAggregateInputType = {
@@ -9645,6 +9653,8 @@ export namespace Prisma {
     imageUrl?: true
     isPrivateImage?: true
     description?: true
+    createdAt?: true
+    updatedAt?: true
   }
 
   export type CategoryCountAggregateInputType = {
@@ -9653,6 +9663,8 @@ export namespace Prisma {
     imageUrl?: true
     isPrivateImage?: true
     description?: true
+    createdAt?: true
+    updatedAt?: true
     _all?: true
   }
 
@@ -9748,6 +9760,8 @@ export namespace Prisma {
     imageUrl: string
     isPrivateImage: boolean
     description: string | null
+    createdAt: Date
+    updatedAt: Date
     _count: CategoryCountAggregateOutputType | null
     _avg: CategoryAvgAggregateOutputType | null
     _sum: CategorySumAggregateOutputType | null
@@ -9775,6 +9789,8 @@ export namespace Prisma {
     imageUrl?: boolean
     isPrivateImage?: boolean
     description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
     products?: boolean | Category$productsArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["category"]>
@@ -9785,6 +9801,8 @@ export namespace Prisma {
     imageUrl?: boolean
     isPrivateImage?: boolean
     description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["category"]>
 
   export type CategorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9793,6 +9811,8 @@ export namespace Prisma {
     imageUrl?: boolean
     isPrivateImage?: boolean
     description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }, ExtArgs["result"]["category"]>
 
   export type CategorySelectScalar = {
@@ -9801,9 +9821,11 @@ export namespace Prisma {
     imageUrl?: boolean
     isPrivateImage?: boolean
     description?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
   }
 
-  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"categoryId" | "name" | "imageUrl" | "isPrivateImage" | "description", ExtArgs["result"]["category"]>
+  export type CategoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"categoryId" | "name" | "imageUrl" | "isPrivateImage" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
   export type CategoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     products?: boolean | Category$productsArgs<ExtArgs>
     _count?: boolean | CategoryCountOutputTypeDefaultArgs<ExtArgs>
@@ -9822,6 +9844,8 @@ export namespace Prisma {
       imageUrl: string
       isPrivateImage: boolean
       description: string | null
+      createdAt: Date
+      updatedAt: Date
     }, ExtArgs["result"]["category"]>
     composites: {}
   }
@@ -10251,6 +10275,8 @@ export namespace Prisma {
     readonly imageUrl: FieldRef<"Category", 'String'>
     readonly isPrivateImage: FieldRef<"Category", 'Boolean'>
     readonly description: FieldRef<"Category", 'String'>
+    readonly createdAt: FieldRef<"Category", 'DateTime'>
+    readonly updatedAt: FieldRef<"Category", 'DateTime'>
   }
     
 
@@ -32525,7 +32551,9 @@ export namespace Prisma {
     name: 'name',
     imageUrl: 'imageUrl',
     isPrivateImage: 'isPrivateImage',
-    description: 'description'
+    description: 'description',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
   };
 
   export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
@@ -33487,6 +33515,8 @@ export namespace Prisma {
     imageUrl?: StringFilter<"Category"> | string
     isPrivateImage?: BoolFilter<"Category"> | boolean
     description?: StringNullableFilter<"Category"> | string | null
+    createdAt?: DateTimeFilter<"Category"> | Date | string
+    updatedAt?: DateTimeFilter<"Category"> | Date | string
     products?: ProductListRelationFilter
   }
 
@@ -33496,6 +33526,8 @@ export namespace Prisma {
     imageUrl?: SortOrder
     isPrivateImage?: SortOrder
     description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     products?: ProductOrderByRelationAggregateInput
   }
 
@@ -33508,6 +33540,8 @@ export namespace Prisma {
     imageUrl?: StringFilter<"Category"> | string
     isPrivateImage?: BoolFilter<"Category"> | boolean
     description?: StringNullableFilter<"Category"> | string | null
+    createdAt?: DateTimeFilter<"Category"> | Date | string
+    updatedAt?: DateTimeFilter<"Category"> | Date | string
     products?: ProductListRelationFilter
   }, "categoryId" | "name">
 
@@ -33517,6 +33551,8 @@ export namespace Prisma {
     imageUrl?: SortOrder
     isPrivateImage?: SortOrder
     description?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
     _count?: CategoryCountOrderByAggregateInput
     _avg?: CategoryAvgOrderByAggregateInput
     _max?: CategoryMaxOrderByAggregateInput
@@ -33533,6 +33569,8 @@ export namespace Prisma {
     imageUrl?: StringWithAggregatesFilter<"Category"> | string
     isPrivateImage?: BoolWithAggregatesFilter<"Category"> | boolean
     description?: StringNullableWithAggregatesFilter<"Category"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Category"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Category"> | Date | string
   }
 
   export type ProductWhereInput = {
@@ -35397,6 +35435,8 @@ export namespace Prisma {
     imageUrl: string
     isPrivateImage?: boolean
     description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     products?: ProductCreateNestedManyWithoutCategoryInput
   }
 
@@ -35406,6 +35446,8 @@ export namespace Prisma {
     imageUrl: string
     isPrivateImage?: boolean
     description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
     products?: ProductUncheckedCreateNestedManyWithoutCategoryInput
   }
 
@@ -35415,6 +35457,8 @@ export namespace Prisma {
     imageUrl?: StringFieldUpdateOperationsInput | string
     isPrivateImage?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUpdateManyWithoutCategoryNestedInput
   }
 
@@ -35424,6 +35468,8 @@ export namespace Prisma {
     imageUrl?: StringFieldUpdateOperationsInput | string
     isPrivateImage?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     products?: ProductUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
@@ -35433,6 +35479,8 @@ export namespace Prisma {
     imageUrl: string
     isPrivateImage?: boolean
     description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CategoryUpdateManyMutationInput = {
@@ -35441,6 +35489,8 @@ export namespace Prisma {
     imageUrl?: StringFieldUpdateOperationsInput | string
     isPrivateImage?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoryUncheckedUpdateManyInput = {
@@ -35449,6 +35499,8 @@ export namespace Prisma {
     imageUrl?: StringFieldUpdateOperationsInput | string
     isPrivateImage?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProductCreateInput = {
@@ -37512,6 +37564,8 @@ export namespace Prisma {
     imageUrl?: SortOrder
     isPrivateImage?: SortOrder
     description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CategoryAvgOrderByAggregateInput = {
@@ -37524,6 +37578,8 @@ export namespace Prisma {
     imageUrl?: SortOrder
     isPrivateImage?: SortOrder
     description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CategoryMinOrderByAggregateInput = {
@@ -37532,6 +37588,8 @@ export namespace Prisma {
     imageUrl?: SortOrder
     isPrivateImage?: SortOrder
     description?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type CategorySumOrderByAggregateInput = {
@@ -42747,6 +42805,8 @@ export namespace Prisma {
     imageUrl: string
     isPrivateImage?: boolean
     description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CategoryUncheckedCreateWithoutProductsInput = {
@@ -42755,6 +42815,8 @@ export namespace Prisma {
     imageUrl: string
     isPrivateImage?: boolean
     description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CategoryCreateOrConnectWithoutProductsInput = {
@@ -43015,6 +43077,8 @@ export namespace Prisma {
     imageUrl?: StringFieldUpdateOperationsInput | string
     isPrivateImage?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CategoryUncheckedUpdateWithoutProductsInput = {
@@ -43023,6 +43087,8 @@ export namespace Prisma {
     imageUrl?: StringFieldUpdateOperationsInput | string
     isPrivateImage?: BoolFieldUpdateOperationsInput | boolean
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FarmerUpsertWithoutProductsInput = {

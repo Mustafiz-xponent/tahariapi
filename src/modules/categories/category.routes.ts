@@ -3,10 +3,18 @@
  * Defines API endpoints for categories.
  */
 import { Router } from "express";
+import validator from "@/middlewares/validator";
 import { UserRole } from "@/generated/prisma/client";
 import { upload } from "@/utils/fileUpload/configMulterUpload";
 import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
 import * as CategoryController from "@/modules/categories/category.controller";
+import {
+  zCreateCategoryDto,
+  zDeleteCategoryDto,
+  zGetCategoriesDto,
+  zGetCategoryDto,
+  zUpdateCategoryDto,
+} from "@/modules/categories/category.dto";
 
 const router = Router();
 
@@ -15,14 +23,24 @@ router.post(
   "/",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  upload.single("image"),
+  validator(zCreateCategoryDto),
   CategoryController.createCategory
 );
 
 // Route to get all categories
-router.get("/", CategoryController.getAllCategories);
+router.get(
+  "/",
+  validator(zGetCategoriesDto),
+  CategoryController.getAllCategories
+);
 
 // Route to get a category by ID
-router.get("/:id", CategoryController.getCategoryById);
+router.get(
+  "/:id",
+  validator(zGetCategoryDto),
+  CategoryController.getCategoryById
+);
 
 // Route to update a category's details by admin
 router.put(
@@ -30,6 +48,7 @@ router.put(
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   upload.single("image"),
+  validator(zUpdateCategoryDto),
   CategoryController.updateCategory
 );
 
@@ -38,6 +57,7 @@ router.delete(
   "/:id",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  validator(zDeleteCategoryDto),
   CategoryController.deleteCategory
 );
 

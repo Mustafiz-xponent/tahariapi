@@ -1,9 +1,9 @@
-import prisma from "@/prisma-client/prismaClient";
-import { Farmer } from "@/generated/prisma/client";
-import { CreateFarmerDto, UpdateFarmerDto } from "@/modules/farmers/farmer.dto";
-import { GetAllFarmersResult } from "@/modules/farmers/farmers.interface";
-import { AppError } from "@/utils/appError";
 import httpStatus from "http-status";
+import { AppError } from "@/utils/appError";
+import prisma from "@/prisma-client/prismaClient";
+import { Farmer, Prisma } from "@/generated/prisma/client";
+import { GetAllFarmersResult } from "@/modules/farmers/farmers.interface";
+import { CreateFarmerDto, UpdateFarmerDto } from "@/modules/farmers/farmer.dto";
 
 // Create a new farmer
 export const createFarmer = async (
@@ -26,7 +26,7 @@ export const getAllFarmers = async (
   const { page, limit, skip, sort } = paginationParams;
   const { search } = filterParams;
 
-  const where: any = {};
+  const where: Prisma.FarmerWhereInput = {};
   if (search && search.trim() !== "") {
     where.farmName = {
       contains: search,
