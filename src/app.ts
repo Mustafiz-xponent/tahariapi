@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import helmet from "helmet";
 import morgran from "morgan";
 import { initJobs } from "@/jobs";
-import bodyParser from "body-parser";
 import httpStatus from "http-status";
 import compression from "compression";
 import sendResponse from "@/utils/sendResponse";
@@ -41,7 +40,7 @@ dotenv.config();
 
 const app: Application = express();
 // Core Middleware
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.use(morgran("dev"));

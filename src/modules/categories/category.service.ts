@@ -181,8 +181,12 @@ export const deleteCategory = async (categoryId: bigint): Promise<void> => {
   }
   // Delete image from S3
   await deleteFileFromS3(category.imageUrl!, true);
-  // Delete category
-  await prisma.category.delete({
-    where: { categoryId },
-  });
+  await prisma.$transaction([
+    // Delete category
+    prisma.category.delete({
+      where: { categoryId },
+    }),
+    // delete products
+    prisma.product.deleteMany({ where: { categoryId } }),
+  ]);
 };
