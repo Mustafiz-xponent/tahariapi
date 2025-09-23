@@ -64,11 +64,10 @@ export const getCustomerById = async (
     const customerId = customerIdSchema.parse(req.params.id);
     const customer = await customerService.getCustomerById(customerId);
     if (!customer) {
-      sendResponse<null>(res, {
+      sendResponse(res, {
         success: false,
         statusCode: httpStatus.NOT_FOUND,
         message: "Customer not found",
-        data: null,
       });
       return;
     }
@@ -114,11 +113,10 @@ export const updateCustomer = async (
       res.status(httpStatus.BAD_REQUEST).json({ errors: error.flatten() });
       return;
     }
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "Failed to update customer",
-      data: null,
     });
   }
 };
@@ -133,22 +131,20 @@ export const deleteCustomer = async (
   try {
     const customerId = customerIdSchema.parse(req.params.id);
     await customerService.deleteCustomer(customerId);
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Customer deleted successfully",
-      data: null,
     });
   } catch (error) {
     if (error instanceof ZodError) {
       res.status(httpStatus.BAD_REQUEST).json({ errors: error.flatten() });
       return;
     }
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "Failed to delete customer",
-      data: null,
     });
   }
 };

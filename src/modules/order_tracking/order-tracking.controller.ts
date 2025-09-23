@@ -120,11 +120,10 @@ export const deleteOrderTracking = async (
   try {
     const trackingId = idSchema.parse(req.params.id);
     await orderTrackingService.deleteOrderTracking(trackingId);
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Order tracking deleted successfully",
-      data: null,
     });
   } catch (error) {
     handleErrorResponse(error, res, "delete order tracking");

@@ -238,11 +238,10 @@ export const deleteSubscription = async (
   try {
     const subscriptionId = subscriptionIdSchema.parse(req.params.id);
     await subscriptionService.deleteSubscription(subscriptionId);
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Subscription deleted successfully",
-      data: null,
     });
   } catch (error) {
     handleErrorResponse(error, res, "delete subscription");

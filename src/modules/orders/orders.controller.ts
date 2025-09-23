@@ -148,11 +148,10 @@ export const deleteOrder = async (
     const orderId = orderIdSchema.parse(req.params.id);
     await orderService.deleteOrder(orderId);
 
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Order deleted successfully",
-      data: null,
     });
   } catch (error) {
     handleErrorResponse(error, res, "delete order");

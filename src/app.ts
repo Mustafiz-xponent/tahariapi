@@ -89,20 +89,18 @@ app.use("/api/dashboard", dashboardRoutes);
 
 // Health check route
 app.get("/health", (_req: Request, res: Response) => {
-  sendResponse<null>(res, {
+  sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
     message: "Server is running",
-    data: null,
   });
 });
 // API route not found
 app.use((_req: Request, res: Response) => {
-  sendResponse<null>(res, {
+  sendResponse(res, {
     success: false,
     statusCode: httpStatus.NOT_FOUND,
     message: "API route not found",
-    data: null,
   });
 });
 // Global error handler

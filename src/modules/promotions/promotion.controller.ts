@@ -113,11 +113,10 @@ export const deletePromotion = asyncHandler(
     const promotionId = BigInt(req.params.id);
     await promotionService.deletePromotion(promotionId);
 
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Promotion deleted successfully",
-      data: null,
     });
   }
 );

@@ -11,72 +11,54 @@ import { upload } from "@/utils/fileUpload/configMulterUpload";
 import { handleErrorResponse } from "@/utils/errorResponseHandler";
 import * as productService from "@/modules/products/product.service";
 import {
-  GetAllProductsQueryDto,
-  productNameSchema,
+  GetAllProductsDto,
+  UpdateProductDto,
   zCreateProductDto,
   zUpdateProductDto,
 } from "@/modules/products/product.dto";
-
-const productIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
-  message: "Product ID must be a positive integer",
-});
+import asyncHandler from "@/utils/asyncHandler";
 
 /**
  * Create a new product with optional image uploads
  */
-export const createProduct = [
-  upload.array("images", 10), // Allow up to 10 images
+export const createProduct = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    try {
-      const data = zCreateProductDto.parse(req.body);
-      const files = req.files as Express.Multer.File[];
+    const data = req.body;
+    const files = req.files as Express.Multer.File[];
 
-      // Convert multer files to File objects if images are provided
-      let imageFiles: File[] = [];
-      if (files && files.length > 0) {
-        imageFiles = files.map((file) => {
-          const blob = new Blob([file.buffer], { type: file.mimetype });
-          return new File([blob], file.originalname, { type: file.mimetype });
-        });
-      }
-
-      const product = await productService.createProduct(
-        data,
-        imageFiles,
-        true
-      );
-
-      sendResponse<Product>(res, {
-        success: true,
-        statusCode: httpStatus.CREATED,
-        message: "Product created successfully",
-        data: product,
+    // Convert multer files to File objects if images are provided
+    let imageFiles: File[] = [];
+    if (files && files.length > 0) {
+      imageFiles = files.map((file) => {
+        const blob = new Blob([file.buffer], { type: file.mimetype });
+        return new File([blob], file.originalname, { type: file.mimetype });
       });
-    } catch (error) {
-      handleErrorResponse(error, res, "create product");
     }
-  },
-];
+
+    const product = await productService.createProduct(data, imageFiles, true);
+
+    sendResponse<Product>(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "Product created successfully",
+      data: product,
+    });
+  }
+);
+
 /**
  * Get all products with optional relations and pagination
  */
-export const getAllProducts = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
+export const getAllProducts = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
     const { page, limit, isSubscription, sort, isPreorder, name, categoryId } =
-      req.query as unknown as GetAllProductsQueryDto;
+      req.query as unknown as GetAllProductsDto["query"];
     const skip = (page - 1) * limit;
 
-    const includeRelations = req.query.include === "relations";
     const filters = { isSubscription, isPreorder, name, categoryId };
     const paginationParams = { page, limit, skip, sort };
 
     const result = await productService.getAllProducts(
-      includeRelations,
-      true, // generateAccessibleUrls
-      300, // urlExpiresIn
       paginationParams,
       filters
     );
@@ -95,140 +77,75 @@ export const getAllProducts = async (
         hasPreviousPage: page > 1,
       },
     });
-  } catch (error) {
-    handleErrorResponse(error, res, "fetch products");
   }
-};
-
-/**
- * Get product by name with optional relations
- */
-export const getProductByName = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const productName = productNameSchema.parse(req.params.name);
-    const includeRelations = req.query.include === "relations";
-
-    const product = await productService.getProductByName(
-      productName,
-      includeRelations
-    );
-
-    if (!product) {
-      sendResponse<null>(res, {
-        success: false,
-        statusCode: httpStatus.NOT_FOUND,
-        message: "Product not found",
-        data: null,
-      });
-      return;
-    }
-    sendResponse<productService.ProductWithAccessibleImages[]>(res, {
-      success: true,
-      statusCode: httpStatus.OK,
-      message: "Product retrieved successfully",
-      data: product,
-    });
-  } catch (error) {
-    handleErrorResponse(error, res, "fetch product by name");
-  }
-};
+);
 
 /**
  * Get a single product by ID with optional relations
  */
-export const getProductById = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const productId = productIdSchema.parse(req.params.id);
-    const includeRelations = req.query.include === "relations";
-    const product = await productService.getProductById(
-      productId,
-      includeRelations
-    );
-    if (!product) {
-      sendResponse<null>(res, {
-        success: false,
-        statusCode: httpStatus.NOT_FOUND,
-        message: "Product not found",
-        data: null,
-      });
-      return;
-    }
+export const getProductById = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const productId = BigInt(req.params.id);
+    const product = await productService.getProductById(productId);
+
     sendResponse<Product>(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Product retrieved successfully",
       data: product,
     });
-  } catch (error) {
-    handleErrorResponse(error, res, "fetch product");
   }
-};
+);
 
 /**
  * Update a product by ID with optional image uploads
  */
-export const updateProduct = [
-  upload.array("images", 10), // Allow up to 10 images
+export const updateProduct = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    try {
-      const productId = productIdSchema.parse(req.params.id);
-      const data = zUpdateProductDto.parse(req.body);
-      const files = req.files as Express.Multer.File[];
+    const productId = BigInt(req.params.id);
+    const data = req.body as UpdateProductDto["body"];
+    const files = req.files as Express.Multer.File[];
 
-      // Convert multer files to File objects if images are provided
-      let imageFiles: File[] = [];
-      if (files && files.length > 0) {
-        imageFiles = files.map((file) => {
-          const blob = new Blob([file.buffer], { type: file.mimetype });
-          return new File([blob], file.originalname, { type: file.mimetype });
-        });
-      }
-
-      // Check if images should replace existing ones
-      const replaceImages = req.body.replaceImages === "true";
-
-      const updated = await productService.updateProduct(
-        productId,
-        data,
-        imageFiles,
-        replaceImages
-      );
-      sendResponse<Product>(res, {
-        success: true,
-        statusCode: httpStatus.OK,
-        message: "Product updated successfully",
-        data: updated,
+    // Convert multer files to File objects if images are provided
+    let imageFiles: File[] = [];
+    if (files && files.length > 0) {
+      imageFiles = files.map((file) => {
+        const blob = new Blob([file.buffer], { type: file.mimetype });
+        return new File([blob], file.originalname, { type: file.mimetype });
       });
-    } catch (error) {
-      handleErrorResponse(error, res, "update product");
     }
-  },
-];
+
+    // Check if images should replace existing ones
+    const replaceImages = req.body.replaceImages === "true";
+
+    const updated = await productService.updateProduct(
+      productId,
+      data,
+      imageFiles,
+      replaceImages
+    );
+    sendResponse<Product>(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Product updated successfully",
+      data: updated,
+    });
+  }
+);
 
 /**
  * Delete a product by ID (automatically handles image cleanup)
  */
-export const deleteProduct = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const productId = productIdSchema.parse(req.params.id);
+export const deleteProduct = asyncHandler(
+  async (req: Request, res: Response): Promise<void> => {
+    const productId = BigInt(req.params.id);
+
     await productService.deleteProduct(productId);
 
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Product deleted successfully",
-      data: null,
     });
-  } catch (error) {
-    handleErrorResponse(error, res, "delete product");
   }
-};
+);

@@ -131,11 +131,10 @@ export const deleteStockTransaction = async (
     const transactionId = transactionIdSchema.parse(req.params.id);
     await stockTransactionService.deleteStockTransaction(transactionId);
 
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Stock transaction deleted successfully",
-      data: null,
     });
   } catch (error) {
     handleErrorResponse(error, res, "delete stock transaction");

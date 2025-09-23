@@ -80,7 +80,7 @@ export const updateFarmer = asyncHandler(
     const farmerId = BigInt(req.params.id);
     const data = req.body;
     const updatedFarmer = await farmerService.updateFarmer(farmerId, data);
-    
+
     sendResponse<Farmer>(res, {
       success: true,
       statusCode: httpStatus.OK,
@@ -97,11 +97,10 @@ export const deleteFarmer = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
     const farmerId = BigInt(req.params.id);
     await farmerService.deleteFarmer(farmerId);
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Farmer deleted successfully",
-      data: null,
     });
   }
 );

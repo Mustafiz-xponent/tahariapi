@@ -6,8 +6,15 @@ import { Router } from "express";
 import validator from "@/middlewares/validator";
 import { UserRole } from "@/generated/prisma/client";
 import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
-import { zGetAllProductsDto } from "@/modules/products/product.dto";
+import {
+  zCreateProductDto,
+  zDeleteProductDto,
+  zGetAllProductsDto,
+  zGetProductDto,
+  zUpdateProductDto,
+} from "@/modules/products/product.dto";
 import * as ProductController from "@/modules/products/product.controller";
+import { upload } from "@/utils/fileUpload/configMulterUpload";
 
 const router = Router();
 
@@ -16,6 +23,8 @@ router.post(
   "/",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  upload.array("images", 10),
+  validator(zCreateProductDto),
   ProductController.createProduct
 );
 
@@ -27,17 +36,14 @@ router.get(
 );
 
 // Route to get a product by ID
-// router.get("/:id", ProductController.getProductById);
-router.get("/:id", ProductController.getProductById);
-
-// Route to get a product by name
-// router.get("/name/:name", ProductController.getProductByName);
+router.get("/:id", validator(zGetProductDto), ProductController.getProductById);
 
 // Route to update a product's details
 router.put(
   "/:id",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  validator(zUpdateProductDto),
   ProductController.updateProduct
 );
 
@@ -46,6 +52,7 @@ router.delete(
   "/:id",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  validator(zDeleteProductDto),
   ProductController.deleteProduct
 );
 

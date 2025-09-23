@@ -120,11 +120,10 @@ export const deleteInventoryPurchase = async (
   try {
     const purchaseId = purchaseIdSchema.parse(req.params.id);
     await inventoryPurchaseService.deleteInventoryPurchase(purchaseId);
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Inventory purchase deleted successfully",
-      data: null,
     });
   } catch (error) {
     handleErrorResponse(error, res, "delete inventory purchase");

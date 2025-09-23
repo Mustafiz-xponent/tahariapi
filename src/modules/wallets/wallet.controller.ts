@@ -92,18 +92,16 @@ export const handleSslCommerzIPN = async (
 ): Promise<void> => {
   try {
     await walletService.handleDepositeSuccess(req.body);
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "IPN received successfully",
-      data: null,
     });
   } catch (error) {
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "IPN failed",
-      data: null,
     });
   }
 };
@@ -185,11 +183,10 @@ export const deleteWallet = asyncHandler(
       .id as unknown as DeleteWalletDto["params"]["id"];
     await walletService.deleteWallet(walletId);
 
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Wallet deleted successfully",
-      data: null,
     });
   }
 );

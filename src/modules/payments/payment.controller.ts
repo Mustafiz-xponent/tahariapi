@@ -99,18 +99,16 @@ export const handleSSLCommerzIPN = async (
   try {
     await paymentService.handleSSLCommerzSuccess(req.body);
 
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "IPN received successfully",
-      data: null,
     });
   } catch (error) {
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "IPN failed",
-      data: null,
     });
   }
 };
@@ -197,11 +195,10 @@ export const deletePayment = async (
     const paymentId = paymentIdSchema.parse(req.params.id);
     await paymentService.deletePayment(paymentId);
 
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Payment deleted successfully",
-      data: null,
     });
   } catch (error) {
     handleErrorResponse(error, res, "delete payment");

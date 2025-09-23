@@ -16,11 +16,10 @@ export const authMiddleware: RequestHandler = async (
 ) => {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: status.UNAUTHORIZED,
       message: "No token provided",
-      data: null,
     });
     return;
   }
@@ -33,11 +32,10 @@ export const authMiddleware: RequestHandler = async (
   });
 
   if (!user) {
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: status.UNAUTHORIZED,
       message: "User no longer exists. Please login again.",
-      data: null,
     });
     return;
   }
@@ -53,11 +51,10 @@ export const authMiddleware: RequestHandler = async (
 export const authorizeRoles = (...roles: UserRole[]): RequestHandler => {
   return (req, res, next) => {
     if (!roles.includes(req.user?.role as UserRole)) {
-      sendResponse<null>(res, {
+      sendResponse(res, {
         success: false,
         statusCode: status.FORBIDDEN,
         message: "You are not permitted to access this resource",
-        data: null,
       });
       return;
     }

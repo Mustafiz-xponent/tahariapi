@@ -120,11 +120,10 @@ export const deleteSubscriptionPlan = async (
     const planId = planIdSchema.parse(req.params.id);
     await subscriptionPlanService.deleteSubscriptionPlan(planId);
 
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Subscription plan deleted successfully",
-      data: null,
     });
   } catch (error) {
     handleErrorResponse(error, res, "delete subscription plan");

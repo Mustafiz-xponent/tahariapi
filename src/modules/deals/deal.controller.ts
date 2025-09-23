@@ -106,11 +106,10 @@ export const deleteDeal = asyncHandler(
     const dealId = BigInt(req.params.id);
     await dealService.deleteDeal(dealId);
 
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Deal deleted successfully",
-      data: null,
     });
   }
 );

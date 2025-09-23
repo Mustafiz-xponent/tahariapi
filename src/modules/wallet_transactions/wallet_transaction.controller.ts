@@ -169,11 +169,10 @@ export const deleteWalletTransaction = async (
     const transactionId = req.params
       .id as unknown as DeleteWalletTransactionDto["params"]["id"];
     await walletTransactionService.deleteWalletTransaction(transactionId);
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Wallet transaction deleted successfully",
-      data: null,
     });
   } catch (error) {
     handleErrorResponse(error, res, "delete wallet transaction");

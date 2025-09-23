@@ -119,11 +119,10 @@ export const deleteFarmerPayment = async (
   try {
     const paymentId = paymentIdSchema.parse(req.params.id);
     await farmerPaymentService.deleteFarmerPayment(paymentId);
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Farmer payment deleted successfully",
-      data: null,
     });
   } catch (error) {
     handleErrorResponse(error, res, "delete farmer payment");

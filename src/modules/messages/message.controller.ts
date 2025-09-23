@@ -36,11 +36,10 @@ export const createMessage = async (
       res.status(httpStatus.BAD_REQUEST).json({ errors: error.flatten() });
       return;
     }
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "Failed to create message",
-      data: null,
     });
   }
 };
@@ -89,11 +88,10 @@ export const getAllMessages = async (
       },
     });
   } catch (error) {
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "Failed to fetch messages",
-      data: null,
     });
   }
 };
@@ -123,11 +121,10 @@ export const getMessageById = async (
       res.status(httpStatus.BAD_REQUEST).json({ errors: error.flatten() });
       return;
     }
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "Failed to fetch message",
-      data: null,
     });
   }
 };
@@ -158,11 +155,10 @@ export const updateMessage = async (
       data: updatedMessage,
     });
   } catch (error) {
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "Failed to update message",
-      data: null,
     });
   }
 };
@@ -180,18 +176,16 @@ export const deleteMessage = async (
     const userRole = req.user?.role;
 
     await messageService.deleteMessage(BigInt(messageId), userId, userRole);
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Message deleted successfully",
-      data: null,
     });
   } catch (error) {
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "Failed to delete message",
-      data: null,
     });
   }
 };
@@ -219,11 +213,10 @@ export const sendMessage = async (
       data: result,
     });
   } catch (error) {
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "Failed to send message",
-      data: null,
     });
   }
 };
@@ -244,18 +237,16 @@ export const markMessageAsRead = async (
       userRole,
       senderId,
     });
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
       message: "Message marked as read successfully",
-      data: null,
     });
   } catch (error) {
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "Failed to mark message as read",
-      data: null,
     });
   }
 };

@@ -24,11 +24,10 @@ export const registerCustomer = async (req: Request, res: Response) => {
   try {
     const data = zCustomerRegisterDto.parse(req.body);
     await customerService.registerCustomer(data);
-    sendResponse<null>(res, {
+    sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
       message: "Registration successful. OTP sent to your phone.",
-      data: null,
     });
   } catch (error) {
     handleErrorResponse(error, res, "register customer");
