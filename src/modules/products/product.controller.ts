@@ -2,19 +2,14 @@
  * Controller layer for Product entity operations.
  * Updated to handle image uploads with product creation and updates.
  */
-import { z } from "zod";
 import httpStatus from "http-status";
 import { Request, Response } from "express";
 import sendResponse from "@/utils/sendResponse";
 import { Product } from "@/generated/prisma/client";
-import { upload } from "@/utils/fileUpload/configMulterUpload";
-import { handleErrorResponse } from "@/utils/errorResponseHandler";
 import * as productService from "@/modules/products/product.service";
 import {
   GetAllProductsDto,
   UpdateProductDto,
-  zCreateProductDto,
-  zUpdateProductDto,
 } from "@/modules/products/product.dto";
 import asyncHandler from "@/utils/asyncHandler";
 
@@ -26,16 +21,7 @@ export const createProduct = asyncHandler(
     const data = req.body;
     const files = req.files as Express.Multer.File[];
 
-    // Convert multer files to File objects if images are provided
-    let imageFiles: File[] = [];
-    if (files && files.length > 0) {
-      imageFiles = files.map((file) => {
-        const blob = new Blob([file.buffer], { type: file.mimetype });
-        return new File([blob], file.originalname, { type: file.mimetype });
-      });
-    }
-
-    const product = await productService.createProduct(data, imageFiles, true);
+    const product = await productService.createProduct(data, files, true);
 
     sendResponse<Product>(res, {
       success: true,

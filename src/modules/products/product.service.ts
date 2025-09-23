@@ -3,7 +3,6 @@
  */
 import logger from "@/utils/logger";
 import prisma from "@/prisma-client/prismaClient";
-import { getErrorMessage } from "@/utils/errorHandler";
 import { Prisma, Product } from "@/generated/prisma/client";
 import {
   CreateProductDto,
@@ -40,9 +39,24 @@ import {
  */
 export async function createProduct(
   data: CreateProductDto["body"],
-  imageFiles?: File[],
+  files: Express.Multer.File[],
   usePrivateBucket: boolean = false
 ): Promise<Product> {
+  if (files.length < 1) {
+    throw new AppError(
+      "At least one image is required",
+      httpStatus.BAD_REQUEST
+    );
+  }
+  // Convert multer files to File objects if images are provided
+  let imageFiles: File[] = [];
+  if (files && files.length > 0) {
+    imageFiles = files.map((file) => {
+      const blob = new Blob([file.buffer], { type: file.mimetype });
+      return new File([blob], file.originalname, { type: file.mimetype });
+    });
+  }
+
   // First create the product without images
   const product = await prisma.product.create({
     data: {
@@ -255,7 +269,7 @@ export async function updateProduct(
 ): Promise<Product> {
   // Get current product to access existing image URLs and privacy setting
   const currentProduct = await prisma.product.findUnique({
-    where: { productId: Number(productId) },
+    where: { productId },
     select: {
       imageUrls: true,
       isPrivateImages: true,

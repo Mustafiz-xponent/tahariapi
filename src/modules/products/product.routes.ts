@@ -43,6 +43,7 @@ router.put(
   "/:id",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  upload.array("images", 10),
   validator(zUpdateProductDto),
   ProductController.updateProduct
 );
