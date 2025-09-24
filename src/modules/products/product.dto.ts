@@ -20,44 +20,86 @@ const zBigIntId = (fieldName: string) =>
  */
 
 export const zCreateProductDto = {
-  body: z.object({
-    name: z.string().min(1, "Name is required"),
-    description: z.string().optional(),
-    unitPrice: z.coerce.number().positive("Unit price must be positive"),
-    unitType: z.nativeEnum(ProductUnitType),
-    packageSize: z.coerce.number().positive("Package size must be positive"),
-    stockQuantity: z.coerce
-      .number()
-      .int()
-      .nonnegative("Stock quantity must be a non-negative integer")
-      .optional(),
-    reorderLevel: z.coerce
-      .number()
-      .int()
-      .nonnegative("Reorder level must be a non-negative integer")
-      .optional(),
-    isSubscription: z
-      .union([z.boolean(), z.string()])
-      .transform((val) =>
-        typeof val === "string" ? val.toLowerCase() === "true" : val
-      )
-      .optional(),
-    isPreorder: z
-      .union([z.boolean(), z.string()])
-      .transform((val) =>
-        typeof val === "string" ? val.toLowerCase() === "true" : val
-      )
-      .optional(),
-    preorderAvailabilityDate: z
-      .string()
-      .refine((val) => !val || !isNaN(Date.parse(val)), {
-        message: "Invalid date format",
-      })
-      .transform((val) => (val ? new Date(val) : undefined))
-      .optional(),
-    categoryId: zBigIntId("Category ID"),
-    farmerId: zBigIntId("Farmer ID"),
-  }),
+  body: z
+    .object({
+      name: z.string().min(1, "Name is required"),
+      description: z.string().optional(),
+      unitPrice: z.coerce.number().positive("Unit price must be positive"),
+      unitType: z.nativeEnum(ProductUnitType),
+      packageSize: z.coerce.number().positive("Package size must be positive"),
+      stockQuantity: z.coerce
+        .number()
+        .int()
+        .nonnegative("Stock quantity must be a non-negative integer")
+        .optional(),
+      reorderLevel: z.coerce
+        .number()
+        .int()
+        .nonnegative("Reorder level must be a non-negative integer")
+        .optional(),
+      isSubscription: z
+        .union([z.boolean(), z.string()])
+        .transform((val) =>
+          typeof val === "string" ? val.toLowerCase() === "true" : val
+        )
+        .optional(),
+      isPreorder: z
+        .union([z.boolean(), z.string()])
+        .transform((val) =>
+          typeof val === "string" ? val.toLowerCase() === "true" : val
+        )
+        .optional(),
+      preorderAvailabilityDate: z
+        .string()
+        .refine((val) => !val || !isNaN(Date.parse(val)), {
+          message: "Invalid date format",
+        })
+        .transform((val) => (val ? new Date(val) : undefined))
+        .optional(),
+      categoryId: zBigIntId("Category ID"),
+      farmerId: zBigIntId("Farmer ID"),
+    })
+    .refine(
+      (data) => {
+        // If preorder is enabled, subscription must be false and date must be provided
+        if (data.isPreorder) {
+          return (
+            data.isSubscription === false &&
+            data.preorderAvailabilityDate !== undefined
+          );
+        }
+        return true;
+      },
+      {
+        message:
+          "When preorder is enabled, subscription must be disabled and preorder availability date is required",
+        path: ["isPreorder"],
+      }
+    )
+    .refine(
+      (data) => {
+        // If subscription is enabled, preorder must be false
+        if (data.isSubscription) {
+          return data.isPreorder === false;
+        }
+        return true;
+      },
+      {
+        message: "When subscription is enabled, preorder must be disabled",
+        path: ["isSubscription"],
+      }
+    )
+    .refine(
+      (data) => {
+        // Both cannot be true at the same time
+        return !(data.isSubscription && data.isPreorder);
+      },
+      {
+        message:
+          "Product cannot be both subscription and preorder at the same time",
+        path: ["isSubscription"],
+      }
+    ),
 };
 
 /**
