@@ -296,14 +296,14 @@ export async function uploadProductImages(
  * @returns Array of new uploaded file information
  */
 export async function replaceProductImages(
-  oldImageUrls: string[],
   productId: bigint,
   isPrivate: boolean = false,
   oldFilesArePrivate: boolean = false,
+  oldImageUrls?: string[],
   newFiles?: File[]
 ) {
-  // Delete old images first
-  if (oldImageUrls.length > 0) {
+  // Delete old images first if exists
+  if (oldImageUrls && oldImageUrls.length > 0) {
     const oldKeys = oldImageUrls
       .map(extractS3KeyFromUrl)
       .filter((key): key is string => key !== null);

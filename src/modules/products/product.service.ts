@@ -296,29 +296,29 @@ export async function updateProduct(
   }
 
   let finalImageUrls = currentProduct.imageUrls;
-
+  const hasNewOrDeletedImages =
+    imageFiles?.length > 0 ||
+    (data?.deletedImages && data?.deletedImages?.length > 0);
   // Handle image uploads if provided
-  if (imageFiles && imageFiles.length > 0) {
+  if (hasNewOrDeletedImages) {
     try {
-      if (data?.deletedImages && data?.deletedImages?.length > 0) {
-        const filteredImages = currentProduct.imageUrls.filter((image) => {
-          return !data?.deletedImages?.includes(image);
-        });
+      const filteredImages = currentProduct.imageUrls.filter((image) => {
+        return !data?.deletedImages?.includes(image);
+      });
 
-        // Replace existing images
-        const uploadResults = await replaceProductImages(
-          data?.deletedImages,
-          productId,
-          true,
-          true,
-          imageFiles
-        );
+      // Replace existing images
+      const uploadResults = await replaceProductImages(
+        productId,
+        true,
+        true,
+        data?.deletedImages,
+        imageFiles
+      );
 
-        finalImageUrls = [
-          ...filteredImages,
-          ...(uploadResults?.map((r) => r.url) ?? []),
-        ];
-      }
+      finalImageUrls = [
+        ...filteredImages,
+        ...(uploadResults?.map((r) => r.url) ?? []),
+      ];
     } catch (uploadError) {
       console.error(
         "Failed to upload images during product update:",
