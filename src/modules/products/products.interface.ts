@@ -15,7 +15,8 @@ export interface GetAllProductsFilterOptions {
   isSubscription?: boolean;
   isPreorder?: boolean;
   name?: string;
-  categoryId?: bigint;
+  categoryIds?: bigint[];
+  farmerIds?: bigint[];
 }
 export interface GetAllProductsResult {
   products: ProductWithAccessibleImages[];

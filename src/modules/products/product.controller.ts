@@ -37,11 +37,25 @@ export const createProduct = asyncHandler(
  */
 export const getAllProducts = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const { page, limit, isSubscription, sort, isPreorder, name, categoryId } =
-      req.query as unknown as GetAllProductsDto["query"];
+    const {
+      page,
+      limit,
+      isSubscription,
+      sort,
+      isPreorder,
+      name,
+      categoryIds,
+      farmerIds,
+    } = req.query as unknown as GetAllProductsDto["query"];
     const skip = (page - 1) * limit;
 
-    const filters = { isSubscription, isPreorder, name, categoryId };
+    const filters = {
+      isSubscription,
+      isPreorder,
+      name,
+      categoryIds,
+      farmerIds,
+    };
     const paginationParams = { page, limit, skip, sort };
 
     const result = await productService.getAllProducts(

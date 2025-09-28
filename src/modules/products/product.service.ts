@@ -133,9 +133,14 @@ export async function getAllProducts(
         mode: "insensitive" as Prisma.QueryMode,
       },
     }),
-    ...(filterParams?.categoryId && {
-      categoryId: filterParams.categoryId,
-    }),
+    ...(filterParams?.categoryIds &&
+      filterParams?.categoryIds.length > 0 && {
+        categoryId: { in: filterParams?.categoryIds },
+      }),
+    ...(filterParams?.farmerIds &&
+      filterParams?.farmerIds.length > 0 && {
+        farmerId: { in: filterParams?.farmerIds },
+      }),
   };
 
   // Get paginated products with optional relations

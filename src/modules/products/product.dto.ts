@@ -130,7 +130,25 @@ export const zGetAllProductsDto = {
       .optional()
       .transform((val) => val === "true"),
     name: z.string().optional(),
-    categoryId: zBigIntId("Category Id").optional(),
+    status: z.enum(["in-stock", "out-of-stock"]).optional(),
+    categoryIds: z
+      .string()
+      .optional()
+      .transform((val) =>
+        val
+          ? val
+              .split(",")
+              .map((id) => zBigIntId("Category Id").parse(id.trim()))
+          : []
+      ),
+    farmerIds: z
+      .string()
+      .optional()
+      .transform((val) =>
+        val
+          ? val.split(",").map((id) => zBigIntId("Farmer Id").parse(id.trim()))
+          : []
+      ),
   }),
 };
 type GetAllProductsQueryDto = z.infer<typeof zGetAllProductsDto.query>;
