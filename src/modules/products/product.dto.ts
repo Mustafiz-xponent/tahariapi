@@ -181,42 +181,14 @@ export const zUpdateProductDto = {
       .int()
       .nonnegative("Reorder level must be a non-negative integer")
       .optional(),
-    isSubscription: z
-      .union([z.boolean(), z.string()])
-      .transform((val) => {
-        if (typeof val === "string") {
-          return val.toLowerCase() === "true";
-        }
-        return val;
-      })
-      .optional(),
-    isPreorder: z
-      .union([z.boolean(), z.string()])
-      .transform((val) => {
-        if (typeof val === "string") {
-          return val.toLowerCase() === "true";
-        }
-        return val;
-      })
-      .optional(),
     preorderAvailabilityDate: z
       .string()
       .datetime()
       .optional()
       .transform((val) => (val ? new Date(val) : undefined)),
-    imageUrls: z.array(z.string().url()).optional(), // For manual URL management
     categoryId: zBigIntId("Category ID").optional(),
     farmerId: zBigIntId("Farmer Id").optional(),
-    replaceImages: z
-      .union([z.boolean(), z.string()])
-      .transform((val) => {
-        if (typeof val === "string") {
-          return val.toLowerCase() === "true";
-        }
-        return val;
-      })
-      .optional()
-      .default(false), // Whether to replace existing images or add to them
+    deletedImages: z.string().array().optional(),
   }),
 };
 

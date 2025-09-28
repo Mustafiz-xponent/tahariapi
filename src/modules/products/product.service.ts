@@ -39,8 +39,7 @@ import {
  */
 export async function createProduct(
   data: CreateProductDto["body"],
-  files: Express.Multer.File[],
-  usePrivateBucket: boolean = false
+  files: Express.Multer.File[]
 ): Promise<Product> {
   if (files.length < 1) {
     throw new AppError(
@@ -71,7 +70,7 @@ export async function createProduct(
       isPreorder: data.isPreorder ?? false,
       preorderAvailabilityDate: data.preorderAvailabilityDate,
       imageUrls: [], // Start with empty array
-      isPrivateImages: usePrivateBucket, // Store whether images are private
+      isPrivateImages: true, // store images to private bucket
       categoryId: data.categoryId,
       farmerId: data.farmerId,
     },
@@ -83,7 +82,7 @@ export async function createProduct(
       const uploadResults = await uploadProductImages(
         imageFiles,
         product.productId,
-        usePrivateBucket
+        true
       );
       const imageUrls = uploadResults.map((result) => result.url);
 
@@ -255,18 +254,22 @@ export async function getProductById(
  * @param productId - The ID of the product to update
  * @param data - Data to update the product
  * @param imageFiles - Optional array of new image files
- * @param replaceImages - Whether to replace existing images or add to them
- * @param usePrivateBucket - Whether new images should be stored in private bucket
  * @returns The updated product
  * @throws Error if the product is not found or update fails
  */
 export async function updateProduct(
   productId: bigint,
   data: UpdateProductDto["body"],
-  imageFiles?: File[],
-  replaceImages = false,
-  usePrivateBucket?: boolean
+  files?: Express.Multer.File[]
 ): Promise<Product> {
+  // Convert multer files to File objects if images are provided
+  let imageFiles: File[] = [];
+  if (files && files.length > 0) {
+    imageFiles = files.map((file) => {
+      const blob = new Blob([file.buffer], { type: file.mimetype });
+      return new File([blob], file.originalname, { type: file.mimetype });
+    });
+  }
   // Get current product to access existing image URLs and privacy setting
   const currentProduct = await prisma.product.findUnique({
     where: { productId },
@@ -282,34 +285,38 @@ export async function updateProduct(
     throw new AppError("Product not found", httpStatus.BAD_REQUEST);
   }
 
-  // Determine privacy setting for new images
-  const shouldUsePrivate =
-    usePrivateBucket ?? currentProduct.isPrivateImages ?? false;
+  const existingImagesCount = currentProduct.imageUrls?.length ?? 0;
+  const deletedImagesCount = data?.deletedImages?.length ?? 0;
+  const newImagesCount = imageFiles?.length ?? 0;
+
+  const totalImages = existingImagesCount - deletedImagesCount + newImagesCount;
+
+  if (totalImages > 10) {
+    throw new AppError("Maximum 10 images are allowed", httpStatus.BAD_REQUEST);
+  }
+
   let finalImageUrls = currentProduct.imageUrls;
 
   // Handle image uploads if provided
   if (imageFiles && imageFiles.length > 0) {
     try {
-      if (replaceImages) {
+      if (data?.deletedImages && data?.deletedImages?.length > 0) {
+        const filteredImages = currentProduct.imageUrls.filter((image) => {
+          return !data?.deletedImages?.includes(image);
+        });
+
         // Replace existing images
         const uploadResults = await replaceProductImages(
-          imageFiles,
-          currentProduct.imageUrls,
+          data?.deletedImages,
           productId,
-          shouldUsePrivate,
-          currentProduct.isPrivateImages || false
+          true,
+          true,
+          imageFiles
         );
-        finalImageUrls = uploadResults.map((result) => result.url);
-      } else {
-        // Add to existing images
-        const uploadResults = await uploadProductImages(
-          imageFiles,
-          productId,
-          shouldUsePrivate
-        );
+
         finalImageUrls = [
-          ...currentProduct.imageUrls,
-          ...uploadResults.map((result) => result.url),
+          ...filteredImages,
+          ...(uploadResults?.map((r) => r.url) ?? []),
         ];
       }
     } catch (uploadError) {
@@ -323,7 +330,7 @@ export async function updateProduct(
 
   // Update the product
   const product = await prisma.product.update({
-    where: { productId: Number(productId) },
+    where: { productId },
     data: {
       name: data.name,
       description: data.description,
@@ -332,11 +339,9 @@ export async function updateProduct(
       packageSize: data.packageSize,
       stockQuantity: data.stockQuantity,
       reorderLevel: data.reorderLevel,
-      isSubscription: data.isSubscription,
-      isPreorder: data.isPreorder,
       preorderAvailabilityDate: data.preorderAvailabilityDate,
-      imageUrls: data.imageUrls ?? finalImageUrls, // Use provided URLs or processed ones
-      isPrivateImages: usePrivateBucket ?? currentProduct.isPrivateImages,
+      imageUrls: finalImageUrls ?? currentProduct?.imageUrls,
+      isPrivateImages: true,
       categoryId: data.categoryId,
       farmerId: data.farmerId,
     },

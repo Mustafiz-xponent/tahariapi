@@ -21,7 +21,7 @@ export const createProduct = asyncHandler(
     const data = req.body;
     const files = req.files as Express.Multer.File[];
 
-    const product = await productService.createProduct(data, files, true);
+    const product = await productService.createProduct(data, files);
 
     sendResponse<Product>(res, {
       success: true,
@@ -92,24 +92,7 @@ export const updateProduct = asyncHandler(
     const data = req.body as UpdateProductDto["body"];
     const files = req.files as Express.Multer.File[];
 
-    // Convert multer files to File objects if images are provided
-    let imageFiles: File[] = [];
-    if (files && files.length > 0) {
-      imageFiles = files.map((file) => {
-        const blob = new Blob([file.buffer], { type: file.mimetype });
-        return new File([blob], file.originalname, { type: file.mimetype });
-      });
-    }
-
-    // Check if images should replace existing ones
-    const replaceImages = req.body.replaceImages === "true";
-
-    const updated = await productService.updateProduct(
-      productId,
-      data,
-      imageFiles,
-      replaceImages
-    );
+    const updated = await productService.updateProduct(productId, data, files);
     sendResponse<Product>(res, {
       success: true,
       statusCode: httpStatus.OK,

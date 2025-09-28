@@ -296,12 +296,12 @@ export async function uploadProductImages(
  * @returns Array of new uploaded file information
  */
 export async function replaceProductImages(
-  newFiles: File[],
   oldImageUrls: string[],
   productId: bigint,
   isPrivate: boolean = false,
-  oldFilesArePrivate: boolean = false
-): Promise<{ url: string; key: string; isPrivate: boolean }[]> {
+  oldFilesArePrivate: boolean = false,
+  newFiles?: File[]
+) {
   // Delete old images first
   if (oldImageUrls.length > 0) {
     const oldKeys = oldImageUrls
@@ -314,7 +314,9 @@ export async function replaceProductImages(
   }
 
   // Upload new images
-  return uploadProductImages(newFiles, productId, isPrivate);
+  return newFiles?.length
+    ? await uploadProductImages(newFiles, productId, isPrivate)
+    : [];
 }
 
 /**
