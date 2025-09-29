@@ -17,6 +17,7 @@ export interface GetAllProductsFilterOptions {
   name?: string;
   categoryIds?: bigint[];
   farmerIds?: bigint[];
+  status?: "in-stock" | "out-of-stock" | "low-stock";
 }
 export interface GetAllProductsResult {
   products: ProductWithAccessibleImages[];

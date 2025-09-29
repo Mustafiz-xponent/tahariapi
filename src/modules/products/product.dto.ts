@@ -130,7 +130,7 @@ export const zGetAllProductsDto = {
       .optional()
       .transform((val) => val === "true"),
     name: z.string().optional(),
-    status: z.enum(["in-stock", "out-of-stock"]).optional(),
+    status: z.enum(["in-stock", "out-of-stock", "low-stock"]).optional(),
     categoryIds: z
       .string()
       .optional()

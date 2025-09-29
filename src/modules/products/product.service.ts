@@ -133,6 +133,21 @@ export async function getAllProducts(
         mode: "insensitive" as Prisma.QueryMode,
       },
     }),
+    ...(filterParams?.status === "low-stock" && {
+      stockQuantity: {
+        lte: prisma.product.fields.reorderLevel, // get low stock product
+      },
+    }),
+    ...(filterParams?.status === "in-stock" && {
+      stockQuantity: {
+        gt: 0, // get in-stock product
+      },
+    }),
+    ...(filterParams?.status === "out-of-stock" && {
+      stockQuantity: {
+        equals: 0, // get out of stock product
+      },
+    }),
     ...(filterParams?.categoryIds &&
       filterParams?.categoryIds.length > 0 && {
         categoryId: { in: filterParams?.categoryIds },

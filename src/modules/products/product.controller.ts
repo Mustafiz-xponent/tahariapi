@@ -46,6 +46,7 @@ export const getAllProducts = asyncHandler(
       name,
       categoryIds,
       farmerIds,
+      status,
     } = req.query as unknown as GetAllProductsDto["query"];
     const skip = (page - 1) * limit;
 
@@ -55,6 +56,7 @@ export const getAllProducts = asyncHandler(
       name,
       categoryIds,
       farmerIds,
+      status,
     };
     const paginationParams = { page, limit, skip, sort };
 
