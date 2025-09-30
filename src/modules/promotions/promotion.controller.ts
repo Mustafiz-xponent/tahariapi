@@ -33,11 +33,11 @@ export const createPromotion = asyncHandler(
  */
 export const getAllPromotions = asyncHandler(
   async (req: Request, res: Response): Promise<void> => {
-    const { page, limit, sort, placement, targetType } =
+    const { page, limit, sort, placement, targetType, search, status } =
       req.query as unknown as GetAllPromotionsQueryDto;
     const skip = (page - 1) * limit;
     const paginationParams = { page, limit, skip, sort };
-    const filterParams = { placement, targetType };
+    const filterParams = { placement, targetType, search, status };
 
     const result = await promotionService.getAllPromotions(
       paginationParams,

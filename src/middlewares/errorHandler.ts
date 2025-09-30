@@ -17,7 +17,7 @@ const handlePrismaError = (error: unknown): AppError => {
   if (error instanceof PrismaClientKnownRequestError) {
     switch (error.code) {
       case "P2002":
-        message = `Unique constraint violation: ${
+        message = `Duplicate value of: ${
           (error.meta?.target as string[])?.join(", ") || "field"
         }`;
         statusCode = httpStatus.CONFLICT;

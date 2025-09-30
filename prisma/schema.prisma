@@ -126,7 +126,7 @@ enum NotificationType {
 
 enum PromoTargetType {
   PRODUCT
-  DEAL
+  // DEAL
   PREORDER
   SUBSCRIPTION_PLAN
 }
@@ -546,22 +546,22 @@ model Notification {
 }
 
 model Promotion {
-  promotionId BigInt          @id @default(autoincrement())
+  promotionId BigInt           @id @default(autoincrement())
   title       String?
   description String?
   imageUrl    String
-  targetType  PromoTargetType // PRODUCT, DEAL or ROUTE
-  priority    Int             @unique @default(1)
+  targetType  PromoTargetType? // PRODUCT OR SUBSCRIPTION PLAN ROUTE
+  priority    Int              @unique @default(1)
   placement   PromoPlacement
-  isActive    Boolean         @default(true)
+  isActive    Boolean          @default(true)
   productId   BigInt?
-  dealId      BigInt?
+  // dealId      BigInt?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   product Product? @relation(fields: [productId], references: [productId])
-  deal    Deal?    @relation(fields: [dealId], references: [dealId])
+  // deal    Deal?    @relation(fields: [dealId], references: [dealId])
 }
 
 model Deal {
@@ -577,8 +577,8 @@ model Deal {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  products  Product[]
-  promotion Promotion[]
+  products Product[]
+  // promotion Promotion[]
 
   @@index([dealId])
 }

@@ -11,6 +11,7 @@ import {
 } from "@/generated/prisma/client";
 import {
   CreatePromotionDto,
+  GetAllPromotionsQueryDto,
   UpdatePromotionDto,
 } from "@/modules/promotions/promotion.dto";
 import {
@@ -22,6 +23,7 @@ import {
   getAccessibleImageUrl,
   uploadFileToS3,
 } from "@/utils/fileUpload/s3Aws";
+import { GetAllProductsDto } from "@/modules/products/product.dto";
 
 /**
  * Creates a new promotion entry in the database
@@ -44,10 +46,10 @@ export async function createPromotion(
         data: {
           title: data.title ?? null,
           description: data.description ?? null,
-          targetType: data.targetType,
+          targetType: data.targetType as PromoTargetType,
           imageUrl: s3Res.url,
           productId: data.productId ?? null,
-          dealId: data.dealId ?? null,
+          // dealId: data.dealId ?? null,
           placement: data.placement,
           priority: data.priority,
           isActive: data.isActive,
@@ -71,14 +73,30 @@ export async function createPromotion(
  */
 export async function getAllPromotions(
   paginationParams: { page: number; limit: number; skip: number; sort: string },
-  filterParams: { placement?: PromoPlacement; targetType?: PromoTargetType }
+  filterParams: {
+    placement?: PromoPlacement;
+    targetType?: PromoTargetType;
+    search?: string;
+    status?: GetAllPromotionsQueryDto["status"];
+  }
 ): Promise<IGetPromotionsResult> {
   const { page, limit, skip, sort } = paginationParams;
-  const { placement, targetType } = filterParams;
+  const { placement, targetType, search, status } = filterParams;
+  const effectiveStatus = status ?? "active";
   const whereConditions: Prisma.PromotionWhereInput = {
-    isActive: true,
     ...(placement ? { placement } : {}),
     ...(targetType ? { targetType } : {}),
+    ...(search && {
+      title: {
+        contains: search,
+        mode: "insensitive" as Prisma.QueryMode,
+      },
+    }),
+    ...(effectiveStatus === "active"
+      ? { isActive: true }
+      : effectiveStatus === "inactive"
+      ? { isActive: false }
+      : {}), // "all" → no filter
   };
 
   const promotions = await prisma.promotion.findMany({
@@ -175,7 +193,7 @@ export async function updatePromotion(
           description: data.description,
           targetType: data.targetType,
           productId: data.productId,
-          dealId: data.dealId,
+          // dealId: data.dealId,
           imageUrl: s3Res?.url ? s3Res.url : promotion.imageUrl,
           placement: data.placement,
           priority: data.priority,

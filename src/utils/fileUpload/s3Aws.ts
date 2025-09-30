@@ -110,7 +110,7 @@ export async function uploadFileToS3(
     };
   } catch (error) {
     console.error("Error uploading file to S3:", error);
-    throw new Error("Failed to upload file to S3");
+    throw new Error("Failed to upload file");
   }
 }
 

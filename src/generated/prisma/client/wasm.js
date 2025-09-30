@@ -376,7 +376,6 @@ exports.Prisma.PromotionScalarFieldEnum = {
   placement: 'placement',
   isActive: 'isActive',
   productId: 'productId',
-  dealId: 'dealId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -504,7 +503,6 @@ exports.NotificationType = exports.$Enums.NotificationType = {
 
 exports.PromoTargetType = exports.$Enums.PromoTargetType = {
   PRODUCT: 'PRODUCT',
-  DEAL: 'DEAL',
   PREORDER: 'PREORDER',
   SUBSCRIPTION_PLAN: 'SUBSCRIPTION_PLAN'
 };
