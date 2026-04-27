@@ -1,23 +1,9 @@
-// import * as tsConfigPaths from "tsconfig-paths";
+import path from "path";
 
-// tsConfigPaths.register({
-//   baseUrl: "./",
-//   paths: {
-//     "@/*": ["src/*"],
-//     "@/generated/*": ["src/generated/*"],
-//   },
-// });
-
-// import dotenv from "dotenv";
-// dotenv.config();
-
-// import app from "../app";
-
-// export default app;
-
-// This must be a require, not import, so it runs first
+// Set up module alias before any other imports
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-require("../alias");
+const moduleAlias = require("module-alias");
+moduleAlias.addAlias("@", path.join(__dirname, ".."));
 
 import dotenv from "dotenv";
 dotenv.config();
