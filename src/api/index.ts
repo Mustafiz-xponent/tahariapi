@@ -1,9 +1,11 @@
 import * as tsConfigPaths from "tsconfig-paths";
-import * as tsConfig from "../../tsconfig.json";
 
 tsConfigPaths.register({
-  baseUrl: ".",
-  paths: tsConfig.compilerOptions.paths,
+  baseUrl: "./",
+  paths: {
+    "@/*": ["src/*"],
+    "@/generated/*": ["src/generated/*"],
+  },
 });
 
 import dotenv from "dotenv";
