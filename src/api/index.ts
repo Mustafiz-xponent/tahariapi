@@ -1,13 +1,16 @@
 import path from "path";
 
-// Set up module alias before any other imports
+// Must run before any imports that use @/ aliases
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const moduleAlias = require("module-alias");
 moduleAlias.addAlias("@", path.join(__dirname, ".."));
 
-import dotenv from "dotenv";
+// Use require instead of import so alias is applied first
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const dotenv = require("dotenv");
 dotenv.config();
 
-import app from "../app";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const app = require("../app").default;
 
-export default app;
+module.exports = app;
