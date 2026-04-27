@@ -1,3 +1,48 @@
+// /**
+//  * Routes for InventoryPurchase entity operations.
+//  * Defines API endpoints for inventory purchase-related CRUD operations.
+//  */
+// import { Router } from "express";
+// import { UserRole } from "@/generated/prisma/client";
+// import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
+// import * as InventoryPurchaseController from "@/modules/inventory_purchases/inventory_purchase.controller";
+
+// const router = Router();
+
+// // Route to create a new inventory purchase
+// router.post(
+//   "/",
+//   authMiddleware,
+//   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+//   InventoryPurchaseController.createInventoryPurchase
+// );
+
+// // Route to get all inventory purchases
+// router.get("/", InventoryPurchaseController.getAllInventoryPurchases);
+
+// // Route to get an inventory purchase by ID
+// router.get("/:id", InventoryPurchaseController.getInventoryPurchaseById);
+
+// // Route to update an inventory purchase's details
+// router.put(
+//   "/:id",
+//   authMiddleware,
+//   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+//   InventoryPurchaseController.updateInventoryPurchase
+// );
+
+// // Route to delete an inventory purchase
+// router.delete(
+//   "/:id",
+//   authMiddleware,
+//   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+//   InventoryPurchaseController.deleteInventoryPurchase
+// );
+
+// export default router;
+
+
+//_-------------------------- 2222222222222222222-------------
 /**
  * Routes for InventoryPurchase entity operations.
  * Defines API endpoints for inventory purchase-related CRUD operations.
@@ -5,7 +50,13 @@
 import { Router } from "express";
 import { UserRole } from "@/generated/prisma/client";
 import { authMiddleware, authorizeRoles } from "@/middlewares/auth";
-import * as InventoryPurchaseController from "@/modules/inventory_purchases/inventory_purchase.controller";
+import {
+  createInventoryPurchase,
+  getAllInventoryPurchases,
+  getInventoryPurchaseById,
+  updateInventoryPurchase,
+  deleteInventoryPurchase,
+} from "@/modules/inventory_purchases/inventory_purchase.controller";
 
 const router = Router();
 
@@ -14,21 +65,21 @@ router.post(
   "/",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  InventoryPurchaseController.createInventoryPurchase
+  createInventoryPurchase
 );
 
 // Route to get all inventory purchases
-router.get("/", InventoryPurchaseController.getAllInventoryPurchases);
+router.get("/", getAllInventoryPurchases);
 
 // Route to get an inventory purchase by ID
-router.get("/:id", InventoryPurchaseController.getInventoryPurchaseById);
+router.get("/:id", getInventoryPurchaseById);
 
 // Route to update an inventory purchase's details
 router.put(
   "/:id",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  InventoryPurchaseController.updateInventoryPurchase
+  updateInventoryPurchase
 );
 
 // Route to delete an inventory purchase
@@ -36,7 +87,7 @@ router.delete(
   "/:id",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  InventoryPurchaseController.deleteInventoryPurchase
+  deleteInventoryPurchase
 );
 
 export default router;

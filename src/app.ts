@@ -73,7 +73,8 @@ app.use("/api/farmer-payments", farmerPaymentRoutes);
 app.use("/api/stock-transactions", stockTransactionRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/order-items", orderItemRoutes);
-app.use("/api/order-tracking", orderTrackingRoutes);
+app.use("/api/order-trackings", orderTrackingRoutes);
+app.use("/order-trackings", orderTrackingRoutes); // Fallback route without /api prefix
 app.use("/api/payments", paymentRoutes);
 app.use("/api/wallets", walletRoutes);
 app.use("/api/wallet-transactions", walletTransactionRoutes);

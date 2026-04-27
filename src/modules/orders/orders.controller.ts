@@ -1,7 +1,219 @@
-/**
- * Controller layer for Order entity operations.
- * Handles HTTP requests and responses for order-related endpoints.
- */
+// /**
+//  * Controller layer for Order entity operations.
+//  * Handles HTTP requests and responses for order-related endpoints.
+//  */
+// import { z } from "zod";
+// import httpStatus from "http-status";
+// import { Request, Response } from "express";
+// import sendResponse from "@/utils/sendResponse";
+// import { Order, OrderStatus } from "@/generated/prisma/client";
+// import * as orderService from "@/modules/orders/orders.service";
+// import { handleErrorResponse } from "@/utils/errorResponseHandler";
+// import { zCreateOrderDto, zUpdateOrderDto } from "@/modules/orders/orders.dto";
+
+// const orderIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
+//   message: "Order ID must be a positive integer",
+// });
+
+// /**
+//  * Create a new order
+//  */
+// export const createOrder = async (
+//   req: Request,
+//   res: Response
+// ): Promise<void> => {
+//   try {
+//     const data = zCreateOrderDto.parse(req.body);
+//     const order = await orderService.createOrder(data);
+
+//     sendResponse<Order>(res, {
+//       success: true,
+//       statusCode: httpStatus.CREATED,
+//       message: "Order created successfully",
+//       data: order,
+//     });
+//   } catch (error) {
+//     handleErrorResponse(error, res, "create order");
+//   }
+// };
+
+// /**
+//  * Get all orders
+//  */
+// interface OrdersQuery {
+//   page?: string;
+//   limit?: string;
+//   status?: OrderStatus;
+//   customerId?: string;
+//   orderId?: string;
+//   sort?: string;
+// }
+// export const getAllOrders = async (
+//   req: Request<{}, {}, {}, OrdersQuery>,
+//   res: Response
+// ): Promise<void> => {
+//   try {
+//     const page = Math.max(parseInt(req.query.page as string) || 1, 1);
+//     const limit = Math.min(
+//       Math.max(parseInt(req.query.limit as string) || 10, 1),
+//       100
+//     ); // Max 100 items per page
+//     const skip = (page - 1) * limit;
+//     const sort = req.query.sort === "asc" ? "asc" : "desc";
+//     const status = req.query.status as OrderStatus | undefined;
+//     const customerId = req.query.customerId
+//       ? BigInt(req.query.customerId as string)
+//       : undefined;
+//     const orderId = req.query.orderId
+//       ? BigInt(req.query.orderId as string)
+//       : undefined;
+
+//     const filters = { status, customerId, orderId };
+//     const pagination = { page, limit, skip, sort };
+//     const result = await orderService.getAllOrders({ filters, pagination });
+//     sendResponse<Order[]>(res, {
+//       success: true,
+//       statusCode: httpStatus.OK,
+//       message: "Orders fetched successfully",
+//       data: result.orders,
+//       pagination: {
+//         currentPage: result.currentPage,
+//         totalPages: result.totalPages,
+//         totalItems: result.totalCount,
+//         itemsPerPage: limit,
+//         hasNextPage: result.currentPage < result.totalPages,
+//         hasPreviousPage: result.currentPage > 1,
+//       },
+//     });
+//   } catch (error) {
+//     handleErrorResponse(error, res, "fetch orders");
+//   }
+// };
+
+// /**
+//  * Get a single order by ID
+//  */
+// export const getOrderById = async (
+//   req: Request,
+//   res: Response
+// ): Promise<void> => {
+//   try {
+//     const orderId = orderIdSchema.parse(req.params.id);
+//     const order = await orderService.getOrderById(orderId);
+//     if (!order) {
+//       throw new Error("Order not found");
+//     }
+//     sendResponse<Order>(res, {
+//       success: true,
+//       statusCode: httpStatus.OK,
+//       message: "Order retrieved successfully",
+//       data: order,
+//     });
+//   } catch (error) {
+//     handleErrorResponse(error, res, "fetch order");
+//   }
+// };
+
+// /**
+//  * Update an order by ID
+//  */
+// export const updateOrder = async (
+//   req: Request,
+//   res: Response
+// ): Promise<void> => {
+//   try {
+//     const orderId = orderIdSchema.parse(req.params.id);
+//     const data = zUpdateOrderDto.parse(req.body);
+//     const updated = await orderService.updateOrder(orderId, data);
+
+//     sendResponse<Order>(res, {
+//       success: true,
+//       statusCode: httpStatus.OK,
+//       message: "Order updated successfully",
+//       data: updated,
+//     });
+//   } catch (error) {
+//     handleErrorResponse(error, res, "update order");
+//   }
+// };
+
+// /**
+//  * Delete an order by ID
+//  */
+// export const deleteOrder = async (
+//   req: Request,
+//   res: Response
+// ): Promise<void> => {
+//   try {
+//     const orderId = orderIdSchema.parse(req.params.id);
+//     await orderService.deleteOrder(orderId);
+
+//     sendResponse(res, {
+//       success: true,
+//       statusCode: httpStatus.OK,
+//       message: "Order deleted successfully",
+//     });
+//   } catch (error) {
+//     handleErrorResponse(error, res, "delete order");
+//   }
+// };
+// /**
+//  * Get all customer orders
+//  */
+// export const getCustomerOrders = async (
+//   req: Request<{}, {}, {}, OrdersQuery>,
+//   res: Response
+// ): Promise<void> => {
+//   try {
+//     const page = Math.max(parseInt(req.query.page as string) || 1, 1);
+//     const limit = Math.min(
+//       Math.max(parseInt(req.query.limit as string) || 10, 1),
+//       100
+//     ); // Max 100 items per page
+//     const skip = (page - 1) * limit;
+//     const sort = req.query.sort === "asc" ? "asc" : "desc";
+//     const status = req.query.status as string | undefined;
+//     const statusArray = status
+//       ? Array.isArray(status)
+//         ? status.map((s) => s.toUpperCase())
+//         : status.split(",").map((s) => s.toUpperCase())
+//       : [];
+
+//     if (!req.user?.userId) throw new Error("Please login to continue");
+
+//     const userId = BigInt(req.user?.userId!);
+
+//     const result = await orderService.getCustomerOrders({
+//       userId,
+//       page,
+//       limit,
+//       sort,
+//       statusArray,
+//       skip,
+//     });
+
+//     sendResponse<Order[]>(res, {
+//       success: true,
+//       statusCode: httpStatus.OK,
+//       message: "Customer orders retrieved successfully",
+//       data: result.orders,
+//       pagination: {
+//         currentPage: result.currentPage,
+//         totalPages: result.totalPages,
+//         totalItems: result.totalCount,
+//         itemsPerPage: limit,
+//         hasNextPage: page < result.totalPages,
+//         hasPreviousPage: page > 1,
+//       },
+//     });
+//   } catch (error) {
+//     handleErrorResponse(error, res, "fetch customer orders");
+//   }
+// };
+
+// --------------------------- 2222222222222222222222222222 -------------------------
+// orders.controller.ts
+
 import { z } from "zod";
 import httpStatus from "http-status";
 import { Request, Response } from "express";
@@ -20,7 +232,7 @@ const orderIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
  */
 export const createOrder = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const data = zCreateOrderDto.parse(req.body);
@@ -47,20 +259,27 @@ interface OrdersQuery {
   customerId?: string;
   orderId?: string;
   sort?: string;
+  search?: string;
+  startDate?: string;
+  endDate?: string;
 }
+
 export const getAllOrders = async (
   req: Request<{}, {}, {}, OrdersQuery>,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const page = Math.max(parseInt(req.query.page as string) || 1, 1);
     const limit = Math.min(
       Math.max(parseInt(req.query.limit as string) || 10, 1),
-      100
-    ); // Max 100 items per page
+      100,
+    );
     const skip = (page - 1) * limit;
     const sort = req.query.sort === "asc" ? "asc" : "desc";
     const status = req.query.status as OrderStatus | undefined;
+    const search = req.query.search as string | undefined;
+    const startDate = req.query.startDate as string | undefined;
+    const endDate = req.query.endDate as string | undefined;
     const customerId = req.query.customerId
       ? BigInt(req.query.customerId as string)
       : undefined;
@@ -68,9 +287,10 @@ export const getAllOrders = async (
       ? BigInt(req.query.orderId as string)
       : undefined;
 
-    const filters = { status, customerId, orderId };
+    const filters = { status, customerId, orderId, search, startDate, endDate };
     const pagination = { page, limit, skip, sort };
     const result = await orderService.getAllOrders({ filters, pagination });
+
     sendResponse<Order[]>(res, {
       success: true,
       statusCode: httpStatus.OK,
@@ -95,7 +315,7 @@ export const getAllOrders = async (
  */
 export const getOrderById = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const orderId = orderIdSchema.parse(req.params.id);
@@ -119,7 +339,7 @@ export const getOrderById = async (
  */
 export const updateOrder = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const orderId = orderIdSchema.parse(req.params.id);
@@ -142,7 +362,7 @@ export const updateOrder = async (
  */
 export const deleteOrder = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const orderId = orderIdSchema.parse(req.params.id);
@@ -157,19 +377,20 @@ export const deleteOrder = async (
     handleErrorResponse(error, res, "delete order");
   }
 };
+
 /**
  * Get all customer orders
  */
 export const getCustomerOrders = async (
   req: Request<{}, {}, {}, OrdersQuery>,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const page = Math.max(parseInt(req.query.page as string) || 1, 1);
     const limit = Math.min(
       Math.max(parseInt(req.query.limit as string) || 10, 1),
-      100
-    ); // Max 100 items per page
+      100,
+    );
     const skip = (page - 1) * limit;
     const sort = req.query.sort === "asc" ? "asc" : "desc";
     const status = req.query.status as string | undefined;
