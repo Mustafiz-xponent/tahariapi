@@ -18,7 +18,7 @@ import {
  * @throws Error if the order item cannot be created (e.g., invalid orderId or productId)
  */
 export async function createOrderItem(
-  data: CreateOrderItemDto
+  data: CreateOrderItemDto,
 ): Promise<OrderItem> {
   try {
     // Validate orderId existence
@@ -59,13 +59,51 @@ export async function createOrderItem(
 }
 
 /**
+ * Check product stock availability
+ */
+export async function checkProductStock(
+  productId: BigInt,
+  quantity: number,
+  packageSize: number,
+): Promise<{
+  available: boolean;
+  currentStock: number;
+  requiredStock: number;
+  message: string;
+}> {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { productId: Number(productId) },
+    });
+
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    const requiredStock = quantity * packageSize;
+    const isAvailable = product.stockQuantity >= requiredStock;
+
+    return {
+      available: isAvailable,
+      currentStock: product.stockQuantity,
+      requiredStock: requiredStock,
+      message: isAvailable
+        ? "Stock available"
+        : `Insufficient stock. Available: ${product.stockQuantity}, Required: ${requiredStock}`,
+    };
+  } catch (error) {
+    throw new Error(`Failed to check stock: ${getErrorMessage(error)}`);
+  }
+}
+
+/**
  * Creates multiple order items with validation.
  * @param {CreateOrderItemsDto} data - Order ID and items to create
  * @returns {Promise<Prisma.OrderItem[]>} Created order items
  * @throws {Error} If order or products don't exist
  */
 export async function createOrderItems(
-  data: CreateOrderItemsDto
+  data: CreateOrderItemsDto,
 ): Promise<OrderItem[]> {
   try {
     // Convert all IDs to BigInt for consistent comparison
@@ -89,7 +127,7 @@ export async function createOrderItems(
 
     // Compare using BigInt for type safety
     const missingProducts = productIds.filter(
-      (id) => !products.some((p) => BigInt(p.productId) === id)
+      (id) => !products.some((p) => BigInt(p.productId) === id),
     );
 
     if (missingProducts.length > 0) {
@@ -99,7 +137,7 @@ export async function createOrderItems(
     // Validate stock quantity
     for (const item of data.items) {
       const product = products.find(
-        (p) => BigInt(p.productId) === item.productId
+        (p) => BigInt(p.productId) === item.productId,
       );
       if (!product) {
         throw new Error(`Product not found: ${item.productId.toString()}`);
@@ -107,7 +145,7 @@ export async function createOrderItems(
 
       if (product.stockQuantity < item.quantity * item.packageSize) {
         throw new Error(
-          `Insufficient stock quantity for product ${item.productId.toString()}`
+          `Insufficient stock quantity for product ${item.productId.toString()}`,
         );
       }
     }
@@ -124,8 +162,8 @@ export async function createOrderItems(
             unitPrice: item.unitPrice,
             subtotal: item.subtotal,
           },
-        })
-      )
+        }),
+      ),
     );
   } catch (error) {
     throw new Error(`Failed to create order item: ${getErrorMessage(error)}`);
@@ -153,7 +191,7 @@ export async function getAllOrderItems(): Promise<OrderItem[]> {
  * @throws Error if the query fails
  */
 export async function getOrderItemById(
-  orderItemId: BigInt
+  orderItemId: BigInt,
 ): Promise<OrderItem | null> {
   try {
     const orderItem = await prisma.orderItem.findUnique({
@@ -174,7 +212,7 @@ export async function getOrderItemById(
  */
 export async function updateOrderItem(
   orderItemId: BigInt,
-  data: UpdateOrderItemDto
+  data: UpdateOrderItemDto,
 ): Promise<OrderItem> {
   try {
     // Validate orderId existence if provided
