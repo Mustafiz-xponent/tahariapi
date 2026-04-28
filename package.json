@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "rm:dist": "rm -rf dist",
+    "vercel-build": "npm run build",
     "build": "npm run rm:dist && tsc && npm run copy:prisma && tsc-alias --verbose",
     "start": "node ./dist/index.js",
     "copy:prisma": "cpx \"src/generated/**/*\" dist/generated",
