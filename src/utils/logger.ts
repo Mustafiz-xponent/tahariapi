@@ -1,5 +1,5 @@
 import pino from "pino";
-const isProd = process.env.NODE_ENV === "production";
+const isProd = process.env.NODE_ENV === "production" || !process.env.NODE_ENV;
 
 const logger = pino(
   isProd
@@ -19,7 +19,7 @@ const logger = pino(
           },
         },
         level: "debug",
-      }
+      },
 );
 
 export default logger;
