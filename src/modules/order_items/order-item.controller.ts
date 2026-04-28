@@ -48,7 +48,6 @@
 //   }
 // };
 
-
 // /**
 //  * Get all order items
 //  */
@@ -135,7 +134,6 @@
 //   }
 // };
 
-
 // --------------------------------- 222222222222222222222222222 -----------------------------
 /**
  * Controller layer for OrderItem entity operations.
@@ -167,24 +165,27 @@ const productIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
  */
 export const checkProductStock = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const productId = productIdSchema.parse(req.params.productId);
-    const quantity = z
+
+    // Use z.coerce to automatically convert strings to numbers
+    const quantity = z.coerce
       .number()
       .int()
-      .positive()
-      .parse(req.query.quantity || 1);
-    const packageSize = z
+      .positive("Quantity must be positive")
+      .parse(req.query.quantity || "1");
+
+    const packageSize = z.coerce
       .number()
-      .positive()
-      .parse(req.query.packageSize || 1);
+      .positive("Package size must be positive")
+      .parse(req.query.packageSize || "1");
 
     const stockInfo = await orderItemService.checkProductStock(
       productId,
       quantity,
-      packageSize
+      packageSize,
     );
 
     sendResponse(res, {
@@ -232,7 +233,7 @@ export const createOrderItem = async (req: Request, res: Response) => {
  */
 export const getAllOrderItems = async (
   _req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const orderItems = await orderItemService.getAllOrderItems();
@@ -252,7 +253,7 @@ export const getAllOrderItems = async (
  */
 export const getOrderItemById = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const orderItemId = orderItemIdSchema.parse(req.params.id);
@@ -276,7 +277,7 @@ export const getOrderItemById = async (
  */
 export const updateOrderItem = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const orderItemId = orderItemIdSchema.parse(req.params.id);
@@ -298,7 +299,7 @@ export const updateOrderItem = async (
  */
 export const deleteOrderItem = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const orderItemId = orderItemIdSchema.parse(req.params.id);
