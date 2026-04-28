@@ -1,0 +1,153 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.zDeletePromotionDto = exports.zUpdatePromotionDto = exports.zGetPromotionDto = exports.zGetAllPromotionsDto = exports.zCreatePromotionDto = void 0;
+const zod_1 = require("zod");
+const client_1 = require("../../generated/prisma/client");
+/**
+ * Returns a Zod schema for a positive integer ID, with the given field name used
+ * for error messages.
+ * @param fieldName The name of the field, used for error messages.
+ * @returns A Zod schema for a positive integer ID.
+ */
+const zBigIntId = (fieldName) => zod_1.z
+    .union([zod_1.z.string(), zod_1.z.number()])
+    .transform((val) => BigInt(val))
+    .refine((val) => val > 0n, {
+    message: `${fieldName} must be a positive integer`,
+});
+/*
+ **  Schema: Create Promotion
+ */
+exports.zCreatePromotionDto = {
+    body: zod_1.z
+        .object({
+        title: zod_1.z
+            .string()
+            .max(60, { message: "Title must be less then 60 char" })
+            .optional(),
+        description: zod_1.z
+            .string()
+            .max(80, { message: "Description must be less then 80 char" })
+            .optional(),
+        targetType: zod_1.z
+            .nativeEnum(client_1.PromoTargetType, {
+            errorMap: () => ({ message: "Invalid target type" }),
+        })
+            .optional(),
+        productId: zod_1.z
+            .union([zod_1.z.string(), zod_1.z.number()])
+            .transform((val) => BigInt(val))
+            .refine((val) => val > 0n, {
+            message: `Product Id must be a positive integer`,
+        })
+            .optional(),
+        // dealId: zBigIntId("Deal ID").optional(),
+        placement: zod_1.z.nativeEnum(client_1.PromoPlacement, {
+            errorMap: () => ({ message: "Invalid placement" }),
+        }),
+        priority: zod_1.z.coerce.number().min(1).default(1),
+        isActive: zod_1.z.boolean().default(true),
+    })
+        .refine((data) => (data.productId === undefined && data.targetType === undefined) ||
+        (data.productId !== undefined && data.targetType !== undefined), {
+        message: "productId and targetType must be provided together.",
+        path: ["productId"],
+    }),
+    // .refine(
+    //   (data) =>
+    //     (data.dealId === undefined && data.targetType === undefined) ||
+    //     (data.dealId !== undefined && data.targetType !== undefined),
+    //   {
+    //     message: "productId and targetType must be provided together.",
+    //     path: ["dealId"],
+    //   }
+    // ),
+};
+/*
+ ** Schema: Get All Promotions (Query Parameters)
+ ** Includes pagination, sorting, filtering
+ */
+exports.zGetAllPromotionsDto = {
+    query: zod_1.z.object({
+        page: zod_1.z.coerce.number().int().positive().optional().default(1),
+        limit: zod_1.z.coerce.number().int().positive().max(100).optional().default(10),
+        sort: zod_1.z.enum(["asc", "desc"]).optional().default("desc"),
+        search: zod_1.z.string().optional(),
+        status: zod_1.z.enum(["active", "inactive", "all"]).optional(),
+        placement: zod_1.z.nativeEnum(client_1.PromoPlacement).optional(),
+        targetType: zod_1.z.nativeEnum(client_1.PromoTargetType).optional(),
+    }),
+};
+/*
+ **   Schema: Get Single Promotion by ID (Route Param)
+ */
+exports.zGetPromotionDto = {
+    params: zod_1.z.object({
+        id: zBigIntId("Promotion ID"),
+    }),
+};
+/*
+ ** Schema: Update Promotion
+ ** All fields optional, but validated similarly to creation
+ */
+exports.zUpdatePromotionDto = {
+    params: zod_1.z.object({
+        id: zBigIntId("Promotion ID"),
+    }),
+    body: zod_1.z
+        .object({
+        title: zod_1.z
+            .string()
+            .max(60, { message: "Title must be less then 60 char" })
+            .optional(),
+        description: zod_1.z
+            .string()
+            .max(80, { message: "Description must be less then 80 char" })
+            .optional(),
+        targetType: zod_1.z
+            .nativeEnum(client_1.PromoTargetType, {
+            errorMap: () => ({ message: "Invalid target type" }),
+        })
+            .optional(),
+        productId: zBigIntId("Product ID").optional(),
+        // dealId: zBigIntId("Deal ID").optional(),
+        placement: zod_1.z
+            .nativeEnum(client_1.PromoPlacement, {
+            errorMap: () => ({ message: "Invalid placement" }),
+        })
+            .optional(),
+        priority: zod_1.z.number().min(1).optional(),
+        isActive: zod_1.z.boolean().default(false),
+    })
+        .refine((data) => {
+        if (data.productId !== undefined) {
+            return (data.targetType === "PRODUCT" || data.targetType === "PREORDER");
+        }
+        if (data.targetType === "PRODUCT" || data.targetType === "PREORDER") {
+            return data.productId !== undefined;
+        }
+        return true;
+    }, {
+        message: "productId requires targetType to be 'PRODUCT' or 'PREORDER', and vice versa.",
+        path: ["productId"],
+    }),
+    // .refine(
+    //   (data) =>
+    //     data.dealId === undefined ||
+    //     data.targetType === undefined ||
+    //     (data.dealId !== undefined && data.targetType === "DEAL") ||
+    //     (data.targetType !== "DEAL" && data.dealId === undefined),
+    //   {
+    //     message: "dealId requires targetType 'DEAL', and vice versa.",
+    //     path: ["dealId"],
+    //   }
+    // ),
+};
+/*
+ ** Schema: Delete Promotion by ID (Route Param)
+ */
+exports.zDeletePromotionDto = {
+    params: zod_1.z.object({
+        id: zBigIntId("Promotion ID"),
+    }),
+};
