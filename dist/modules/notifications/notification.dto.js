@@ -6,7 +6,7 @@ exports.zMarkNotificationAsReadDto = exports.zDeleteNotificationDto = exports.zU
  * These interfaces define the expected shape of data when creating or updating a notification.
  */
 const zod_1 = require("zod");
-const client_1 = require("@/generated/prisma/client");
+const client_1 = require("../../generated/prisma/client");
 /**
  * Common ID schema: supports string/number -> BigInt and must be > 0.
  */

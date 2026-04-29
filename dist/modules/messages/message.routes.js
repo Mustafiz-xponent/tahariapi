@@ -41,11 +41,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for message-related CRUD operations.
  */
 const express_1 = require("express");
-const validator_1 = __importDefault(require("@/middlewares/validator"));
-const client_1 = require("@/generated/prisma/client");
-const auth_1 = require("@/middlewares/auth");
-const MessageController = __importStar(require("@/modules/messages/message.controller"));
-const message_dto_1 = require("@/modules/messages/message.dto");
+const validator_1 = __importDefault(require("../../middlewares/validator"));
+const client_1 = require("../../generated/prisma/client");
+const auth_1 = require("../../middlewares/auth");
+const MessageController = __importStar(require("../../modules/messages/message.controller"));
+const message_dto_1 = require("../../modules/messages/message.dto");
 const router = (0, express_1.Router)();
 // Route to create a new message
 router.post("/", MessageController.createMessage);

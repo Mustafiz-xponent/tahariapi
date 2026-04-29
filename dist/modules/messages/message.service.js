@@ -13,10 +13,10 @@ exports.deleteMessage = deleteMessage;
  * Service layer for Message entity operations.
  * Contains business logic and database interactions for messages.
  */
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const errorHandler_1 = require("@/utils/errorHandler");
-const client_1 = require("@/generated/prisma/client");
-const socket_1 = require("@/utils/socket");
+const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
+const errorHandler_1 = require("../../utils/errorHandler");
+const client_1 = require("../../generated/prisma/client");
+const socket_1 = require("../../utils/socket");
 /**
  * Create a new message
  */

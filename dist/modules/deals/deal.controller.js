@@ -38,9 +38,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteDeal = exports.updateDeal = exports.getDealById = exports.getAllDeals = exports.createDeal = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const asyncHandler_1 = __importDefault(require("@/utils/asyncHandler"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
-const dealService = __importStar(require("@/modules/deals/deal.service"));
+const asyncHandler_1 = __importDefault(require("../../utils/asyncHandler"));
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const dealService = __importStar(require("../../modules/deals/deal.service"));
 /**
  * Create a new deal
  * - Expects deal data in `req.body`

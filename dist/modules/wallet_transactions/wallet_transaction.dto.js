@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.zDeleteWalletTransactionDto = exports.zGetWalletTransactionDto = exports.zUpdateWalletTransactionDto = exports.zCreateWalletTransactionDto = void 0;
 const zod_1 = require("zod");
-const client_1 = require("@/generated/prisma/client");
+const client_1 = require("../../generated/prisma/client");
 const zBigIntId = (fieldName) => zod_1.z
     .union([zod_1.z.string(), zod_1.z.number()])
     .refine((val) => val !== "", { message: `${fieldName} is required` })

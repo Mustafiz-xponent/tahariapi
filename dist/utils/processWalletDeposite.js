@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.processSSLCommerzWalletDeposite = processSSLCommerzWalletDeposite;
 const axios_1 = __importDefault(require("axios"));
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const appError_1 = require("@/utils/appError");
+const prismaClient_1 = __importDefault(require("../prisma-client/prismaClient"));
+const appError_1 = require("../utils/appError");
 const http_status_1 = __importDefault(require("http-status"));
 /**
  * Process payment through SSLCommerz

@@ -7,8 +7,8 @@ exports.sendOtp = sendOtp;
 exports.verifyOtp = verifyOtp;
 const axios_1 = __importDefault(require("axios"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const logger_1 = __importDefault(require("@/utils/logger"));
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const logger_1 = __importDefault(require("../utils/logger"));
+const prismaClient_1 = __importDefault(require("../prisma-client/prismaClient"));
 const OTP_EXPIRY_MINUTES = 5;
 const SALT_ROUNDS = 10;
 /**

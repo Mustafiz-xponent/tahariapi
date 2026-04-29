@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCategory = exports.updateCategory = exports.getCategoryById = exports.getAllCategories = exports.createCategory = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const appError_1 = require("@/utils/appError");
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const s3Aws_1 = require("@/utils/fileUpload/s3Aws");
-const configMulterUpload_1 = require("@/utils/fileUpload/configMulterUpload");
-const s3Aws_2 = require("@/utils/fileUpload/s3Aws");
+const appError_1 = require("../../utils/appError");
+const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
+const s3Aws_1 = require("../../utils/fileUpload/s3Aws");
+const configMulterUpload_1 = require("../../utils/fileUpload/configMulterUpload");
+const s3Aws_2 = require("../../utils/fileUpload/s3Aws");
 // Create a new category
 const createCategory = async ({ data, file, }) => {
     if (!file) {

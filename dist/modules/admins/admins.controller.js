@@ -38,9 +38,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAdmin = exports.getAdminById = exports.getAllAdmins = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const asyncHandler_1 = __importDefault(require("@/utils/asyncHandler"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
-const adminService = __importStar(require("@/modules/admins/admins.service"));
+const asyncHandler_1 = __importDefault(require("../../utils/asyncHandler"));
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const adminService = __importStar(require("../../modules/admins/admins.service"));
 // Route to get all admins list
 exports.getAllAdmins = (0, asyncHandler_1.default)(async (_req, res) => {
     const admins = await adminService.getAllAdmins();

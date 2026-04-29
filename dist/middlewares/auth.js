@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authenticateSocket = exports.authorizeRoles = exports.authMiddleware = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const prismaClient_1 = __importDefault(require("../prisma-client/prismaClient"));
 const http_status_1 = require("http-status");
-const logger_1 = __importDefault(require("@/utils/logger"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const logger_1 = __importDefault(require("../utils/logger"));
+const sendResponse_1 = __importDefault(require("../utils/sendResponse"));
 // Auth middleware check if user is authenticated
 const authMiddleware = async (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];

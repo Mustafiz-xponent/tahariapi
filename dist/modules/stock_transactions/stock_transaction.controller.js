@@ -44,10 +44,10 @@ exports.deleteStockTransaction = exports.updateStockTransaction = exports.getSto
  */
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
-const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
-const stockTransactionService = __importStar(require("@/modules/stock_transactions/stock_transaction.service"));
-const stock_transaction_dto_1 = require("@/modules/stock_transactions/stock_transaction.dto");
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const errorResponseHandler_1 = require("../../utils/errorResponseHandler");
+const stockTransactionService = __importStar(require("../../modules/stock_transactions/stock_transaction.service"));
+const stock_transaction_dto_1 = require("../../modules/stock_transactions/stock_transaction.dto");
 const transactionIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Transaction ID must be a positive integer",
 });

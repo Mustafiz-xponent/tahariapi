@@ -9,9 +9,9 @@ exports.getDealById = getDealById;
 exports.updateDeal = updateDeal;
 exports.deleteDeal = deleteDeal;
 const http_status_1 = __importDefault(require("http-status"));
-const appError_1 = require("@/utils/appError");
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const s3Aws_1 = require("@/utils/fileUpload/s3Aws");
+const appError_1 = require("../../utils/appError");
+const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
+const s3Aws_1 = require("../../utils/fileUpload/s3Aws");
 /**
  * Creates a new deal entry in the database
  * - Accepts deal data in `CreateDealDto`

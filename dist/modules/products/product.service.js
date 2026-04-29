@@ -11,11 +11,11 @@ exports.deleteProduct = deleteProduct;
 /**
  * Service layer for Product entity operations.
  */
-const logger_1 = __importDefault(require("@/utils/logger"));
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const calculateDealPricing_1 = require("@/utils/calculateDealPricing");
-const s3Aws_1 = require("@/utils/fileUpload/s3Aws");
-const appError_1 = require("@/utils/appError");
+const logger_1 = __importDefault(require("../../utils/logger"));
+const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
+const calculateDealPricing_1 = require("../../utils/calculateDealPricing");
+const s3Aws_1 = require("../../utils/fileUpload/s3Aws");
+const appError_1 = require("../../utils/appError");
 const http_status_1 = __importDefault(require("http-status"));
 /**
  * Create a new product with optional image uploads

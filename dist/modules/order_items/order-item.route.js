@@ -38,7 +38,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 // import { Router } from "express";
-// import * as OrderItemController from "@/modules/order_items/order-item.controller";
+// import * as OrderItemController from "../../modules/order_items/order-item.controller";
 // const router = Router();
 // // Route to create a new order item
 // router.post("/", OrderItemController.createOrderItem);
@@ -57,7 +57,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for order item-related CRUD operations.
  */
 const express_1 = require("express");
-const OrderItemController = __importStar(require("@/modules/order_items/order-item.controller"));
+const OrderItemController = __importStar(require("../../modules/order_items/order-item.controller"));
 const router = (0, express_1.Router)();
 // Route to check product stock availability
 router.get("/stock/check/:productId", OrderItemController.checkProductStock);

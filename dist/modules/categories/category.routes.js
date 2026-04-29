@@ -41,12 +41,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for categories.
  */
 const express_1 = require("express");
-const validator_1 = __importDefault(require("@/middlewares/validator"));
-const client_1 = require("@/generated/prisma/client");
-const configMulterUpload_1 = require("@/utils/fileUpload/configMulterUpload");
-const auth_1 = require("@/middlewares/auth");
-const CategoryController = __importStar(require("@/modules/categories/category.controller"));
-const category_dto_1 = require("@/modules/categories/category.dto");
+const validator_1 = __importDefault(require("../../middlewares/validator"));
+const client_1 = require("../../generated/prisma/client");
+const configMulterUpload_1 = require("../../utils/fileUpload/configMulterUpload");
+const auth_1 = require("../../middlewares/auth");
+const CategoryController = __importStar(require("../../modules/categories/category.controller"));
+const category_dto_1 = require("../../modules/categories/category.dto");
 const router = (0, express_1.Router)();
 // Route to create a new category by admin
 router.post("/", auth_1.authMiddleware, (0, auth_1.authorizeRoles)(client_1.UserRole.ADMIN, client_1.UserRole.SUPER_ADMIN), configMulterUpload_1.upload.single("image"), (0, validator_1.default)(category_dto_1.zCreateCategoryDto), CategoryController.createCategory);

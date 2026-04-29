@@ -37,11 +37,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const client_1 = require("@/generated/prisma/client");
-const auth_1 = require("@/middlewares/auth");
-const FarmerController = __importStar(require("@/modules/farmers/farmers.controller"));
-const validator_1 = __importDefault(require("@/middlewares/validator"));
-const farmer_dto_1 = require("@/modules/farmers/farmer.dto");
+const client_1 = require("../../generated/prisma/client");
+const auth_1 = require("../../middlewares/auth");
+const FarmerController = __importStar(require("../../modules/farmers/farmers.controller"));
+const validator_1 = __importDefault(require("../../middlewares/validator"));
+const farmer_dto_1 = require("../../modules/farmers/farmer.dto");
 const router = (0, express_1.Router)();
 // Route to create a new farmer by admin
 router.post("/", auth_1.authMiddleware, (0, auth_1.authorizeRoles)(client_1.UserRole.ADMIN, client_1.UserRole.SUPER_ADMIN), (0, validator_1.default)(farmer_dto_1.zCreateFarmerDto), FarmerController.createFarmer);

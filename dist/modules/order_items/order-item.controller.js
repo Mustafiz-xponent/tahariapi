@@ -6,15 +6,15 @@
 // import { z } from "zod";
 // import httpStatus from "http-status";
 // import { Request, Response } from "express";
-// import sendResponse from "@/utils/sendResponse";
-// import { OrderItem } from "@/generated/prisma/client";
-// import { handleErrorResponse } from "@/utils/errorResponseHandler";
-// import * as orderItemService from "@/modules/order_items/order-item.service";
+// import sendResponse from "../../utils/sendResponse";
+// import { OrderItem } from "../../generated/prisma/client";
+// import { handleErrorResponse } from "../../utils/errorResponseHandler";
+// import * as orderItemService from "../../modules/order_items/order-item.service";
 // import {
 //   zCreateOrderItemDto,
 //   zCreateOrderItemsDto,
 //   zUpdateOrderItemDto,
-// } from "@/modules/order_items/order-item.dto";
+// } from "../../modules/order_items/order-item.dto";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -173,10 +173,10 @@ exports.deleteOrderItem = exports.updateOrderItem = exports.getOrderItemById = e
  */
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
-const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
-const orderItemService = __importStar(require("@/modules/order_items/order-item.service"));
-const order_item_dto_1 = require("@/modules/order_items/order-item.dto");
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const errorResponseHandler_1 = require("../../utils/errorResponseHandler");
+const orderItemService = __importStar(require("../../modules/order_items/order-item.service"));
+const order_item_dto_1 = require("../../modules/order_items/order-item.dto");
 const orderItemIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Order Item ID must be a positive integer",
 });

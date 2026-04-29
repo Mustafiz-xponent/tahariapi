@@ -6,14 +6,14 @@
 // import { z } from "zod";
 // import httpStatus from "http-status";
 // import { Request, Response } from "express";
-// import sendResponse from "@/utils/sendResponse";
-// import { InventoryPurchase } from "@/generated/prisma/client";
-// import { handleErrorResponse } from "@/utils/errorResponseHandler";
-// import * as inventoryPurchaseService from "@/modules/inventory_purchases/inventory_purchase.service";
+// import sendResponse from "../../utils/sendResponse";
+// import { InventoryPurchase } from "../../generated/prisma/client";
+// import { handleErrorResponse } from "../../utils/errorResponseHandler";
+// import * as inventoryPurchaseService from "../../modules/inventory_purchases/inventory_purchase.service";
 // import {
 //   zCreateInventoryPurchaseDto,
 //   zUpdateInventoryPurchaseDto,
-// } from "@/modules/inventory_purchases/inventory-purchase.dto";
+// } from "../../modules/inventory_purchases/inventory-purchase.dto";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -132,10 +132,10 @@ exports.deleteInventoryPurchase = exports.updateInventoryPurchase = exports.getI
 // ----------------------- 2222222222222222222222 -------------------
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
-const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
-const inventory_purchase_service_1 = require("@/modules/inventory_purchases/inventory_purchase.service");
-const inventory_purchase_dto_1 = require("@/modules/inventory_purchases/inventory-purchase.dto");
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const errorResponseHandler_1 = require("../../utils/errorResponseHandler");
+const inventory_purchase_service_1 = require("../../modules/inventory_purchases/inventory_purchase.service");
+const inventory_purchase_dto_1 = require("../../modules/inventory_purchases/inventory-purchase.dto");
 const purchaseIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Purchase ID must be a positive integer",
 });

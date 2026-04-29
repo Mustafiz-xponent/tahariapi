@@ -5,10 +5,10 @@
 //  */
 // import httpStatus from "http-status";
 // import { Request, Response } from "express";
-// import sendResponse from "@/utils/sendResponse";
-// import { User } from "@/generated/prisma/client";
-// import { handleErrorResponse } from "@/utils/errorResponseHandler";
-// import * as customerService from "@/modules/auth/customer/customer.service";
+// import sendResponse from "../../../utils/sendResponse";
+// import { User } from "../../../generated/prisma/client";
+// import { handleErrorResponse } from "../../../utils/errorResponseHandler";
+// import * as customerService from "../../../modules/auth/customer/customer.service";
 // import {
 //   zCustomerIdParam,
 //   zCustomerLoginDto,
@@ -16,7 +16,7 @@
 //   zCustomerRegisterDto,
 //   zCustomerUpdateProfileDto,
 //   zCustomerVerifyOtpDto,
-// } from "@/modules/auth/customer/customer.dto";
+// } from "../../../modules/auth/customer/customer.dto";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -183,10 +183,10 @@ exports.getCustomerById = exports.updateCustomerProfile = exports.verifyCustomer
  * Handles HTTP requests and responses for customer authentication endpoints.
  */
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
-const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
-const customerService = __importStar(require("@/modules/auth/customer/customer.service"));
-const customer_dto_1 = require("@/modules/auth/customer/customer.dto");
+const sendResponse_1 = __importDefault(require("../../../utils/sendResponse"));
+const errorResponseHandler_1 = require("../../../utils/errorResponseHandler");
+const customerService = __importStar(require("../../../modules/auth/customer/customer.service"));
+const customer_dto_1 = require("../../../modules/auth/customer/customer.dto");
 // ---------------------------------------------------------------------------
 // Registration
 // ---------------------------------------------------------------------------

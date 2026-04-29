@@ -43,10 +43,10 @@ exports.deleteCustomer = exports.updateCustomer = exports.getCustomerById = expo
  */
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const asyncHandler_1 = __importDefault(require("@/utils/asyncHandler"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
-const customerService = __importStar(require("@/modules/customers/customer.service"));
-const customer_dto_1 = require("@/modules/customers/customer.dto");
+const asyncHandler_1 = __importDefault(require("../../utils/asyncHandler"));
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const customerService = __importStar(require("../../modules/customers/customer.service"));
+const customer_dto_1 = require("../../modules/customers/customer.dto");
 const customerIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Customer ID must be a positive integer",
 });

@@ -43,10 +43,10 @@ exports.deleteSubscriptionPlan = exports.updateSubscriptionPlan = exports.getSub
  */
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
-const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
-const subscriptionPlanService = __importStar(require("@/modules/subscription_plans/subscription_plan.service"));
-const subscription_plan_dto_1 = require("@/modules/subscription_plans/subscription_plan.dto");
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const errorResponseHandler_1 = require("../../utils/errorResponseHandler");
+const subscriptionPlanService = __importStar(require("../../modules/subscription_plans/subscription_plan.service"));
+const subscription_plan_dto_1 = require("../../modules/subscription_plans/subscription_plan.dto");
 const planIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Plan ID must be a positive integer",
 });

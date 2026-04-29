@@ -41,12 +41,12 @@ exports.processCodPayment = processCodPayment;
 exports.processSSLCommerzPayment = processSSLCommerzPayment;
 exports.validateSSLCommerzPayment = validateSSLCommerzPayment;
 const axios_1 = __importDefault(require("axios"));
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const errorHandler_1 = require("@/utils/errorHandler");
-const sendNotification_1 = require("@/utils/sendNotification");
-const orderService = __importStar(require("@/modules/orders/orders.service"));
-const socket_1 = require("@/utils/socket");
-const getOrderStatusMessage_1 = require("@/utils/getOrderStatusMessage");
+const prismaClient_1 = __importDefault(require("../prisma-client/prismaClient"));
+const errorHandler_1 = require("../utils/errorHandler");
+const sendNotification_1 = require("../utils/sendNotification");
+const orderService = __importStar(require("../modules/orders/orders.service"));
+const socket_1 = require("../utils/socket");
+const getOrderStatusMessage_1 = require("../utils/getOrderStatusMessage");
 /**
  * Process payment through customer wallet
  */

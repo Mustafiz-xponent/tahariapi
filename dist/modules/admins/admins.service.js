@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAdmin = exports.getAdminById = exports.getAllAdmins = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const appError_1 = require("@/utils/appError");
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const appError_1 = require("../../utils/appError");
+const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
 /**
  * Retrieves all admins from the database.
  * @returns A list of Admin objects

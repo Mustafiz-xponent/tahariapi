@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for stock transaction-related CRUD operations.
  */
 const express_1 = require("express");
-const StockTransactionController = __importStar(require("@/modules/stock_transactions/stock_transaction.controller"));
+const StockTransactionController = __importStar(require("../../modules/stock_transactions/stock_transaction.controller"));
 const router = (0, express_1.Router)();
 // Route to create a new stock transaction
 router.post("/", StockTransactionController.createStockTransaction);

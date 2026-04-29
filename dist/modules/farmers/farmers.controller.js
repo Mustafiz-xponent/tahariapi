@@ -38,9 +38,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteFarmer = exports.updateFarmer = exports.getFarmerById = exports.getAllFarmers = exports.createFarmer = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
-const farmerService = __importStar(require("@/modules/farmers/farmers.service"));
-const asyncHandler_1 = __importDefault(require("@/utils/asyncHandler"));
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const farmerService = __importStar(require("../../modules/farmers/farmers.service"));
+const asyncHandler_1 = __importDefault(require("../../utils/asyncHandler"));
 /**
  * Create a new farmer
  */

@@ -42,9 +42,9 @@ exports.deleteProduct = exports.updateProduct = exports.getProductById = exports
  * Updated to handle image uploads with product creation and updates.
  */
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
-const productService = __importStar(require("@/modules/products/product.service"));
-const asyncHandler_1 = __importDefault(require("@/utils/asyncHandler"));
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const productService = __importStar(require("../../modules/products/product.service"));
+const asyncHandler_1 = __importDefault(require("../../utils/asyncHandler"));
 /**
  * Create a new product with optional image uploads
  */

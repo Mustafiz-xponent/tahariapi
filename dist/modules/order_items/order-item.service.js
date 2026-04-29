@@ -14,8 +14,8 @@ exports.deleteOrderItem = deleteOrderItem;
  * Service layer for OrderItem entity operations.
  * Contains business logic and database interactions for order items.
  */
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const errorHandler_1 = require("@/utils/errorHandler");
+const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
+const errorHandler_1 = require("../../utils/errorHandler");
 /**
  * Create a new order item
  * @param data - Data required to create an order item

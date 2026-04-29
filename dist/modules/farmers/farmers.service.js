@@ -5,8 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteFarmer = exports.updateFarmer = exports.getFarmerById = exports.getAllFarmers = exports.createFarmer = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const appError_1 = require("@/utils/appError");
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const appError_1 = require("../../utils/appError");
+const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
 // Create a new farmer
 const createFarmer = async (data) => {
     const farmer = await prismaClient_1.default.farmer.create({ data });

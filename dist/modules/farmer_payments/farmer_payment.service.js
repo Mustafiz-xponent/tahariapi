@@ -13,8 +13,8 @@ exports.deleteFarmerPayment = deleteFarmerPayment;
  * Service layer for FarmerPayment entity operations.
  * Contains business logic and database interactions for farmer payments.
  */
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const errorHandler_1 = require("@/utils/errorHandler");
+const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
+const errorHandler_1 = require("../../utils/errorHandler");
 /**
  * Create a new farmer payment
  * @param data - Data required to create a farmer payment

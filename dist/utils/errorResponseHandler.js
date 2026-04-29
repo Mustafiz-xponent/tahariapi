@@ -30,7 +30,7 @@ exports.handleErrorResponse = handleErrorResponse;
 //     message,
 //   });
 // }
-const client_1 = require("@/generated/prisma/client");
+const client_1 = require("../generated/prisma/client");
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
 /**

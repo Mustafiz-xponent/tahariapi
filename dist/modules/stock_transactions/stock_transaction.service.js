@@ -12,8 +12,8 @@ exports.deleteStockTransaction = deleteStockTransaction;
  * Service layer for StockTransaction entity operations.
  * Contains business logic and database interactions for stock transactions.
  */
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const errorHandler_1 = require("@/utils/errorHandler");
+const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
+const errorHandler_1 = require("../../utils/errorHandler");
 // /**
 //  * Create a new stock transaction
 //  * @param data - Data required to create a stock transaction

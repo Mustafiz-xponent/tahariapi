@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for farmer payment-related CRUD operations.
  */
 const express_1 = require("express");
-const FarmerPaymentController = __importStar(require("@/modules/farmer_payments/farmer_payment.controller"));
+const FarmerPaymentController = __importStar(require("../../modules/farmer_payments/farmer_payment.controller"));
 const router = (0, express_1.Router)();
 // Route to create a new farmer payment
 router.post("/", FarmerPaymentController.createFarmerPayment);

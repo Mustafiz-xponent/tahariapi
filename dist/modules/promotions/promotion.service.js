@@ -9,10 +9,10 @@ exports.getPromotionById = getPromotionById;
 exports.updatePromotion = updatePromotion;
 exports.deletePromotion = deletePromotion;
 const http_status_1 = __importDefault(require("http-status"));
-const appError_1 = require("@/utils/appError");
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const configMulterUpload_1 = require("@/utils/fileUpload/configMulterUpload");
-const s3Aws_1 = require("@/utils/fileUpload/s3Aws");
+const appError_1 = require("../../utils/appError");
+const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
+const configMulterUpload_1 = require("../../utils/fileUpload/configMulterUpload");
+const s3Aws_1 = require("../../utils/fileUpload/s3Aws");
 /**
  * Creates a new promotion entry in the database
  * - Requires an image file (uploaded to S3)

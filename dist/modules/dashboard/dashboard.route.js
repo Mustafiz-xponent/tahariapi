@@ -37,11 +37,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const validator_1 = __importDefault(require("@/middlewares/validator"));
-const client_1 = require("@/generated/prisma/client");
-const auth_1 = require("@/middlewares/auth");
-const dashboard_dto_1 = require("@/modules/dashboard/dashboard.dto");
-const dasboardController = __importStar(require("@/modules/dashboard/dashboard.controller"));
+const validator_1 = __importDefault(require("../../middlewares/validator"));
+const client_1 = require("../../generated/prisma/client");
+const auth_1 = require("../../middlewares/auth");
+const dashboard_dto_1 = require("../../modules/dashboard/dashboard.dto");
+const dasboardController = __importStar(require("../../modules/dashboard/dashboard.controller"));
 const router = (0, express_1.Router)();
 router.get("/summary", auth_1.authMiddleware, (0, auth_1.authorizeRoles)(client_1.UserRole.ADMIN, client_1.UserRole.SUPER_ADMIN), dasboardController.getDashboardSummary);
 router.get("/sales-overview", auth_1.authMiddleware, (0, auth_1.authorizeRoles)(client_1.UserRole.ADMIN, client_1.UserRole.SUPER_ADMIN), (0, validator_1.default)(dashboard_dto_1.zGetSalesOverviewDto), dasboardController.getSalesOverview);

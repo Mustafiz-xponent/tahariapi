@@ -20,7 +20,7 @@ exports.getBatchAccessibleImageUrls = getBatchAccessibleImageUrls;
 exports.processProductsWithAccessibleUrls = processProductsWithAccessibleUrls;
 const client_s3_1 = require("@aws-sdk/client-s3");
 const s3_request_presigner_1 = require("@aws-sdk/s3-request-presigner");
-const logger_1 = __importDefault(require("@/utils/logger"));
+const logger_1 = __importDefault(require("../../utils/logger"));
 // Configure AWS S3 client
 const s3Client = new client_s3_1.S3Client({
     region: process.env.AWS_REGION,

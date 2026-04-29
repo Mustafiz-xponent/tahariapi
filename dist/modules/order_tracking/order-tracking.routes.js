@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for order tracking-related CRUD operations.
  */
 const express_1 = require("express");
-const OrderTrackingController = __importStar(require("@/modules/order_tracking/order-tracking.controller"));
+const OrderTrackingController = __importStar(require("../../modules/order_tracking/order-tracking.controller"));
 const router = (0, express_1.Router)();
 // Route to create a new order tracking entry
 router.post("/", OrderTrackingController.createOrderTracking);

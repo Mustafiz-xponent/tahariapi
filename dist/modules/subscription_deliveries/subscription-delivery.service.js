@@ -12,8 +12,8 @@ exports.deleteSubscriptionDelivery = deleteSubscriptionDelivery;
  * Service layer for SubscriptionDelivery entity operations.
  * Contains business logic and database interactions for subscription deliveries.
  */
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const errorHandler_1 = require("@/utils/errorHandler");
+const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
+const errorHandler_1 = require("../../utils/errorHandler");
 /**
  * Create a new subscription delivery
  */

@@ -4,19 +4,19 @@
 //  * Handles registration, login, OTP generation, verification, and JWT issuance for customers.
 //  */
 // import bcrypt from "bcrypt";
-// import logger from "@/utils/logger";
-// import { User } from "@/generated/prisma/client";
-// import prisma from "@/prisma-client/prismaClient";
-// import { generateAuthToken } from "@/utils/authToken";
-// import { getErrorMessage } from "@/utils/errorHandler";
-// import { sendOtp, verifyOtp } from "@/utils/otpService";
+// import logger from "../../../utils/logger";
+// import { User } from "../../../generated/prisma/client";
+// import prisma from "../../../prisma-client/prismaClient";
+// import { generateAuthToken } from "../../../utils/authToken";
+// import { getErrorMessage } from "../../../utils/errorHandler";
+// import { sendOtp, verifyOtp } from "../../../utils/otpService";
 // import {
 //   CustomerLoginDto,
 //   CustomerOtpLoginDto,
 //   CustomerRegisterDto,
 //   CustomerUpdateProfileDto,
 //   CustomerVerifyOtpDto,
-// } from "@/modules/auth/customer/customer.dto";
+// } from "../../../modules/auth/customer/customer.dto";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -236,10 +236,10 @@ exports.getCustomerById = getCustomerById;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const axios_1 = __importDefault(require("axios"));
 const crypto_1 = __importDefault(require("crypto"));
-const logger_1 = __importDefault(require("@/utils/logger"));
-const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
-const authToken_1 = require("@/utils/authToken");
-const errorHandler_1 = require("@/utils/errorHandler");
+const logger_1 = __importDefault(require("../../../utils/logger"));
+const prismaClient_1 = __importDefault(require("../../../prisma-client/prismaClient"));
+const authToken_1 = require("../../../utils/authToken");
+const errorHandler_1 = require("../../../utils/errorHandler");
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------

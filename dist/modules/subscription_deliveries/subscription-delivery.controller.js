@@ -43,10 +43,10 @@ exports.deleteSubscriptionDelivery = exports.updateSubscriptionDelivery = export
  */
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
-const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
-const subscriptionDeliveryService = __importStar(require("@/modules/subscription_deliveries/subscription-delivery.service"));
-const subscription_delivery_dto_1 = require("@/modules/subscription_deliveries/subscription-delivery.dto");
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const errorResponseHandler_1 = require("../../utils/errorResponseHandler");
+const subscriptionDeliveryService = __importStar(require("../../modules/subscription_deliveries/subscription-delivery.service"));
+const subscription_delivery_dto_1 = require("../../modules/subscription_deliveries/subscription-delivery.dto");
 const deliveryIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Delivery ID must be a positive integer",
 });
