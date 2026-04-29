@@ -12,12 +12,12 @@ exports.loginAdmin = loginAdmin;
  */
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const http_status_1 = __importDefault(require("http-status"));
-const appError_1 = require("../../../utils/appError");
-const prismaClient_1 = __importDefault(require("../../../prisma-client/prismaClient"));
-const authToken_1 = require("../../../utils/authToken");
-const errorHandler_1 = require("../../../utils/errorHandler");
-const otpService_1 = require("../../../utils/otpService");
-const client_1 = require("../../../generated/prisma/client");
+const appError_1 = require("@/utils/appError");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const authToken_1 = require("@/utils/authToken");
+const errorHandler_1 = require("@/utils/errorHandler");
+const otpService_1 = require("@/utils/otpService");
+const client_1 = require("@/generated/prisma/client");
 const SALT_ROUNDS = 10;
 /**
  * Create admin by super admin only

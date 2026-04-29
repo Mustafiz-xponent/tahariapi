@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateDealPricing = calculateDealPricing;
-const prismaClient_1 = __importDefault(require("../prisma-client/prismaClient"));
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
 const library_1 = require("@prisma/client/runtime/library");
 /**
  * Calculates the pricing for a product considering both global and product-specific deals.

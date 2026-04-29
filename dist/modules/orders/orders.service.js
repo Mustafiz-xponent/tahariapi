@@ -3,17 +3,17 @@
 //  * Controller layer for Order entity operations.
 //  * Handles HTTP requests and responses for order-related endpoints.
 //  */
-// import prisma from "../../prisma-client/prismaClient";
-// import { getErrorMessage } from "../../utils/errorHandler";
-// import { sendNotification } from "../../utils/sendNotification";
-// import { getOrderStatusMessage } from "../../utils/getOrderStatusMessage";
-// import { getBatchAccessibleImageUrls } from "../../utils/fileUpload/s3Aws";
-// import { Order, OrderStatus, Prisma } from "../../generated/prisma/client";
-// import { CreateOrderDto, UpdateOrderDto } from "../../modules/orders/orders.dto";
+// import prisma from "@/prisma-client/prismaClient";
+// import { getErrorMessage } from "@/utils/errorHandler";
+// import { sendNotification } from "@/utils/sendNotification";
+// import { getOrderStatusMessage } from "@/utils/getOrderStatusMessage";
+// import { getBatchAccessibleImageUrls } from "@/utils/fileUpload/s3Aws";
+// import { Order, OrderStatus, Prisma } from "@/generated/prisma/client";
+// import { CreateOrderDto, UpdateOrderDto } from "@/modules/orders/orders.dto";
 // import {
 //   hasInsufficientWalletBalance,
 //   upcomingDelivery,
-// } from "../../utils/processSubscription";
+// } from "@/utils/processSubscription";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -525,17 +525,17 @@ exports.getCustomerOrders = getCustomerOrders;
 // }
 // -------------------------------- 2222222222222222222222222222222222222 ---------------------------------
 // orders.service.ts
-// import prisma from "../../prisma-client/prismaClient";
-// import { getErrorMessage } from "../../utils/errorHandler";
-// import { sendNotification } from "../../utils/sendNotification";
-// import { getOrderStatusMessage } from "../../utils/getOrderStatusMessage";
-// import { getBatchAccessibleImageUrls } from "../../utils/fileUpload/s3Aws";
-// import { Order, OrderStatus, Prisma } from "../../generated/prisma/client";
-// import { CreateOrderDto, UpdateOrderDto } from "../../modules/orders/orders.dto";
+// import prisma from "@/prisma-client/prismaClient";
+// import { getErrorMessage } from "@/utils/errorHandler";
+// import { sendNotification } from "@/utils/sendNotification";
+// import { getOrderStatusMessage } from "@/utils/getOrderStatusMessage";
+// import { getBatchAccessibleImageUrls } from "@/utils/fileUpload/s3Aws";
+// import { Order, OrderStatus, Prisma } from "@/generated/prisma/client";
+// import { CreateOrderDto, UpdateOrderDto } from "@/modules/orders/orders.dto";
 // import {
 //   hasInsufficientWalletBalance,
 //   upcomingDelivery,
-// } from "../../utils/processSubscription";
+// } from "@/utils/processSubscription";
 // interface CustomerOrdersResult {
 //   orders: Order[];
 //   totalCount: number;
@@ -1066,13 +1066,13 @@ exports.getCustomerOrders = getCustomerOrders;
 // }
 // ------------------------------ 3333333333333333333333333333333333 --------------------------------
 // orders.service.ts
-const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
-const errorHandler_1 = require("../../utils/errorHandler");
-const sendNotification_1 = require("../../utils/sendNotification");
-const getOrderStatusMessage_1 = require("../../utils/getOrderStatusMessage");
-const s3Aws_1 = require("../../utils/fileUpload/s3Aws");
-const client_1 = require("../../generated/prisma/client");
-const processSubscription_1 = require("../../utils/processSubscription");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const errorHandler_1 = require("@/utils/errorHandler");
+const sendNotification_1 = require("@/utils/sendNotification");
+const getOrderStatusMessage_1 = require("@/utils/getOrderStatusMessage");
+const s3Aws_1 = require("@/utils/fileUpload/s3Aws");
+const client_1 = require("@/generated/prisma/client");
+const processSubscription_1 = require("@/utils/processSubscription");
 // =============================================================================
 // Shared: OrderItem select clause
 // =============================================================================

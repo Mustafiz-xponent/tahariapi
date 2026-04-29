@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createOrderItem = createOrderItem;
+exports.checkProductStock = checkProductStock;
 exports.createOrderItems = createOrderItems;
 exports.getAllOrderItems = getAllOrderItems;
 exports.getOrderItemById = getOrderItemById;
@@ -13,8 +14,8 @@ exports.deleteOrderItem = deleteOrderItem;
  * Service layer for OrderItem entity operations.
  * Contains business logic and database interactions for order items.
  */
-const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
-const errorHandler_1 = require("../../utils/errorHandler");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const errorHandler_1 = require("@/utils/errorHandler");
 /**
  * Create a new order item
  * @param data - Data required to create an order item
@@ -55,6 +56,37 @@ async function createOrderItem(data) {
     }
     catch (error) {
         throw new Error(`Failed to create order item: ${(0, errorHandler_1.getErrorMessage)(error)}`);
+    }
+}
+/**
+ * Check product stock availability
+ */
+/**
+ * Check product stock availability
+ */
+async function checkProductStock(productId, quantity, packageSize) {
+    try {
+        const product = await prismaClient_1.default.product.findUnique({
+            where: { productId: Number(productId) },
+        });
+        if (!product) {
+            throw new Error("Product not found");
+        }
+        // requiredStock = packageSize (minimum to add to cart)
+        const requiredStock = packageSize;
+        // Out of stock if currentStock < packageSize
+        const isAvailable = product.stockQuantity >= requiredStock;
+        return {
+            available: isAvailable,
+            currentStock: product.stockQuantity,
+            requiredStock: requiredStock,
+            message: isAvailable
+                ? "Stock available"
+                : `Out of stock. Available: ${product.stockQuantity}${product.stockQuantity > 0 ? ", Need at least: " + requiredStock : ""}`,
+        };
+    }
+    catch (error) {
+        throw new Error(`Failed to check stock: ${(0, errorHandler_1.getErrorMessage)(error)}`);
     }
 }
 /**

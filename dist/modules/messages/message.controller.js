@@ -43,9 +43,9 @@ exports.markMessageAsRead = exports.sendMessage = exports.deleteMessage = export
  */
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const message_dto_1 = require("../../modules/messages/message.dto");
-const messageService = __importStar(require("../../modules/messages/message.service"));
+const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const message_dto_1 = require("@/modules/messages/message.dto");
+const messageService = __importStar(require("@/modules/messages/message.service"));
 const messageIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Message ID must be a positive integer",
 });

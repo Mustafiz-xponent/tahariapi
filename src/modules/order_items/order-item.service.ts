@@ -61,6 +61,9 @@ export async function createOrderItem(
 /**
  * Check product stock availability
  */
+/**
+ * Check product stock availability
+ */
 export async function checkProductStock(
   productId: BigInt,
   quantity: number,
@@ -80,7 +83,9 @@ export async function checkProductStock(
       throw new Error("Product not found");
     }
 
-    const requiredStock = quantity * packageSize;
+    // requiredStock = packageSize (minimum to add to cart)
+    const requiredStock = packageSize;
+    // Out of stock if currentStock < packageSize
     const isAvailable = product.stockQuantity >= requiredStock;
 
     return {
@@ -89,7 +94,7 @@ export async function checkProductStock(
       requiredStock: requiredStock,
       message: isAvailable
         ? "Stock available"
-        : `Insufficient stock. Available: ${product.stockQuantity}, Required: ${requiredStock}`,
+        : `Out of stock. Available: ${product.stockQuantity}${product.stockQuantity > 0 ? ", Need at least: " + requiredStock : ""}`,
     };
   } catch (error) {
     throw new Error(`Failed to check stock: ${getErrorMessage(error)}`);

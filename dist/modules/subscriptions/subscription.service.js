@@ -16,12 +16,12 @@ exports.deleteSubscription = deleteSubscription;
  * Service layer for Subscription entity operations.
  * Contains business logic and database interactions for subscriptions.
  */
-const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
-const errorHandler_1 = require("../../utils/errorHandler");
-const sendNotification_1 = require("../../utils/sendNotification");
-const s3Aws_1 = require("../../utils/fileUpload/s3Aws");
-const subscriptionAction_1 = require("../../utils/subscriptionAction");
-const processSubscription_1 = require("../../utils/processSubscription");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const errorHandler_1 = require("@/utils/errorHandler");
+const sendNotification_1 = require("@/utils/sendNotification");
+const s3Aws_1 = require("@/utils/fileUpload/s3Aws");
+const subscriptionAction_1 = require("@/utils/subscriptionAction");
+const processSubscription_1 = require("@/utils/processSubscription");
 /**
  * Create a new subscription
  */

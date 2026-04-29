@@ -7,7 +7,7 @@ exports.zUpdateSubscriptionPlanDto = exports.zCreateSubscriptionPlanDto = void 0
  * You can also use these types with validation libraries like Zod or Joi if needed.
  */
 const zod_1 = require("zod");
-const client_1 = require("../../generated/prisma/client");
+const client_1 = require("@/generated/prisma/client");
 /**
  * Zod schema for creating a new subscription plan.
  * Validates all required fields necessary for creation.

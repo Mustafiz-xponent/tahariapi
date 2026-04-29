@@ -43,11 +43,11 @@ exports.deleteAdmin = exports.adminResetPassword = exports.adminForgotPassword =
  */
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const asyncHandler_1 = __importDefault(require("../../../utils/asyncHandler"));
-const sendResponse_1 = __importDefault(require("../../../utils/sendResponse"));
-const errorResponseHandler_1 = require("../../../utils/errorResponseHandler");
-const adminService = __importStar(require("../../../modules/auth/admin/admin.service"));
-const admin_dto_1 = require("../../../modules/auth/admin/admin.dto");
+const asyncHandler_1 = __importDefault(require("@/utils/asyncHandler"));
+const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
+const adminService = __importStar(require("@/modules/auth/admin/admin.service"));
+const admin_dto_1 = require("@/modules/auth/admin/admin.dto");
 const adminIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Admin ID must be a positive integer",
 });

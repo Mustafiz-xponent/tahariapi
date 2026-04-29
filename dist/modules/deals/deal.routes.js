@@ -37,11 +37,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const validator_1 = __importDefault(require("../../middlewares/validator"));
-const client_1 = require("../../generated/prisma/client");
-const dealController = __importStar(require("../../modules/deals/deal.controller"));
-const auth_1 = require("../../middlewares/auth");
-const deal_dto_1 = require("../../modules/deals/deal.dto");
+const validator_1 = __importDefault(require("@/middlewares/validator"));
+const client_1 = require("@/generated/prisma/client");
+const dealController = __importStar(require("@/modules/deals/deal.controller"));
+const auth_1 = require("@/middlewares/auth");
+const deal_dto_1 = require("@/modules/deals/deal.dto");
 const router = (0, express_1.Router)();
 // Route to create a new deal
 router.post("/", auth_1.authMiddleware, (0, auth_1.authorizeRoles)(client_1.UserRole.SUPER_ADMIN, client_1.UserRole.ADMIN), (0, validator_1.default)(deal_dto_1.zCreateDealDto), dealController.createDeal);

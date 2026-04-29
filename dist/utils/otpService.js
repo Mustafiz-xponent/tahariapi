@@ -7,8 +7,8 @@ exports.sendOtp = sendOtp;
 exports.verifyOtp = verifyOtp;
 const axios_1 = __importDefault(require("axios"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const logger_1 = __importDefault(require("../utils/logger"));
-const prismaClient_1 = __importDefault(require("../prisma-client/prismaClient"));
+const logger_1 = __importDefault(require("@/utils/logger"));
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
 const OTP_EXPIRY_MINUTES = 5;
 const SALT_ROUNDS = 10;
 /**
@@ -27,6 +27,7 @@ async function sendSms(phone, message) {
     // Add sender ID if configured
     if (process.env.SMS_SENDER_ID) {
         smsPayload.append("sender_id", process.env.SMS_SENDER_ID);
+        3.;
     }
     // Send SMS
     const response = await axios_1.default.post(process.env.SMS_API_URL, smsPayload.toString(), {
@@ -54,9 +55,9 @@ async function sendOtp(phone) {
     logger_1.default.info(`OTP for ${phone}: ${otp}`);
     // Send SMS with OTP
     const message = `Your OTP is ${otp}. Valid for ${OTP_EXPIRY_MINUTES} minutes.`;
-    return { otp }; // TODO: Need to remove this line when in production
+    // return { otp }; // TODO: Need to remove this line when in production
     // TODO: Enable the sendSMS function at production
-    // await sendSms(phone, message);
+    await sendSms(phone, message);
 }
 /**
  * Verify OTP

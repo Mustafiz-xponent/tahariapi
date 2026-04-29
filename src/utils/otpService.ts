@@ -23,7 +23,7 @@ async function sendSms(phone: string, message: string): Promise<void> {
 
   // Add sender ID if configured
   if (process.env.SMS_SENDER_ID) {
-    smsPayload.append("sender_id", process.env.SMS_SENDER_ID);
+    smsPayload.append("sender_id", process.env.SMS_SENDER_ID);3.
   }
 
   // Send SMS
@@ -63,9 +63,9 @@ export async function sendOtp(phone: string) {
 
   // Send SMS with OTP
   const message = `Your OTP is ${otp}. Valid for ${OTP_EXPIRY_MINUTES} minutes.`;
-  return { otp }; // TODO: Need to remove this line when in production
+  // return { otp }; // TODO: Need to remove this line when in production
   // TODO: Enable the sendSMS function at production
-  // await sendSms(phone, message);
+  await sendSms(phone, message);
 }
 
 /**

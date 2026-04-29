@@ -7,7 +7,7 @@ exports.zUpdateOrderItemDto = exports.zCreateOrderItemsDto = exports.zCreateOrde
  * You can also use these types with validation libraries like Zod or Joi if needed.
  */
 const zod_1 = require("zod");
-const client_1 = require("../../generated/prisma/client");
+const client_1 = require("@/generated/prisma/client");
 // Id validation
 const idSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "ID must be a positive integer",

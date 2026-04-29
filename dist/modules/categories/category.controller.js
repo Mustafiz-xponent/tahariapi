@@ -42,9 +42,9 @@ exports.deleteCategory = exports.updateCategory = exports.getCategoryById = expo
  * Handles HTTP requests and responses for category endpoints.
  */
 const http_status_1 = __importDefault(require("http-status"));
-const asyncHandler_1 = __importDefault(require("../../utils/asyncHandler"));
-const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const categoryService = __importStar(require("../../modules/categories/category.service"));
+const asyncHandler_1 = __importDefault(require("@/utils/asyncHandler"));
+const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const categoryService = __importStar(require("@/modules/categories/category.service"));
 /**
  * Create a new category
  */

@@ -7,12 +7,12 @@ exports.server = exports.io = void 0;
 exports.getSocketId = getSocketId;
 exports.getOnlineAdminSupportSockets = getOnlineAdminSupportSockets;
 exports.getAllOnlineUsers = getAllOnlineUsers;
-const app_1 = __importDefault(require("../app"));
+const app_1 = __importDefault(require("@/app"));
 const http_1 = __importDefault(require("http"));
-const logger_1 = __importDefault(require("../utils/logger"));
+const logger_1 = __importDefault(require("@/utils/logger"));
 const socket_io_1 = require("socket.io");
-const client_1 = require("../generated/prisma/client");
-const auth_1 = require("../middlewares/auth");
+const client_1 = require("@/generated/prisma/client");
+const auth_1 = require("@/middlewares/auth");
 const server = http_1.default.createServer(app_1.default);
 exports.server = server;
 const io = new socket_io_1.Server(server, {

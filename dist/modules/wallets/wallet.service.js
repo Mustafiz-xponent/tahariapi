@@ -18,11 +18,11 @@ exports.deleteWallet = deleteWallet;
  * Contains business logic and database interactions for wallets.
  */
 const http_status_1 = __importDefault(require("http-status"));
-const appError_1 = require("../../utils/appError");
-const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
-const sendNotification_1 = require("../../utils/sendNotification");
-const processPayment_1 = require("../../utils/processPayment");
-const processWalletDeposite_1 = require("../../utils/processWalletDeposite");
+const appError_1 = require("@/utils/appError");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const sendNotification_1 = require("@/utils/sendNotification");
+const processPayment_1 = require("@/utils/processPayment");
+const processWalletDeposite_1 = require("@/utils/processWalletDeposite");
 /**
  * Create a new wallet
  * @param data - Data required to create a wallet

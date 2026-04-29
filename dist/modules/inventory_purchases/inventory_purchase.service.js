@@ -4,13 +4,13 @@
 //  * Service layer for InventoryPurchase entity operations.
 //  * Contains business logic and database interactions for inventory purchases.
 //  */
-// import prisma from "../../prisma-client/prismaClient";
-// import { getErrorMessage } from "../../utils/errorHandler";
-// import { InventoryPurchase } from "../../generated/prisma/client";
+// import prisma from "@/prisma-client/prismaClient";
+// import { getErrorMessage } from "@/utils/errorHandler";
+// import { InventoryPurchase } from "@/generated/prisma/client";
 // import {
 //   CreateInventoryPurchaseDto,
 //   UpdateInventoryPurchaseDto,
-// } from "../../modules/inventory_purchases/inventory-purchase.dto";
+// } from "@/modules/inventory_purchases/inventory-purchase.dto";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -135,8 +135,8 @@ exports.deleteInventoryPurchase = deleteInventoryPurchase;
 //   }
 // }
 // ----------------------------- 22222222222222222222222222222 ---------------------------------
-const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
-const errorHandler_1 = require("../../utils/errorHandler");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const errorHandler_1 = require("@/utils/errorHandler");
 const includeRelations = {
     farmer: {
         select: {

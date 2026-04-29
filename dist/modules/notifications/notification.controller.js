@@ -42,10 +42,10 @@ exports.markAllNotificationsAsSeen = exports.markAllNotificationsAsRead = export
  * Handles HTTP requests and responses for notification-related endpoints.
  */
 const zod_1 = require("zod");
-const logger_1 = __importDefault(require("../../utils/logger"));
+const logger_1 = __importDefault(require("@/utils/logger"));
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const notificationService = __importStar(require("../../modules/notifications/notification.service"));
+const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const notificationService = __importStar(require("@/modules/notifications/notification.service"));
 const notificationIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Notification ID must be a positive integer",
 });

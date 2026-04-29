@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendNotification = void 0;
-const socket_1 = require("../utils/socket");
-const prismaClient_1 = __importDefault(require("../prisma-client/prismaClient"));
+const socket_1 = require("@/utils/socket");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
 const sendNotification = async (message, type, notify, receiverId, tx) => {
     // pick transaction client if provided, otherwise use prisma
     const db = tx ?? prismaClient_1.default;

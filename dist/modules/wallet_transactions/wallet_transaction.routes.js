@@ -41,11 +41,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for wallet transaction-related CRUD operations.
  */
 const express_1 = require("express");
-const validator_1 = __importDefault(require("../../middlewares/validator"));
-const client_1 = require("../../generated/prisma/client");
-const auth_1 = require("../../middlewares/auth");
-const WalletTransactionController = __importStar(require("../../modules/wallet_transactions/wallet_transaction.controller"));
-const wallet_transaction_dto_1 = require("../../modules/wallet_transactions/wallet_transaction.dto");
+const validator_1 = __importDefault(require("@/middlewares/validator"));
+const client_1 = require("@/generated/prisma/client");
+const auth_1 = require("@/middlewares/auth");
+const WalletTransactionController = __importStar(require("@/modules/wallet_transactions/wallet_transaction.controller"));
+const wallet_transaction_dto_1 = require("@/modules/wallet_transactions/wallet_transaction.dto");
 const router = (0, express_1.Router)();
 // Route to create a new wallet transaction
 router.post("/", auth_1.authMiddleware, (0, auth_1.authorizeRoles)(client_1.UserRole.ADMIN, client_1.UserRole.SUPER_ADMIN), (0, validator_1.default)(wallet_transaction_dto_1.zCreateWalletTransactionDto), WalletTransactionController.createWalletTransaction);

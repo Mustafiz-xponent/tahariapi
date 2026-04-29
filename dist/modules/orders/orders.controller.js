@@ -6,11 +6,11 @@
 // import { z } from "zod";
 // import httpStatus from "http-status";
 // import { Request, Response } from "express";
-// import sendResponse from "../../utils/sendResponse";
-// import { Order, OrderStatus } from "../../generated/prisma/client";
-// import * as orderService from "../../modules/orders/orders.service";
-// import { handleErrorResponse } from "../../utils/errorResponseHandler";
-// import { zCreateOrderDto, zUpdateOrderDto } from "../../modules/orders/orders.dto";
+// import sendResponse from "@/utils/sendResponse";
+// import { Order, OrderStatus } from "@/generated/prisma/client";
+// import * as orderService from "@/modules/orders/orders.service";
+// import { handleErrorResponse } from "@/utils/errorResponseHandler";
+// import { zCreateOrderDto, zUpdateOrderDto } from "@/modules/orders/orders.dto";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -239,10 +239,10 @@ exports.getCustomerOrders = exports.deleteOrder = exports.updateOrder = exports.
 // orders.controller.ts
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const orderService = __importStar(require("../../modules/orders/orders.service"));
-const errorResponseHandler_1 = require("../../utils/errorResponseHandler");
-const orders_dto_1 = require("../../modules/orders/orders.dto");
+const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const orderService = __importStar(require("@/modules/orders/orders.service"));
+const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
+const orders_dto_1 = require("@/modules/orders/orders.dto");
 const orderIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Order ID must be a positive integer",
 });

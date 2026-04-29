@@ -1,8 +1,8 @@
 "use strict";
-/**
- * Routes for OrderItem entity operations.
- * Defines API endpoints for order item-related CRUD operations.
- */
+// /**
+//  * Routes for OrderItem entity operations.
+//  * Defines API endpoints for order item-related CRUD operations.
+//  */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -37,9 +37,30 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+// import { Router } from "express";
+// import * as OrderItemController from "@/modules/order_items/order-item.controller";
+// const router = Router();
+// // Route to create a new order item
+// router.post("/", OrderItemController.createOrderItem);
+// // Route to get all order items
+// router.get("/", OrderItemController.getAllOrderItems);
+// // Route to get an order item by ID
+// router.get("/:id", OrderItemController.getOrderItemById);
+// // Route to update an order item's details
+// router.put("/:id", OrderItemController.updateOrderItem);
+// // Route to delete an order item
+// router.delete("/:id", OrderItemController.deleteOrderItem);
+// export default router;
+// -------------------------------- 22222222222222222222222222 --------------------------------
+/**
+ * Routes for OrderItem entity operations.
+ * Defines API endpoints for order item-related CRUD operations.
+ */
 const express_1 = require("express");
-const OrderItemController = __importStar(require("../../modules/order_items/order-item.controller"));
+const OrderItemController = __importStar(require("@/modules/order_items/order-item.controller"));
 const router = (0, express_1.Router)();
+// Route to check product stock availability
+router.get("/stock/check/:productId", OrderItemController.checkProductStock);
 // Route to create a new order item
 router.post("/", OrderItemController.createOrderItem);
 // Route to get all order items

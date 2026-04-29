@@ -41,11 +41,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for subscription-related CRUD operations.
  */
 const express_1 = require("express");
-const validator_1 = __importDefault(require("../../middlewares/validator"));
-const client_1 = require("../../generated/prisma/client");
-const auth_1 = require("../../middlewares/auth");
-const SubscriptionController = __importStar(require("../../modules/subscriptions/subscription.controller"));
-const subscription_dto_1 = require("../../modules/subscriptions/subscription.dto");
+const validator_1 = __importDefault(require("@/middlewares/validator"));
+const client_1 = require("@/generated/prisma/client");
+const auth_1 = require("@/middlewares/auth");
+const SubscriptionController = __importStar(require("@/modules/subscriptions/subscription.controller"));
+const subscription_dto_1 = require("@/modules/subscriptions/subscription.dto");
 const router = (0, express_1.Router)();
 // Route to create a new subscription
 router.post("/", auth_1.authMiddleware, (0, auth_1.authorizeRoles)(client_1.UserRole.CUSTOMER), (0, validator_1.default)(subscription_dto_1.zCreateSubscriptionDto), SubscriptionController.createSubscription);

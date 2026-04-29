@@ -38,9 +38,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteWallet = exports.updateWallet = exports.getWalletById = exports.getCustomerWalletBalanace = exports.getAllWallets = exports.handleSslCommerzIPN = exports.handleSslCommerzCancel = exports.handleSslCommerzFailure = exports.handleSslCommerzSuccess = exports.initiateWalletDeposit = exports.createWallet = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const asyncHandler_1 = __importDefault(require("../../utils/asyncHandler"));
-const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const walletService = __importStar(require("../../modules/wallets/wallet.service"));
+const asyncHandler_1 = __importDefault(require("@/utils/asyncHandler"));
+const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const walletService = __importStar(require("@/modules/wallets/wallet.service"));
 /**
  * Create a new wallet
  */

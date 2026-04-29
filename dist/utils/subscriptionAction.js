@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.canPauseOrCancelSubscription = void 0;
 exports.pauseOrCancelSubscription = pauseOrCancelSubscription;
 exports.processResumeSubscription = processResumeSubscription;
-const prismaClient_1 = __importDefault(require("../prisma-client/prismaClient"));
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
 const date_fns_1 = require("date-fns");
-const processSubscription_1 = require("../utils/processSubscription");
+const processSubscription_1 = require("@/utils/processSubscription");
 const sendNotification_1 = require("./sendNotification");
 const canPauseOrCancelSubscription = async (subscriptionId, bufferDays = 2) => {
     const today = new Date();

@@ -6,7 +6,7 @@ exports.zDeleteProductDto = exports.zUpdateProductDto = exports.zGetProductDto =
  * Updated to handle image uploads with product operations
  */
 const zod_1 = require("zod");
-const client_1 = require("../../generated/prisma/client");
+const client_1 = require("@/generated/prisma/client");
 const zBigIntId = (fieldName) => zod_1.z
     .union([zod_1.z.string(), zod_1.z.number()])
     .refine((val) => val !== "", { message: `${fieldName} is required` })

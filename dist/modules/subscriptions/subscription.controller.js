@@ -43,10 +43,10 @@ exports.deleteSubscription = exports.resumeSubscription = exports.cancelSubscrip
  */
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const errorResponseHandler_1 = require("../../utils/errorResponseHandler");
-const subscription_dto_1 = require("../../modules/subscriptions/subscription.dto");
-const subscriptionService = __importStar(require("../../modules/subscriptions/subscription.service"));
+const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
+const subscription_dto_1 = require("@/modules/subscriptions/subscription.dto");
+const subscriptionService = __importStar(require("@/modules/subscriptions/subscription.service"));
 const subscriptionIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Subscription ID must be a positive integer",
 });

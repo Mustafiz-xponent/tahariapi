@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSalesOverview = exports.getDashboardSummary = void 0;
-const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
 const date_fns_1 = require("date-fns");
-const client_1 = require("../../generated/prisma/client");
-const appError_1 = require("../../utils/appError");
+const client_1 = require("@/generated/prisma/client");
+const appError_1 = require("@/utils/appError");
 const http_status_1 = __importDefault(require("http-status"));
 // Service function
 const getDashboardSummary = async () => {

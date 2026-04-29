@@ -48,14 +48,14 @@ exports.deletePayment = deletePayment;
  * Service layer for Payment entity operations.
  * Contains business logic and database interactions for payments.
  */
-const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
-const errorHandler_1 = require("../../utils/errorHandler");
-const sendNotification_1 = require("../../utils/sendNotification");
-const orderService = __importStar(require("../../modules/orders/orders.service"));
-const socket_1 = require("../../utils/socket");
-const client_1 = require("../../generated/prisma/client");
-const getOrderStatusMessage_1 = require("../../utils/getOrderStatusMessage");
-const processPayment_1 = require("../../utils/processPayment");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const errorHandler_1 = require("@/utils/errorHandler");
+const sendNotification_1 = require("@/utils/sendNotification");
+const orderService = __importStar(require("@/modules/orders/orders.service"));
+const socket_1 = require("@/utils/socket");
+const client_1 = require("@/generated/prisma/client");
+const getOrderStatusMessage_1 = require("@/utils/getOrderStatusMessage");
+const processPayment_1 = require("@/utils/processPayment");
 async function createPayment(data) {
     try {
         // Validate order exists and is pending payment

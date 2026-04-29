@@ -38,9 +38,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for subscription plan-related CRUD operations.
  */
 const express_1 = require("express");
-const client_1 = require("../../generated/prisma/client");
-const auth_1 = require("../../middlewares/auth");
-const SubscriptionPlanController = __importStar(require("../../modules/subscription_plans/subscription_plan.controller"));
+const client_1 = require("@/generated/prisma/client");
+const auth_1 = require("@/middlewares/auth");
+const SubscriptionPlanController = __importStar(require("@/modules/subscription_plans/subscription_plan.controller"));
 const router = (0, express_1.Router)();
 // Route to create a new subscription plan
 router.post("/", auth_1.authMiddleware, (0, auth_1.authorizeRoles)(client_1.UserRole.ADMIN, client_1.UserRole.SUPER_ADMIN), SubscriptionPlanController.createSubscriptionPlan);

@@ -41,11 +41,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for admin authentication.
  */
 const express_1 = require("express");
-const validator_1 = __importDefault(require("../../../middlewares/validator"));
-const client_1 = require("../../../generated/prisma/client");
-const auth_1 = require("../../../middlewares/auth");
-const AdminController = __importStar(require("../../../modules/auth/admin/admin.controller"));
-const admin_dto_1 = require("../../../modules/auth/admin/admin.dto");
+const validator_1 = __importDefault(require("@/middlewares/validator"));
+const client_1 = require("@/generated/prisma/client");
+const auth_1 = require("@/middlewares/auth");
+const AdminController = __importStar(require("@/modules/auth/admin/admin.controller"));
+const admin_dto_1 = require("@/modules/auth/admin/admin.dto");
 const router = (0, express_1.Router)();
 // Route to create a new admin (super admin only)
 router.post("/create", auth_1.authMiddleware, (0, auth_1.authorizeRoles)(client_1.UserRole.SUPER_ADMIN), AdminController.createAdmin);

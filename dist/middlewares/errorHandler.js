@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.globalErrorHandler = void 0;
-const logger_1 = __importDefault(require("../utils/logger"));
+const logger_1 = __importDefault(require("@/utils/logger"));
 const http_status_1 = __importDefault(require("http-status"));
-const appError_1 = require("../utils/appError");
-const library_1 = require("../generated/prisma/client/runtime/library");
+const appError_1 = require("@/utils/appError");
+const library_1 = require("@/generated/prisma/client/runtime/library");
 const handlePrismaError = (error) => {
     let message = "Database operation failed";
     let statusCode = http_status_1.default.INTERNAL_SERVER_ERROR;

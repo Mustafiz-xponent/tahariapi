@@ -14,8 +14,8 @@ exports.getTransactionsByPurchaseId = getTransactionsByPurchaseId;
  * Service layer for FarmerTransaction entity operations.
  * Contains business logic and database interactions for farmer transactions.
  */
-const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
-const errorHandler_1 = require("../../utils/errorHandler");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const errorHandler_1 = require("@/utils/errorHandler");
 /**
  * Create a new farmer transaction
  * @param data - Data required to create a farmer transaction

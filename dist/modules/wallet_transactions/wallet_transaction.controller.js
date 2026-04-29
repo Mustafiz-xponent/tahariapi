@@ -42,9 +42,9 @@ exports.deleteWalletTransaction = exports.updateWalletTransaction = exports.getC
  * Handles HTTP requests and responses for wallet transaction-related endpoints.
  */
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const errorResponseHandler_1 = require("../../utils/errorResponseHandler");
-const walletTransactionService = __importStar(require("../../modules/wallet_transactions/wallet_transaction.service"));
+const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
+const walletTransactionService = __importStar(require("@/modules/wallet_transactions/wallet_transaction.service"));
 /**
  * Create a new wallet transaction
  */

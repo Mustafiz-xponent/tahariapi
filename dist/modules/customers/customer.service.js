@@ -12,8 +12,8 @@ exports.deleteCustomer = deleteCustomer;
  * Contains business logic and database interactions for customers.
  */
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
-const errorHandler_1 = require("../../utils/errorHandler");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const errorHandler_1 = require("@/utils/errorHandler");
 /**
  * Retrieve all customers
  * @returns An array of all customers

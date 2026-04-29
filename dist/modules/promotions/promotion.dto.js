@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.zDeletePromotionDto = exports.zUpdatePromotionDto = exports.zGetPromotionDto = exports.zGetAllPromotionsDto = exports.zCreatePromotionDto = void 0;
 const zod_1 = require("zod");
-const client_1 = require("../../generated/prisma/client");
+const client_1 = require("@/generated/prisma/client");
 /**
  * Returns a Zod schema for a positive integer ID, with the given field name used
  * for error messages.

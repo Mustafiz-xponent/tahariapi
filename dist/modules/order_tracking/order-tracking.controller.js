@@ -43,10 +43,10 @@ exports.deleteOrderTracking = exports.updateOrderTracking = exports.getOrderTrac
  */
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const errorResponseHandler_1 = require("../../utils/errorResponseHandler");
-const orderTrackingService = __importStar(require("../../modules/order_tracking/order-tracking.service"));
-const order_tracking_dto_1 = require("../../modules/order_tracking/order-tracking.dto");
+const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
+const orderTrackingService = __importStar(require("@/modules/order_tracking/order-tracking.service"));
+const order_tracking_dto_1 = require("@/modules/order_tracking/order-tracking.dto");
 const idSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "ID must be a positive integer",
 });

@@ -38,9 +38,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for customer authentication.
  */
 const express_1 = require("express");
-const client_1 = require("../../../generated/prisma/client");
-const auth_1 = require("../../../middlewares/auth");
-const CustomerController = __importStar(require("../../../modules/auth/customer/customer.controller"));
+const client_1 = require("@/generated/prisma/client");
+const auth_1 = require("@/middlewares/auth");
+const CustomerController = __importStar(require("@/modules/auth/customer/customer.controller"));
 const router = (0, express_1.Router)();
 // Route to register a customer
 router.post("/register", CustomerController.registerCustomer);

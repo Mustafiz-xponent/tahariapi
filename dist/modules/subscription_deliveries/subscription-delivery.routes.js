@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for subscription delivery-related CRUD operations.
  */
 const express_1 = require("express");
-const SubscriptionDeliveryController = __importStar(require("../../modules/subscription_deliveries/subscription-delivery.controller"));
+const SubscriptionDeliveryController = __importStar(require("@/modules/subscription_deliveries/subscription-delivery.controller"));
 const router = (0, express_1.Router)();
 // Route to create a new subscription delivery
 router.post("/", SubscriptionDeliveryController.createSubscriptionDelivery);

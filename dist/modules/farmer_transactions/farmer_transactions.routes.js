@@ -38,9 +38,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for farmer transaction-related CRUD operations.
  */
 const express_1 = require("express");
-const client_1 = require("../../generated/prisma/client");
-const auth_1 = require("../../middlewares/auth");
-const FarmerTransactionController = __importStar(require("../../modules/farmer_transactions/farmer_transactions.controller"));
+const client_1 = require("@/generated/prisma/client");
+const auth_1 = require("@/middlewares/auth");
+const FarmerTransactionController = __importStar(require("@/modules/farmer_transactions/farmer_transactions.controller"));
 const router = (0, express_1.Router)();
 // Route to create a new farmer transaction
 router.post("/", auth_1.authMiddleware, (0, auth_1.authorizeRoles)(client_1.UserRole.ADMIN, client_1.UserRole.SUPER_ADMIN), FarmerTransactionController.createFarmerTransaction);

@@ -13,8 +13,8 @@ exports.deleteWalletTransaction = deleteWalletTransaction;
  * Service layer for WalletTransaction entity operations.
  * Contains business logic and database interactions for wallet transactions.
  */
-const prismaClient_1 = __importDefault(require("../../prisma-client/prismaClient"));
-const errorHandler_1 = require("../../utils/errorHandler");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const errorHandler_1 = require("@/utils/errorHandler");
 /**
  * Create a new wallet transaction
  * @param data - Data required to create a wallet transaction

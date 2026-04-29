@@ -41,11 +41,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for notification-related CRUD operations.
  */
 const express_1 = require("express");
-const validator_1 = __importDefault(require("../../middlewares/validator"));
-const client_1 = require("../../generated/prisma/client");
-const auth_1 = require("../../middlewares/auth");
-const NotificationController = __importStar(require("../../modules/notifications/notification.controller"));
-const notification_dto_1 = require("../../modules/notifications/notification.dto");
+const validator_1 = __importDefault(require("@/middlewares/validator"));
+const client_1 = require("@/generated/prisma/client");
+const auth_1 = require("@/middlewares/auth");
+const NotificationController = __importStar(require("@/modules/notifications/notification.controller"));
+const notification_dto_1 = require("@/modules/notifications/notification.dto");
 const router = (0, express_1.Router)();
 // Route to create a new notification
 router.post("/", auth_1.authMiddleware, (0, auth_1.authorizeRoles)(client_1.UserRole.ADMIN, client_1.UserRole.SUPER_ADMIN), (0, validator_1.default)(notification_dto_1.zCreateNotificationDto), NotificationController.createNotification);

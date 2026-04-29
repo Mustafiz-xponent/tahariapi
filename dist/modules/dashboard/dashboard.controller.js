@@ -38,9 +38,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSalesOverview = exports.getDashboardSummary = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const asyncHandler_1 = __importDefault(require("../../utils/asyncHandler"));
-const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const dasboardService = __importStar(require("../../modules/dashboard/dashboard.services"));
+const asyncHandler_1 = __importDefault(require("@/utils/asyncHandler"));
+const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const dasboardService = __importStar(require("@/modules/dashboard/dashboard.services"));
 exports.getDashboardSummary = (0, asyncHandler_1.default)(async (req, res) => {
     const summary = await dasboardService.getDashboardSummary();
     (0, sendResponse_1.default)(res, {

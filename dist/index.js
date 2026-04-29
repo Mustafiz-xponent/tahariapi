@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
-const socket_1 = require("./utils/socket");
-const logger_1 = __importDefault(require("./utils/logger"));
+const socket_1 = require("@/utils/socket");
+const logger_1 = __importDefault(require("@/utils/logger"));
 // Load environment variables
 dotenv_1.default.config();
 // handling uncaught exceptions--

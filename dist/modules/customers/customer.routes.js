@@ -41,11 +41,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for customer-related CRUD operations.
  */
 const express_1 = require("express");
-const validator_1 = __importDefault(require("../../middlewares/validator"));
-const client_1 = require("../../generated/prisma/client");
-const auth_1 = require("../../middlewares/auth");
-const customer_dto_1 = require("../../modules/customers/customer.dto");
-const CustomerController = __importStar(require("../../modules/customers/customer.controller"));
+const validator_1 = __importDefault(require("@/middlewares/validator"));
+const client_1 = require("@/generated/prisma/client");
+const auth_1 = require("@/middlewares/auth");
+const customer_dto_1 = require("@/modules/customers/customer.dto");
+const CustomerController = __importStar(require("@/modules/customers/customer.controller"));
 const router = (0, express_1.Router)();
 // Route to create a new customer
 // router.post("/", CustomerController.createCustomer);

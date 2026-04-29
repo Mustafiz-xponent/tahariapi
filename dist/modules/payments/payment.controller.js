@@ -43,10 +43,10 @@ exports.deletePayment = exports.updatePayment = exports.getPaymentById = exports
  */
 const zod_1 = require("zod");
 const http_status_1 = __importDefault(require("http-status"));
-const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
-const errorResponseHandler_1 = require("../../utils/errorResponseHandler");
-const paymentService = __importStar(require("../../modules/payments/payment.service"));
-const payment_dto_1 = require("../../modules/payments/payment.dto");
+const sendResponse_1 = __importDefault(require("@/utils/sendResponse"));
+const errorResponseHandler_1 = require("@/utils/errorResponseHandler");
+const paymentService = __importStar(require("@/modules/payments/payment.service"));
+const payment_dto_1 = require("@/modules/payments/payment.dto");
 const paymentIdSchema = zod_1.z.coerce.bigint().refine((val) => val > 0n, {
     message: "Payment ID must be a positive integer",
 });

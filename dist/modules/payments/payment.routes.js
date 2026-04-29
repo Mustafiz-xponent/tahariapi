@@ -38,9 +38,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Defines API endpoints for payment-related CRUD operations.
  */
 const express_1 = require("express");
-const client_1 = require("../../generated/prisma/client");
-const auth_1 = require("../../middlewares/auth");
-const PaymentController = __importStar(require("../../modules/payments/payment.controller"));
+const client_1 = require("@/generated/prisma/client");
+const auth_1 = require("@/middlewares/auth");
+const PaymentController = __importStar(require("@/modules/payments/payment.controller"));
 const router = (0, express_1.Router)();
 // Route to create a new payment
 router.post("/", PaymentController.createPayment);

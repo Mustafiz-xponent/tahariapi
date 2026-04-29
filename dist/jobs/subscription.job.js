@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.startSubscriptionRenewalJob = exports.renewSubscriptions = void 0;
 const node_cron_1 = __importDefault(require("node-cron"));
-const prismaClient_1 = __importDefault(require("../prisma-client/prismaClient"));
-const logger_1 = __importDefault(require("../utils/logger"));
-const processSubscription_1 = require("../utils/processSubscription");
+const prismaClient_1 = __importDefault(require("@/prisma-client/prismaClient"));
+const logger_1 = __importDefault(require("@/utils/logger"));
+const processSubscription_1 = require("@/utils/processSubscription");
 // Configuration
 const CONFIG = {
     BATCH_SIZE: 100, // Number of subscriptions to process per batch
