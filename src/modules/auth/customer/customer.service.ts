@@ -384,6 +384,32 @@ function normalizePhone(phone: string): string {
  * @param message - Plaintext SMS body
  * @throws Error if the HTTP request fails
  */
+// async function sendSms(phone: string, message: string): Promise<void> {
+//   const { apiUrl, apiKey, senderId } = getSmsConfig();
+
+//   const normalizedPhone = normalizePhone(phone);
+//   const encodedMessage = encodeURIComponent(message);
+
+//   const requestUrl =
+//     `${apiUrl}` +
+//     `?api_key=${apiKey}` +
+//     `&type=text` +
+//     `&phone=${normalizedPhone}` +
+//     `&senderid=${senderId}` +
+//     `&message=${encodedMessage}`;
+
+//   logger.info(`[SMS] Sending to ${normalizedPhone}...`);
+
+//   const response = await axios.get(requestUrl, {
+//     timeout: 10_000, // 10 seconds
+//   });
+
+//   logger.info(`[SMS] Gateway response:`, {
+//     status: response.status,
+//     data: response.data,
+//   });
+// }
+
 async function sendSms(phone: string, message: string): Promise<void> {
   const { apiUrl, apiKey, senderId } = getSmsConfig();
 
@@ -398,16 +424,40 @@ async function sendSms(phone: string, message: string): Promise<void> {
     `&senderid=${senderId}` +
     `&message=${encodedMessage}`;
 
+  logger.info(`[SMS] Request URL: ${requestUrl}`);
   logger.info(`[SMS] Sending to ${normalizedPhone}...`);
 
-  const response = await axios.get(requestUrl, {
-    timeout: 10_000, // 10 seconds
-  });
+  try {
+    const response = await axios.get<{ status_code: number }>(requestUrl, {
+      timeout: 8_000,
+    });
 
-  logger.info(`[SMS] Gateway response:`, {
-    status: response.status,
-    data: response.data,
-  });
+    // Fix: stringify response.data properly
+    logger.info(`[SMS] Gateway HTTP status: ${response.status}`);
+    logger.info(
+      `[SMS] Gateway response body: ${JSON.stringify(response.data)}`,
+    );
+
+    // Gateway returns { status_code: 200 } on success
+    if (!response.data || response.data?.status_code !== 200) {
+      throw new Error(
+        `SMS gateway error. Response: ${JSON.stringify(response.data)}`,
+      );
+    }
+
+    logger.info(`[SMS] SMS successfully queued for ${normalizedPhone}.`);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      logger.error(
+        `[SMS] Axios error: ${error.message} | ` +
+          `code: ${error.code} | ` +
+          `status: ${error.response?.status} | ` +
+          `data: ${JSON.stringify(error.response?.data)}`,
+      );
+      throw new Error(`SMS delivery failed: ${error.message}`);
+    }
+    throw error;
+  }
 }
 
 // ---------------------------------------------------------------------------
