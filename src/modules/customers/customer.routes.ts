@@ -20,7 +20,7 @@ router.get(
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   validator(zGetAllCustomersDto),
-  CustomerController.getAllCustomers
+  CustomerController.getAllCustomers,
 );
 
 // Route to get a customer by ID
@@ -31,7 +31,7 @@ router.put(
   "/:id",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  CustomerController.updateCustomer
+  CustomerController.updateCustomer,
 );
 
 // Route to delete a customer
@@ -39,7 +39,7 @@ router.delete(
   "/:id",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  CustomerController.deleteCustomer
+  CustomerController.deleteCustomer,
 );
 
 export default router;
