@@ -48,7 +48,7 @@ app.use(compression());
 app.use(rateLimiter(1000, 15 * 60 * 1000)); // 1000 requests per 15 minutes for dev
 app.set("trust proxy", 1);
 const corsOptions = {
-  origin: process.env.CLIENT_URL,
+  origin: process.env.CLIENT_URL?.split(","),
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   credentials: true,
 };
