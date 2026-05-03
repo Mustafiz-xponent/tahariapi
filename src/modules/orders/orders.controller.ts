@@ -431,3 +431,110 @@ export const getCustomerOrders = async (
     handleErrorResponse(error, res, "fetch customer orders");
   }
 };
+
+
+
+/**
+ * Get orders with pending payment (for due list)
+ */
+export const getDueOrders = async (
+  req: Request<{}, {}, {}, OrdersQuery>,
+  res: Response,
+): Promise<void> => {
+  try {
+    const page = Math.max(parseInt(req.query.page as string) || 1, 1);
+    const limit = Math.min(
+      Math.max(parseInt(req.query.limit as string) || 10, 1),
+      100,
+    );
+    const skip = (page - 1) * limit;
+    const sort = req.query.sort === "asc" ? "asc" : "desc";
+    const search = req.query.search?.trim();
+
+    const filters = { 
+      paymentStatus: "PENDING" as const,
+      search 
+    };
+    const pagination = { page, limit, skip, sort };
+    
+    const result = await orderService.getDueOrders({ filters, pagination });
+
+    sendResponse<Order[]>(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Due orders fetched successfully",
+      data: result.orders,
+      pagination: {
+        currentPage: result.currentPage,
+        totalPages: result.totalPages,
+        totalItems: result.totalCount,
+        itemsPerPage: limit,
+        hasNextPage: result.currentPage < result.totalPages,
+        hasPreviousPage: result.currentPage > 1,
+      },
+    });
+  } catch (error) {
+    handleErrorResponse(error, res, "fetch due orders");
+  }
+};
+
+/**
+ * Send payment reminder to customer
+ */
+export const sendPaymentReminder = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const orderId = orderIdSchema.parse(req.params.orderId);
+    await orderService.sendPaymentReminder(orderId);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Payment reminder sent successfully",
+    });
+  } catch (error) {
+    handleErrorResponse(error, res, "send payment reminder");
+  }
+};
+
+/**
+ * Generate order bill PDF
+ */
+export const generateOrderBill = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const orderId = orderIdSchema.parse(req.params.orderId);
+    const pdfBuffer = await orderService.generateOrderBillPDF(orderId);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=bill-${orderId}.pdf`);
+    res.send(pdfBuffer);
+  } catch (error) {
+    handleErrorResponse(error, res, "generate bill");
+  }
+};
+
+/**
+ * Send bill to customer email
+ */
+export const sendBillToEmail = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const orderId = orderIdSchema.parse(req.params.orderId);
+    await orderService.sendBillToEmail(orderId);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Bill sent to customer email successfully",
+    });
+  } catch (error) {
+    handleErrorResponse(error, res, "send bill email");
+  }
+};

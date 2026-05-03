@@ -9,6 +9,40 @@ import * as OrderController from "@/modules/orders/orders.controller";
 
 const router = Router();
 
+// Add these routes before existing routes
+
+// Due orders route
+router.get(
+  "/dues",
+  authMiddleware,
+  authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  OrderController.getDueOrders,
+);
+
+// Send payment reminder
+router.post(
+  "/:orderId/reminder",
+  authMiddleware,
+  authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  OrderController.sendPaymentReminder,
+);
+
+// Generate bill PDF
+router.get(
+  "/:orderId/bill/pdf",
+  authMiddleware,
+  authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  OrderController.generateOrderBill,
+);
+
+// Send bill to email
+router.post(
+  "/:orderId/bill/email",
+  authMiddleware,
+  authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
+  OrderController.sendBillToEmail,
+);
+
 // Route to create a new order
 router.post("/", OrderController.createOrder);
 
@@ -17,7 +51,7 @@ router.get(
   "/",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  OrderController.getAllOrders
+  OrderController.getAllOrders,
 );
 
 // Route to get orders for a specific customer
@@ -25,7 +59,7 @@ router.get(
   "/customer",
   authMiddleware,
   authorizeRoles(UserRole.CUSTOMER),
-  OrderController.getCustomerOrders
+  OrderController.getCustomerOrders,
 );
 
 // Route to get an order by ID
@@ -36,14 +70,14 @@ router.put(
   "/:id",
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  OrderController.updateOrder
+  OrderController.updateOrder,
 );
 
 // Route to delete an order
 router.delete(
   "/:id",
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN),
-  OrderController.deleteOrder
+  OrderController.deleteOrder,
 );
 
 export default router;
