@@ -3,6 +3,7 @@
 import dotenv from "dotenv";
 import { server } from "@/utils/socket";
 import logger from "@/utils/logger";
+import admin from "@/services/firebaseAdmin"; // ✅ ADD THIS
 
 // Load environment variables
 dotenv.config();

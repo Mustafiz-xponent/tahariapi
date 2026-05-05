@@ -133,6 +133,17 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DeviceTokenScalarFieldEnum = {
+  tokenId: 'tokenId',
+  userId: 'userId',
+  token: 'token',
+  deviceId: 'deviceId',
+  deviceType: 'deviceType',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.AdminScalarFieldEnum = {
   adminId: 'adminId',
   userId: 'userId'
@@ -175,9 +186,6 @@ exports.Prisma.ProductScalarFieldEnum = {
   productId: 'productId',
   name: 'name',
   description: 'description',
-  unitType: 'unitType',
-  unitPrice: 'unitPrice',
-  packageSize: 'packageSize',
   stockQuantity: 'stockQuantity',
   reorderLevel: 'reorderLevel',
   isSubscription: 'isSubscription',
@@ -189,6 +197,9 @@ exports.Prisma.ProductScalarFieldEnum = {
   updatedAt: 'updatedAt',
   categoryId: 'categoryId',
   farmerId: 'farmerId',
+  packageSize: 'packageSize',
+  unitPrice: 'unitPrice',
+  unitType: 'unitType',
   dealId: 'dealId'
 };
 
@@ -197,14 +208,14 @@ exports.Prisma.InventoryPurchaseScalarFieldEnum = {
   quantity: 'quantity',
   unitCost: 'unitCost',
   totalCost: 'totalCost',
-  packageSize: 'packageSize',
   purchaseDate: 'purchaseDate',
   status: 'status',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   farmerId: 'farmerId',
-  productId: 'productId'
+  productId: 'productId',
+  packageSize: 'packageSize'
 };
 
 exports.Prisma.FarmerTransactionScalarFieldEnum = {
@@ -244,9 +255,9 @@ exports.Prisma.StockTransactionScalarFieldEnum = {
 exports.Prisma.WalletScalarFieldEnum = {
   walletId: 'walletId',
   balance: 'balance',
-  lockedBalance: 'lockedBalance',
   updatedAt: 'updatedAt',
-  customerId: 'customerId'
+  customerId: 'customerId',
+  lockedBalance: 'lockedBalance'
 };
 
 exports.Prisma.WalletTransactionScalarFieldEnum = {
@@ -280,11 +291,11 @@ exports.Prisma.OrderItemScalarFieldEnum = {
   orderItemId: 'orderItemId',
   quantity: 'quantity',
   unitPrice: 'unitPrice',
-  packageSize: 'packageSize',
-  unitType: 'unitType',
   subtotal: 'subtotal',
   orderId: 'orderId',
-  productId: 'productId'
+  productId: 'productId',
+  packageSize: 'packageSize',
+  unitType: 'unitType'
 };
 
 exports.Prisma.OrderTrackingScalarFieldEnum = {
@@ -301,16 +312,16 @@ exports.Prisma.SubscriptionScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   status: 'status',
-  paymentMethod: 'paymentMethod',
-  isProcessing: 'isProcessing',
-  planPrice: 'planPrice',
-  shippingAddress: 'shippingAddress',
   renewalDate: 'renewalDate',
-  nextDeliveryDate: 'nextDeliveryDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   customerId: 'customerId',
-  planId: 'planId'
+  planId: 'planId',
+  paymentMethod: 'paymentMethod',
+  isProcessing: 'isProcessing',
+  shippingAddress: 'shippingAddress',
+  planPrice: 'planPrice',
+  nextDeliveryDate: 'nextDeliveryDate'
 };
 
 exports.Prisma.SubscriptionPlanScalarFieldEnum = {
@@ -348,22 +359,22 @@ exports.Prisma.PaymentScalarFieldEnum = {
 exports.Prisma.MessageScalarFieldEnum = {
   messageId: 'messageId',
   message: 'message',
-  status: 'status',
-  readAt: 'readAt',
   createdAt: 'createdAt',
+  readAt: 'readAt',
+  receiverId: 'receiverId',
   senderId: 'senderId',
-  receiverId: 'receiverId'
+  status: 'status'
 };
 
 exports.Prisma.NotificationScalarFieldEnum = {
   notificationId: 'notificationId',
   message: 'message',
-  status: 'status',
-  type: 'type',
-  isSeen: 'isSeen',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  receiverId: 'receiverId'
+  status: 'status',
+  receiverId: 'receiverId',
+  isSeen: 'isSeen',
+  type: 'type'
 };
 
 exports.Prisma.PromotionScalarFieldEnum = {
@@ -372,10 +383,10 @@ exports.Prisma.PromotionScalarFieldEnum = {
   description: 'description',
   imageUrl: 'imageUrl',
   targetType: 'targetType',
+  productId: 'productId',
   priority: 'priority',
   placement: 'placement',
   isActive: 'isActive',
-  productId: 'productId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -520,6 +531,7 @@ exports.DiscountType = exports.$Enums.DiscountType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  DeviceToken: 'DeviceToken',
   Admin: 'Admin',
   Customer: 'Customer',
   Otp: 'Otp',

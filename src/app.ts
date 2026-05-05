@@ -35,6 +35,7 @@ import inventoryPurchaseRoutes from "@/modules/inventory_purchases/inventory_pur
 import walletTransactionRoutes from "@/modules/wallet_transactions/wallet_transaction.routes";
 import farmerTransactionRoutes from "@/modules/farmer_transactions/farmer_transactions.routes";
 import subscriptionDeliveryRoutes from "@/modules/subscription_deliveries/subscription-delivery.routes";
+import deviceTokenRoutes from "@/modules/deviceTokens/deviceTokens.routes"; // ✅ ADD THIS
 
 dotenv.config();
 
@@ -87,6 +88,7 @@ app.use("/api/notifications", notificationsRoutes);
 app.use("/api/promotions", promotionRoutes);
 app.use("/api/deals", dealRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/device-tokens", deviceTokenRoutes); // ✅ ADD THIS LINE
 
 // Health check route
 app.get("/health", (_req: Request, res: Response) => {
