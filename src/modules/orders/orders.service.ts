@@ -308,6 +308,260 @@ export async function getOrderById(orderId: BigInt) {
 // Update Order
 // =============================================================================
 
+// export async function updateOrder(
+//   orderId: bigint,
+//   data: UpdateOrderDto,
+// ): Promise<Order> {
+//   try {
+//     const currentOrder = await prisma.order.findUnique({
+//       where: { orderId },
+//       include: {
+//         customer: { include: { wallet: true } },
+//         orderItems: true,
+//       },
+//     });
+//     if (!currentOrder) throw new Error("Order not found");
+//     if (currentOrder.status === "DELIVERED" && data.status) {
+//       throw new Error("Cannot update status after it has been delivered.");
+//     }
+
+//     // Validate payment status updates
+//     if (data.paymentStatus) {
+//       // Don't allow changing from COMPLETED to other statuses
+//       if (
+//         currentOrder.paymentStatus === "COMPLETED" &&
+//         data.paymentStatus !== "COMPLETED"
+//       ) {
+//         throw new Error("Cannot change payment status from COMPLETED");
+//       }
+
+//       // Don't allow REFUNDED unless current status is COMPLETED
+//       if (
+//         data.paymentStatus === "REFUNDED" &&
+//         currentOrder.paymentStatus !== "COMPLETED"
+//       ) {
+//         throw new Error("Can only refund orders with COMPLETED payment status");
+//       }
+
+//       // Validate payment status changes for COD orders
+//       if (currentOrder.paymentMethod === "COD") {
+//         const allowedCODStatuses = ["PENDING", "COMPLETED", "FAILED"];
+//         if (!allowedCODStatuses.includes(data.paymentStatus)) {
+//           throw new Error(
+//             `Invalid payment status for COD orders. Allowed: ${allowedCODStatuses.join(", ")}`,
+//           );
+//         }
+//       }
+//     }
+
+//     return await prisma.$transaction(async (tx) => {
+//       const isDelivered = data.status === "DELIVERED";
+//       const updatedOrder = await tx.order.update({
+//         where: { orderId },
+//         data: {
+//           status: data.status,
+//           paymentStatus:
+//             data.paymentStatus ??
+//             (isDelivered && currentOrder.paymentMethod === "COD"
+//               ? "COMPLETED"
+//               : currentOrder.paymentStatus),
+//           shippingAddress: data.shippingAddress,
+//           preorderDeliveryDate: currentOrder.isPreorder
+//             ? data.preorderDeliveryDate
+//             : currentOrder.preorderDeliveryDate,
+//         },
+//       });
+
+//       // Handle status tracking
+//       if (data.status) {
+//         const orderStatusFlow: OrderStatus[] = [
+//           "PENDING",
+//           "CONFIRMED",
+//           "PROCESSING",
+//           "SHIPPED",
+//           "DELIVERED",
+//         ];
+//         const currentStatusIndex = orderStatusFlow.indexOf(currentOrder.status);
+//         const newStatusIndex = orderStatusFlow.indexOf(data.status);
+
+//         if (data.status === currentOrder.status) {
+//           throw new Error(`Order is already ${currentOrder.status}`);
+//         }
+//         if (newStatusIndex > currentStatusIndex + 1) {
+//           throw new Error(
+//             `Invalid status transition: Cannot skip status levels from ${currentOrder.status} to ${data.status}`,
+//           );
+//         }
+//         if (newStatusIndex < currentStatusIndex) {
+//           await tx.orderTracking.deleteMany({
+//             where: {
+//               orderId,
+//               status: {
+//                 in: orderStatusFlow.filter(
+//                   (status) => orderStatusFlow.indexOf(status) > newStatusIndex,
+//                 ),
+//               },
+//             },
+//           });
+//         }
+//       }
+
+//       if (data.status && data.status !== currentOrder.status) {
+//         const alreadyTracked = await tx.orderTracking.findFirst({
+//           where: {
+//             orderId,
+//             status: data.status,
+//           },
+//         });
+//         if (!alreadyTracked) {
+//           await tx.orderTracking.create({
+//             data: {
+//               orderId,
+//               status: data.status,
+//               description: `Status updated to ${data.status}`,
+//             },
+//           });
+//         }
+//         const message = getOrderStatusMessage(data.status, orderId);
+//         await sendNotification(
+//           message,
+//           "ORDER",
+//           "CUSTOMER",
+//           currentOrder.customer.userId,
+//           tx,
+//         );
+//       }
+
+//       // Send notification for payment status changes
+//       if (
+//         data.paymentStatus &&
+//         data.paymentStatus !== currentOrder.paymentStatus
+//       ) {
+//         let paymentMessage = "";
+//         switch (data.paymentStatus) {
+//           case "COMPLETED":
+//             paymentMessage = `Payment for Order #${orderId} has been marked as completed.`;
+//             break;
+//           case "FAILED":
+//             paymentMessage = `Payment for Order #${orderId} has failed. Please contact support.`;
+//             break;
+//           case "REFUNDED":
+//             paymentMessage = `Payment for Order #${orderId} has been refunded.`;
+//             break;
+//         }
+
+//         if (paymentMessage) {
+//           await sendNotification(
+//             paymentMessage,
+//             "PAYMENT",
+//             "CUSTOMER",
+//             currentOrder.customer.userId,
+//             tx,
+//           );
+//         }
+//       }
+
+//       // Handle delivery for COD orders
+//       if (data.status === "DELIVERED" && currentOrder.paymentMethod === "COD") {
+//         await Promise.all(
+//           currentOrder.orderItems.map(async (item) => {
+//             await tx.product.update({
+//               where: { productId: item.productId },
+//               data: {
+//                 stockQuantity: {
+//                   decrement: item.quantity * item.packageSize,
+//                 },
+//               },
+//             });
+
+//             await tx.stockTransaction.create({
+//               data: {
+//                 quantity: item.quantity * item.packageSize,
+//                 transactionType: "OUT",
+//                 productId: item.productId,
+//                 orderId: Number(orderId),
+//                 description: `Stock reduced for Order #${orderId}`,
+//               },
+//             });
+//           }),
+//         );
+
+//         // Auto-complete payment if not already done
+//         if (currentOrder.paymentStatus !== "COMPLETED") {
+//           await tx.payment.update({
+//             where: { orderId, paymentMethod: "COD" },
+//             data: {
+//               paymentStatus: "COMPLETED",
+//             },
+//           });
+//         }
+//       }
+
+//       // Handle subscription orders
+//       if (currentOrder.isSubscription) {
+//         const updatedSubscriptionDelivery =
+//           await tx.subscriptionDelivery.update({
+//             where: { orderId },
+//             data: { status: data.status },
+//           });
+//         if (data.status === "DELIVERED") {
+//           const subscriptionId = updatedSubscriptionDelivery.subscriptionId;
+//           const delivery = await upcomingDelivery(tx, subscriptionId);
+//           let nextDeliveryDate: Date | null;
+//           if (delivery) {
+//             nextDeliveryDate = delivery.deliveryDate;
+//           } else {
+//             nextDeliveryDate = null;
+//           }
+//           await tx.subscription.update({
+//             where: { subscriptionId },
+//             data: { nextDeliveryDate },
+//           });
+//         }
+//         if (
+//           currentOrder.paymentMethod === "WALLET" &&
+//           data.status === "DELIVERED"
+//         ) {
+//           if (
+//             hasInsufficientWalletBalance(
+//               currentOrder.customer.wallet,
+//               currentOrder.totalAmount,
+//             )
+//           ) {
+//             throw new Error(`Insufficient wallet balance`);
+//           }
+//           await tx.wallet.update({
+//             where: { walletId: currentOrder.customer.wallet?.walletId },
+//             data: {
+//               lockedBalance: { decrement: currentOrder.totalAmount },
+//               balance: { decrement: currentOrder.totalAmount },
+//             },
+//           });
+//           await tx.walletTransaction.update({
+//             where: { orderId },
+//             data: {
+//               transactionStatus: "COMPLETED",
+//               description: `Payment completed for order #${currentOrder.orderId}`,
+//             },
+//           });
+//           await tx.payment.update({
+//             where: { orderId },
+//             data: { paymentStatus: "COMPLETED" },
+//           });
+//         }
+//       }
+
+//       return updatedOrder;
+//     });
+//   } catch (error) {
+//     throw new Error(`Failed to update order: ${getErrorMessage(error)}`);
+//   }
+// }
+
+// =============================================================================
+// Update Order
+// =============================================================================
+
 export async function updateOrder(
   orderId: bigint,
   data: UpdateOrderDto,
@@ -325,15 +579,44 @@ export async function updateOrder(
       throw new Error("Cannot update status after it has been delivered.");
     }
 
+    // Validate payment status updates
+    if (data.paymentStatus) {
+      // Don't allow changing from COMPLETED to other statuses
+      if (
+        currentOrder.paymentStatus === "COMPLETED" &&
+        data.paymentStatus !== "COMPLETED"
+      ) {
+        throw new Error("Cannot change payment status from COMPLETED");
+      }
+
+      // Don't allow REFUNDED unless current status is COMPLETED
+      if (
+        data.paymentStatus === "REFUNDED" &&
+        currentOrder.paymentStatus !== "COMPLETED"
+      ) {
+        throw new Error("Can only refund orders with COMPLETED payment status");
+      }
+
+      // Validate payment status changes for COD orders
+      if (currentOrder.paymentMethod === "COD") {
+        const allowedCODStatuses = ["PENDING", "COMPLETED", "FAILED"];
+        if (!allowedCODStatuses.includes(data.paymentStatus)) {
+          throw new Error(
+            `Invalid payment status for COD orders. Allowed: ${allowedCODStatuses.join(", ")}`,
+          );
+        }
+      }
+    }
+
     return await prisma.$transaction(async (tx) => {
       const isDelivered = data.status === "DELIVERED";
+
+      // Update order - NO automatic payment status change
       const updatedOrder = await tx.order.update({
         where: { orderId },
         data: {
           status: data.status,
-          paymentStatus:
-            data.paymentStatus ??
-            (isDelivered ? "COMPLETED" : currentOrder.paymentStatus),
+          paymentStatus: data.paymentStatus, // Only update if explicitly provided
           shippingAddress: data.shippingAddress,
           preorderDeliveryDate: currentOrder.isPreorder
             ? data.preorderDeliveryDate
@@ -341,6 +624,7 @@ export async function updateOrder(
         },
       });
 
+      // Handle status tracking
       if (data.status) {
         const orderStatusFlow: OrderStatus[] = [
           "PENDING",
@@ -400,7 +684,37 @@ export async function updateOrder(
         );
       }
 
-      if (data.status === "DELIVERED" && currentOrder.paymentMethod === "COD") {
+      // Send notification for payment status changes
+      if (
+        data.paymentStatus &&
+        data.paymentStatus !== currentOrder.paymentStatus
+      ) {
+        let paymentMessage = "";
+        switch (data.paymentStatus) {
+          case "COMPLETED":
+            paymentMessage = `Payment for Order #${orderId} has been marked as completed.`;
+            break;
+          case "FAILED":
+            paymentMessage = `Payment for Order #${orderId} has failed. Please contact support.`;
+            break;
+          case "REFUNDED":
+            paymentMessage = `Payment for Order #${orderId} has been refunded.`;
+            break;
+        }
+
+        if (paymentMessage) {
+          await sendNotification(
+            paymentMessage,
+            "PAYMENT",
+            "CUSTOMER",
+            currentOrder.customer.userId,
+            tx,
+          );
+        }
+      }
+
+      // Handle stock reduction when delivered (regardless of payment status)
+      if (data.status === "DELIVERED" && currentOrder.status !== "DELIVERED") {
         await Promise.all(
           currentOrder.orderItems.map(async (item) => {
             await tx.product.update({
@@ -423,15 +737,28 @@ export async function updateOrder(
             });
           }),
         );
-
-        await tx.payment.update({
-          where: { orderId, paymentMethod: "COD" },
-          data: {
-            paymentStatus: "COMPLETED",
-          },
-        });
       }
 
+      // Update Payment table when payment status is explicitly updated
+      if (
+        data.paymentStatus &&
+        data.paymentStatus !== currentOrder.paymentStatus
+      ) {
+        const payment = await tx.payment.findUnique({
+          where: { orderId },
+        });
+
+        if (payment) {
+          await tx.payment.update({
+            where: { orderId },
+            data: {
+              paymentStatus: data.paymentStatus,
+            },
+          });
+        }
+      }
+
+      // Handle subscription orders
       if (currentOrder.isSubscription) {
         const updatedSubscriptionDelivery =
           await tx.subscriptionDelivery.update({
@@ -452,9 +779,12 @@ export async function updateOrder(
             data: { nextDeliveryDate },
           });
         }
+
+        // Handle wallet payment for subscription orders when delivered
         if (
           currentOrder.paymentMethod === "WALLET" &&
-          data.status === "DELIVERED"
+          data.status === "DELIVERED" &&
+          currentOrder.status !== "DELIVERED"
         ) {
           if (
             hasInsufficientWalletBalance(
@@ -478,6 +808,7 @@ export async function updateOrder(
               description: `Payment completed for order #${currentOrder.orderId}`,
             },
           });
+          // For wallet payments, auto-complete when delivered
           await tx.payment.update({
             where: { orderId },
             data: { paymentStatus: "COMPLETED" },
