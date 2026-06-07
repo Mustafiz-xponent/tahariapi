@@ -49,7 +49,7 @@ export async function getAllMessages(
   userId: bigint | number,
   userRole: UserRole,
   paginationParams: { page: number; limit: number; skip: number; sort: string },
-  receiverId?: string
+  receiverId?: string,
 ): Promise<GetAllMessagesResult> {
   try {
     let messages: Message[] = [];
@@ -172,7 +172,7 @@ export async function getAllMessages(
  * Retrieve a message by its ID
  */
 export async function getMessageById(
-  messageId: BigInt
+  messageId: BigInt,
 ): Promise<Message | null> {
   try {
     const message = await prisma.message.findUnique({
@@ -191,7 +191,7 @@ export async function updateMessage(
   messageId: bigint,
   newMessage: string,
   userId: bigint,
-  userRole: UserRole
+  userRole: UserRole,
 ) {
   try {
     const message = await prisma.message.findUnique({
@@ -268,7 +268,7 @@ export async function updateMessage(
 export async function deleteMessage(
   messageId: BigInt,
   userId: bigint,
-  userRole: UserRole
+  userRole: UserRole,
 ): Promise<void> {
   try {
     const message = await prisma.message.findUnique({
@@ -492,7 +492,37 @@ export const markMessageAsRead = async ({
     }
   } catch (error) {
     throw new Error(
-      `Failed to mark message as read: ${getErrorMessage(error)}`
+      `Failed to mark message as read: ${getErrorMessage(error)}`,
     );
   }
 };
+
+/**
+ * Get total unread message count for admin/support
+ */
+export async function getTotalUnreadCount(
+  userId: bigint | number,
+  userRole: UserRole,
+): Promise<number> {
+  try {
+    if (
+      userRole === UserRole.SUPPORT ||
+      userRole === UserRole.ADMIN ||
+      userRole === UserRole.SUPER_ADMIN
+    ) {
+      // Count all unread messages sent by customers (receiverId is null = broadcast to support)
+      const count = await prisma.message.count({
+        where: {
+          status: "UNREAD",
+          sender: {
+            role: UserRole.CUSTOMER,
+          },
+        },
+      });
+      return count;
+    }
+    return 0;
+  } catch (error) {
+    throw new Error(`Failed to get unread count: ${getErrorMessage(error)}`);
+  }
+}

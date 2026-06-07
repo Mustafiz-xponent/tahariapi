@@ -50,7 +50,7 @@ export async function registerDeviceToken({
     });
   } catch (error) {
     throw new Error(
-      `Failed to register device token: ${getErrorMessage(error)}`
+      `Failed to register device token: ${getErrorMessage(error)}`,
     );
   }
 }
@@ -71,7 +71,7 @@ export async function unregisterDeviceToken(userId: bigint, token: string) {
     });
   } catch (error) {
     throw new Error(
-      `Failed to unregister device token: ${getErrorMessage(error)}`
+      `Failed to unregister device token: ${getErrorMessage(error)}`,
     );
   }
 }
@@ -99,9 +99,7 @@ export async function getUserDeviceTokens(userId: bigint) {
       },
     });
   } catch (error) {
-    throw new Error(
-      `Failed to fetch device tokens: ${getErrorMessage(error)}`
-    );
+    throw new Error(`Failed to fetch device tokens: ${getErrorMessage(error)}`);
   }
 }
 
@@ -114,7 +112,7 @@ export async function sendTestPushNotification(userId: bigint) {
       userId,
       notification: {
         title: "Test Notification 🎉",
-        body: "This is a test push notification from Tohori Foods!",
+        body: "This is a test push notification from Tahari Foods!",
         data: {
           type: "SYSTEM_ALERT",
           link: "/",
@@ -124,7 +122,7 @@ export async function sendTestPushNotification(userId: bigint) {
     });
   } catch (error) {
     throw new Error(
-      `Failed to send test notification: ${getErrorMessage(error)}`
+      `Failed to send test notification: ${getErrorMessage(error)}`,
     );
   }
 }
@@ -149,6 +147,9 @@ export async function cleanupInactiveTokens() {
     console.log(`🧹 Cleaned up ${result.count} inactive device tokens`);
     return result;
   } catch (error) {
-    console.error("❌ Failed to cleanup inactive tokens:", getErrorMessage(error));
+    console.error(
+      "❌ Failed to cleanup inactive tokens:",
+      getErrorMessage(error),
+    );
   }
 }

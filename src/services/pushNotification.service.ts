@@ -91,7 +91,7 @@ export async function sendPushNotification({
     const response = await admin.messaging().sendEachForMulticast(message);
 
     console.log(
-      `✅ Push notification sent: ${response.successCount} successful, ${response.failureCount} failed`
+      `✅ Push notification sent: ${response.successCount} successful, ${response.failureCount} failed`,
     );
 
     // Handle failed tokens
@@ -102,7 +102,7 @@ export async function sendPushNotification({
           failedTokens.push(tokens[idx]);
           console.error(
             `❌ Failed to send to token ${tokens[idx]}:`,
-            resp.error?.message
+            resp.error?.message,
           );
         }
       });
@@ -119,7 +119,10 @@ export async function sendPushNotification({
       });
     }
   } catch (error) {
-    console.error("❌ Error sending push notification:", getErrorMessage(error));
+    console.error(
+      "❌ Error sending push notification:",
+      getErrorMessage(error),
+    );
     // Don't throw - push notification failure shouldn't break the flow
   }
 }
@@ -138,12 +141,15 @@ export async function sendBulkPushNotification({
 }): Promise<void> {
   try {
     const promises = userIds.map((userId) =>
-      sendPushNotification({ userId, notification, notificationType })
+      sendPushNotification({ userId, notification, notificationType }),
     );
 
     await Promise.allSettled(promises);
   } catch (error) {
-    console.error("❌ Error sending bulk push notifications:", getErrorMessage(error));
+    console.error(
+      "❌ Error sending bulk push notifications:",
+      getErrorMessage(error),
+    );
   }
 }
 
@@ -193,7 +199,10 @@ export async function sendTopicPushNotification({
     const response = await admin.messaging().send(message);
     console.log("✅ Topic notification sent successfully:", response);
   } catch (error) {
-    console.error("❌ Error sending topic notification:", getErrorMessage(error));
+    console.error(
+      "❌ Error sending topic notification:",
+      getErrorMessage(error),
+    );
   }
 }
 
@@ -202,7 +211,7 @@ export async function sendTopicPushNotification({
  */
 export async function subscribeToTopic(
   tokens: string[],
-  topic: string
+  topic: string,
 ): Promise<void> {
   try {
     const response = await admin.messaging().subscribeToTopic(tokens, topic);
@@ -217,10 +226,12 @@ export async function subscribeToTopic(
  */
 export async function unsubscribeFromTopic(
   tokens: string[],
-  topic: string
+  topic: string,
 ): Promise<void> {
   try {
-    const response = await admin.messaging().unsubscribeFromTopic(tokens, topic);
+    const response = await admin
+      .messaging()
+      .unsubscribeFromTopic(tokens, topic);
     console.log(`✅ Successfully unsubscribed from topic ${topic}:`, response);
   } catch (error) {
     console.error("❌ Error unsubscribing from topic:", getErrorMessage(error));

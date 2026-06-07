@@ -1,244 +1,4 @@
-// /**
-//  * Service layer for Admin authentication operations.
-//  * Handles admin creation by super admins and login.
-//  */
-// import bcrypt from "bcrypt";
-// import httpStatus from "http-status";
-// import { AppError } from "@/utils/appError";
-// import prisma from "@/prisma-client/prismaClient";
-// import { generateAuthToken } from "@/utils/authToken";
-// import { getErrorMessage } from "@/utils/errorHandler";
-// import { sendOtp, verifyOtp } from "@/utils/otpService";
-// import { User, UserRole } from "@/generated/prisma/client";
-// import {
-//   AdminForgotPasswordDto,
-//   AdminLoginDto,
-//   AdminResetPasswordDto,
-//   CreateAdminDto,
-// } from "@/modules/auth/admin/admin.dto";
 
-// const SALT_ROUNDS = 10;
-
-// /**
-//  * Create admin by super admin only
-//  */
-// export async function createAdmin(
-//   data: CreateAdminDto
-// ): Promise<{ user: Omit<User, "passwordHash"> }> {
-//   try {
-//     // Check if email or phone already exists
-//     const existingUser = await prisma.user.findFirst({
-//       where: {
-//         OR: [{ email: data.email }, { phone: data.phone }],
-//       },
-//     });
-
-//     if (existingUser) {
-//       throw new Error(
-//         existingUser.email === data.email
-//           ? "Email already registered"
-//           : "Phone number already registered"
-//       );
-//     }
-
-//     const passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS);
-
-//     const user = await prisma.user.create({
-//       data: {
-//         email: data.email,
-//         phone: data.phone,
-//         name: data.name,
-//         address: data.address || [],
-//         passwordHash,
-//         role: "ADMIN",
-//         status: "ACTIVE",
-//         admin: { create: {} },
-//       },
-//     });
-
-//     const { passwordHash: _, ...userData } = user;
-//     return { user: userData };
-//   } catch (error) {
-//     throw new Error(`Failed to create admin: ${getErrorMessage(error)}`);
-//   }
-// }
-
-// /**
-//  * login admin/superAdmin through email/phone with password.
-//  */
-// export async function loginAdmin(
-//   data: AdminLoginDto
-// ): Promise<{ token: string; user: Omit<User, "passwordHash"> }> {
-//   try {
-//     // Validate input
-//     if (!data.password) throw new Error("Password is required");
-//     if (!data.email && !data.phone) {
-//       throw new Error("Email or phone is required");
-//     }
-
-//     // Determine identifier
-//     const identifier = data.email
-//       ? { email: data.email }
-//       : { phone: data.phone! };
-
-//     // Find user
-//     const user = await prisma.user.findUnique({
-//       where: identifier,
-//       include: { admin: true },
-//     });
-
-//     // Validate user
-//     if (!user) throw new Error("Invalid credentials");
-//     if (!user.passwordHash) throw new Error("Password not set yet");
-//     if (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") {
-//       throw new Error("Invalid credentials");
-//     }
-//     const { passwordHash: _, ...userData } = user;
-//     // Verify password
-//     const isValid = await bcrypt.compare(data.password, user.passwordHash);
-//     if (!isValid) throw new Error("Invalid credentials");
-
-//     // Generate token
-//     return generateAuthToken(userData);
-//   } catch (error) {
-//     throw new Error(`Failed to login admin: ${getErrorMessage(error)}`);
-//   }
-// }
-
-// /**
-//  *
-//  */
-// export const adminForgotPassword = async (
-//   phone: AdminForgotPasswordDto["body"]["phone"]
-// ) => {
-//   // check user exits or not
-//   const user = await prisma.user.findUnique({
-//     where: { phone: phone },
-//     select: { userId: true },
-//   });
-//   if (!user) {
-//     throw new AppError("User not found", httpStatus.NOT_FOUND);
-//   }
-//   // send otp via sms
-//   const res = await sendOtp(phone);
-//   return res.otp; // TODO: Need to remove this line when in production
-// };
-
-// /**
-//  * Resets an admin's password using a valid OTP sent to their phone.
-//  * @throws {AppError} If the OTP is invalid or has expired
-//  * @throws {AppError} If the user is not found
-//  */
-// export const adminResetPassword = async (
-//   bodyData: AdminResetPasswordDto["body"]
-// ) => {
-//   const { otp, phone, password } = bodyData;
-//   const now = new Date();
-//   // Check OTP exits or not
-//   const otpRecord = await prisma.otp.findFirst({
-//     where: { phone, expiresAt: { gt: now } },
-//     orderBy: { createdAt: "desc" },
-//   });
-
-//   if (!otpRecord) {
-//     throw new AppError("Your OTP is not valid", httpStatus.UNAUTHORIZED);
-//   }
-//   // Check is OTP valid or not
-//   const isValidOtp = await verifyOtp(phone, otp);
-//   if (!isValidOtp) {
-//     throw new AppError("Your OTP is not valid", httpStatus.UNAUTHORIZED);
-//   }
-
-//   // Check user exits or not
-//   const user = await prisma.user.findUnique({
-//     where: { phone: phone },
-//     select: { userId: true, role: true, passwordHash: true },
-//   });
-
-//   if (!user) {
-//     throw new AppError("User not found", httpStatus.NOT_FOUND);
-//   }
-//   // Check user role is ADMIN | SUPER_ADMIN | SUPPORT
-//   const validRoles: UserRole[] = [
-//     UserRole.ADMIN,
-//     UserRole.SUPER_ADMIN,
-//     UserRole.SUPPORT,
-//   ];
-//   if (!validRoles.includes(user.role)) {
-//     throw new AppError("You are not permitted", httpStatus.UNAUTHORIZED);
-//   }
-//   // Check user current password is same as new password
-//   const isValidPassword = await bcrypt.compare(password, user.passwordHash!);
-//   if (isValidPassword) {
-//     throw new AppError(
-//       "New password cannot be the same as the current password",
-//       httpStatus.BAD_REQUEST
-//     );
-//   }
-//   // Update password
-//   const SALT_ROUNDS = 10;
-//   await prisma.otp.deleteMany({
-//     where: { phone: phone },
-//   });
-//   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
-//   await prisma.user.update({
-//     where: { phone: phone },
-//     data: { passwordHash },
-//   });
-//   // Delete all OTP records for the user
-//   await prisma.otp.deleteMany({
-//     where: { phone: phone },
-//   });
-// };
-// /**
-//  * Delete an admin by ID
-//  * @param adminId The ID of the admin to delete
-//  * @param requestingUserId The ID of the superAdmin making the request
-//  * @throws Error if admin not found or if trying to delete self
-//  */
-// export const deleteAdmin = async (
-//   adminId: bigint,
-//   requestingUserId?: string
-// ): Promise<User> => {
-//   try {
-//     // Prevent self-deletion
-//     if (requestingUserId && BigInt(requestingUserId) === adminId) {
-//       throw new Error("SuperAdmin cannot delete themselves");
-//     }
-
-//     return await prisma.$transaction(async (prisma) => {
-//       // Verify admin exists and is not a superAdmin
-//       const adminToDelete = await prisma.user.findUnique({
-//         where: { userId: Number(adminId) },
-//         include: { admin: true },
-//       });
-
-//       if (!adminToDelete) {
-//         throw new Error("Admin not found");
-//       }
-
-//       if (adminToDelete.role === "SUPER_ADMIN") {
-//         throw new Error("Cannot delete a superAdmin");
-//       }
-
-//       // Delete the admin record first if it exists
-//       if (adminToDelete.admin) {
-//         await prisma.admin.delete({
-//           where: { userId: Number(adminId) },
-//         });
-//       }
-
-//       // Then delete the user
-//       return await prisma.user.delete({
-//         where: { userId: Number(adminId) },
-//       });
-//     });
-//   } catch (error) {
-//     throw new Error(`Error deleting admin: ${getErrorMessage(error)}`);
-//   }
-// };
-
-// -------------------------------- 22222222222222222222222222222222222 -------------------------------
 // src/modules/auth/admin/admin.service.ts
 /**
  * Service layer for Admin authentication operations.
@@ -259,7 +19,11 @@ import {
   AdminForgotPasswordDto,
   AdminLoginDto,
   AdminResetPasswordDto,
+  ChangePasswordDto,
   CreateAdminDto,
+  RequestOtpDto,
+  UpdateAdminDto,
+  VerifyAdminOtpDto,
 } from "@/modules/auth/admin/admin.dto";
 
 // ---------------------------------------------------------------------------
@@ -284,6 +48,233 @@ const OTP_RESEND_COOLDOWN_SECONDS = 60;
 // ---------------------------------------------------------------------------
 // OTP Helpers (private)
 // ---------------------------------------------------------------------------
+
+// Copy OTP helper functions from customer.service.ts
+// (generateOtp, computeExpiryTime, buildOtpMessage, getSmsConfig, normalizePhone, sendSms)
+
+// ... paste all OTP helper functions here ...
+
+/**
+ * Step 1: Super admin initiates admin creation
+ * Creates pending admin and sends OTP for verification
+ */
+export async function createAdmin(
+  data: CreateAdminDto,
+): Promise<{ expiresAt: Date; otp?: string }> {
+  try {
+    // Check if phone already exists
+    const existingUser = await prisma.user.findUnique({
+      where: { phone: data.phone },
+    });
+
+    if (existingUser) {
+      throw new Error("Phone number already registered.");
+    }
+
+    // Check if email exists (if provided)
+    if (data.email) {
+      const existingEmail = await prisma.user.findUnique({
+        where: { email: data.email },
+      });
+      if (existingEmail) {
+        throw new Error("Email already registered.");
+      }
+    }
+
+    // Create user with PENDING status (no password yet)
+    await prisma.user.create({
+      data: {
+        phone: data.phone,
+        name: data.name,
+        email: data.email,
+        address: data.address || [],
+        role: "ADMIN",
+        status: "PENDING", // Will be ACTIVE after OTP verification
+        admin: { create: {} },
+      },
+    });
+
+    logger.info(`[Admin] Pending admin created: ${data.phone}`);
+
+    // Send OTP for verification
+    const { expiresAt, otp } = await processAndSendOtp(data.phone);
+
+    return { expiresAt, otp };
+  } catch (error) {
+    throw new Error(`Failed to create admin: ${getErrorMessage(error)}`);
+  }
+}
+
+/**
+ * Step 2: Verify OTP and set password to complete admin registration
+ */
+export async function verifyAdminOtp(
+  data: VerifyAdminOtpDto,
+): Promise<{ token: string; user: Omit<User, "passwordHash"> }> {
+  // Verify OTP
+  await validateOtp(data.phone, data.otp);
+
+  // Find the pending admin
+  const user = await prisma.user.findUnique({
+    where: { phone: data.phone },
+    include: { admin: true },
+  });
+
+  if (!user || (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN")) {
+    throw new Error("Admin not found.");
+  }
+
+  // Hash password and activate account
+  const passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS);
+
+  const updatedUser = await prisma.user.update({
+    where: { phone: data.phone },
+    data: {
+      passwordHash,
+      status: "ACTIVE",
+    },
+    include: { admin: true },
+  });
+
+  logger.info(`[Admin] Account activated: ${data.phone}`);
+
+  // Issue JWT token
+  return generateAuthToken(updatedUser);
+}
+
+/**
+ * Update admin profile (by admin themselves or super admin)
+ */
+export async function updateAdminProfile(
+  adminId: bigint,
+  data: UpdateAdminDto,
+  requestingUserId?: bigint,
+): Promise<Omit<User, "passwordHash">> {
+  try {
+    // Verify admin exists
+    const admin = await prisma.user.findUnique({
+      where: { userId: adminId },
+      include: { admin: true },
+    });
+
+    if (!admin || !admin.admin) {
+      throw new Error("Admin not found.");
+    }
+
+    // Build update payload
+    const updateData: {
+      name?: string;
+      email?: string;
+      address?: string[];
+      phone?: string;
+      updatedAt: Date;
+    } = {
+      updatedAt: new Date(),
+    };
+
+    if (data.name) updateData.name = data.name;
+    if (data.email) updateData.email = data.email;
+    if (data.address) updateData.address = data.address;
+
+    // Phone change requires super admin permission
+    if (data.phone) {
+      if (requestingUserId && requestingUserId !== adminId) {
+        const requestingUser = await prisma.user.findUnique({
+          where: { userId: requestingUserId },
+        });
+        if (requestingUser?.role !== "SUPER_ADMIN") {
+          throw new Error("Only super admin can change phone numbers.");
+        }
+      }
+      updateData.phone = data.phone;
+    }
+
+    const hasUpdates = Object.keys(updateData).some(
+      (key) =>
+        key !== "updatedAt" &&
+        updateData[key as keyof typeof updateData] !== undefined,
+    );
+
+    if (!hasUpdates) {
+      throw new Error("No valid fields provided for update.");
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { userId: adminId },
+      data: updateData,
+    });
+
+    const { passwordHash, ...userData } = updatedUser;
+    return userData;
+  } catch (error) {
+    throw new Error(`Failed to update admin: ${getErrorMessage(error)}`);
+  }
+}
+
+/**
+ * Request OTP for password change
+ */
+export async function requestPasswordChangeOtp(
+  data: RequestOtpDto,
+): Promise<{ expiresAt: Date; otp?: string }> {
+  // Verify user exists
+  const user = await prisma.user.findUnique({
+    where: { phone: data.phone },
+  });
+
+  if (!user || (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN")) {
+    throw new Error("Admin not found.");
+  }
+
+  // Send OTP
+  const { expiresAt, otp } = await processAndSendOtp(data.phone);
+
+  logger.info(`[Admin] Password change OTP sent to ${data.phone}`);
+
+  return { expiresAt, otp };
+}
+
+/**
+ * Change password with OTP verification
+ */
+export async function changeAdminPassword(
+  data: ChangePasswordDto,
+): Promise<void> {
+  // Verify OTP
+  await validateOtp(data.phone, data.otp);
+
+  // Find admin
+  const user = await prisma.user.findUnique({
+    where: { phone: data.phone },
+  });
+
+  if (!user || (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN")) {
+    throw new Error("Admin not found.");
+  }
+
+  // Verify current password is different from new password
+  if (user.passwordHash) {
+    const isSamePassword = await bcrypt.compare(
+      data.newPassword,
+      user.passwordHash,
+    );
+    if (isSamePassword) {
+      throw new Error(
+        "New password cannot be the same as the current password.",
+      );
+    }
+  }
+
+  // Hash and update password
+  const passwordHash = await bcrypt.hash(data.newPassword, SALT_ROUNDS);
+
+  await prisma.user.update({
+    where: { phone: data.phone },
+    data: { passwordHash },
+  });
+
+  logger.info(`[Admin] Password changed successfully for ${data.phone}`);
+}
 
 /**
  * Generates a cryptographically secure numeric OTP.
@@ -550,46 +541,46 @@ async function validateOtp(phone: string, otp: string): Promise<boolean> {
  * @returns Created user object without passwordHash
  * @throws Error if email or phone already registered
  */
-export async function createAdmin(
-  data: CreateAdminDto,
-): Promise<{ user: Omit<User, "passwordHash"> }> {
-  try {
-    // Check if email or phone already exists
-    const existingUser = await prisma.user.findFirst({
-      where: {
-        OR: [{ email: data.email }, { phone: data.phone }],
-      },
-    });
+// export async function createAdmin(
+//   data: CreateAdminDto,
+// ): Promise<{ user: Omit<User, "passwordHash"> }> {
+//   try {
+//     // Check if email or phone already exists
+//     const existingUser = await prisma.user.findFirst({
+//       where: {
+//         OR: [{ email: data.email }, { phone: data.phone }],
+//       },
+//     });
 
-    if (existingUser) {
-      throw new Error(
-        existingUser.email === data.email
-          ? "Email already registered."
-          : "Phone number already registered.",
-      );
-    }
+//     if (existingUser) {
+//       throw new Error(
+//         existingUser.email === data.email
+//           ? "Email already registered."
+//           : "Phone number already registered.",
+//       );
+//     }
 
-    const passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS);
+//     const passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS);
 
-    const user = await prisma.user.create({
-      data: {
-        email: data.email,
-        phone: data.phone,
-        name: data.name,
-        address: data.address || [],
-        passwordHash,
-        role: "ADMIN",
-        status: "ACTIVE",
-        admin: { create: {} },
-      },
-    });
+//     const user = await prisma.user.create({
+//       data: {
+//         email: data.email,
+//         phone: data.phone,
+//         name: data.name,
+//         address: data.address || [],
+//         passwordHash,
+//         role: "ADMIN",
+//         status: "ACTIVE",
+//         admin: { create: {} },
+//       },
+//     });
 
-    const { passwordHash: _, ...userData } = user;
-    return { user: userData };
-  } catch (error) {
-    throw new Error(`Failed to create admin: ${getErrorMessage(error)}`);
-  }
-}
+//     const { passwordHash: _, ...userData } = user;
+//     return { user: userData };
+//   } catch (error) {
+//     throw new Error(`Failed to create admin: ${getErrorMessage(error)}`);
+//   }
+// }
 
 // ---------------------------------------------------------------------------
 // Admin Login

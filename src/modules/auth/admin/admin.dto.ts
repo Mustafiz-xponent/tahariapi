@@ -1,40 +1,163 @@
-/**
- * Data Transfer Objects (DTOs) for Admin authentication
- * Defines the expected shape of data for admin authentication operations.
- */
+// /**
+//  * Data Transfer Objects (DTOs) for Admin authentication
+//  * Defines the expected shape of data for admin authentication operations.
+//  */
+// import { z } from "zod";
+
+// const bangladeshPhoneValidator = z
+//   .string()
+//   .regex(
+//     /^\+8801[3-9]\d{8}$/,
+//     "Must be a valid Bangladeshi phone number (+8801XXXXXXXXX)"
+//   );
+
+// /**
+//  * Zod schema for creating an admin by super admin.
+//  */
+// export const zCreateAdminDto = z.object({
+//   email: z.string().email(),
+//   phone: bangladeshPhoneValidator,
+//   password: z
+//     .string()
+//     .min(6, "Password must be at least 6 characters")
+//     .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+//     .regex(/[a-z]/, "Must contain at least one lowercase letter")
+//     .regex(/[0-9]/, "Must contain at least one number"),
+//   name: z.string().min(2, "Name must be at least 2 characters"),
+//   address: z.string().array().optional(),
+// });
+
+// /**
+//  * TypeScript type inferred from create schema.
+//  */
+// export type CreateAdminDto = z.infer<typeof zCreateAdminDto>;
+
+// /**
+//  * Zod schema for admin email/password login.
+//  */
+// export const zAdminLoginDto = z
+//   .object({
+//     email: z.string().email().optional(),
+//     phone: bangladeshPhoneValidator.optional(),
+//     password: z.string().optional(),
+//   })
+//   .refine((data) => (data.email || data.phone) && data.password, {
+//     message: "Must provide email/phone with password",
+//   });
+// export type AdminLoginDto = z.infer<typeof zAdminLoginDto>;
+
+// export const zAdminOtpRequestDto = z.object({
+//   phone: bangladeshPhoneValidator,
+// });
+
+// /**
+//  * TypeScript type inferred from login schema.
+//  */
+// export type AdminOtpRequestDto = z.infer<typeof zAdminOtpRequestDto>;
+
+// /**
+//  * Forgot password schema
+//  */
+// export const zAdminForgotPasswordDto = {
+//   body: z.object({ phone: bangladeshPhoneValidator }),
+// };
+
+// type AdminForgotPasswordBodyDto = z.infer<typeof zAdminForgotPasswordDto.body>;
+// // combined type for usage / services or elsewhere
+// export type AdminForgotPasswordDto = {
+//   body: AdminForgotPasswordBodyDto;
+// };
+
+// /**
+//  * Reset password schema
+//  */
+// export const zAdminResetPasswordDto = {
+//   body: z.object({
+//     otp: z.string().length(6, "OTP must be 6 digits"),
+//     phone: bangladeshPhoneValidator,
+//     password: z
+//       .string()
+//       .min(6, "Password must be at least 6 characters")
+//       .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+//       .regex(/[a-z]/, "Must contain at least one lowercase letter")
+//       .regex(/[0-9]/, "Must contain at least one number"),
+//   }),
+// };
+
+// type AdminResetPasswordBodyDto = z.infer<typeof zAdminResetPasswordDto.body>;
+// // combined type for usage / services or elsewhere
+// export type AdminResetPasswordDto = {
+//   body: AdminResetPasswordBodyDto;
+// };
+
+// ------------------------------ 22222222222222222222222222 -----------------------------
 import { z } from "zod";
 
 const bangladeshPhoneValidator = z
   .string()
   .regex(
     /^\+8801[3-9]\d{8}$/,
-    "Must be a valid Bangladeshi phone number (+8801XXXXXXXXX)"
+    "Must be a valid Bangladeshi phone number (+8801XXXXXXXXX)",
   );
 
 /**
- * Zod schema for creating an admin by super admin.
+ * Create admin by super admin - now only requires phone
  */
 export const zCreateAdminDto = z.object({
-  email: z.string().email(),
   phone: bangladeshPhoneValidator,
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email().optional(),
+  address: z.string().array().optional(),
+});
+
+export type CreateAdminDto = z.infer<typeof zCreateAdminDto>;
+
+/**
+ * Verify OTP and complete admin registration
+ */
+export const zVerifyAdminOtpDto = z.object({
+  phone: bangladeshPhoneValidator,
+  otp: z.string().length(6, "OTP must be 6 digits"),
   password: z
     .string()
     .min(6, "Password must be at least 6 characters")
     .regex(/[A-Z]/, "Must contain at least one uppercase letter")
     .regex(/[a-z]/, "Must contain at least one lowercase letter")
     .regex(/[0-9]/, "Must contain at least one number"),
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  address: z.string().array().optional(),
 });
 
-/**
- * TypeScript type inferred from create schema.
- */
-export type CreateAdminDto = z.infer<typeof zCreateAdminDto>;
+export type VerifyAdminOtpDto = z.infer<typeof zVerifyAdminOtpDto>;
 
 /**
- * Zod schema for admin email/password login.
+ * Update admin profile
  */
+export const zUpdateAdminDto = z.object({
+  name: z.string().min(2).optional(),
+  email: z.string().email().optional(),
+  address: z.string().array().optional(),
+  phone: bangladeshPhoneValidator.optional(),
+});
+
+export type UpdateAdminDto = z.infer<typeof zUpdateAdminDto>;
+
+/**
+ * Change password with OTP verification
+ */
+export const zChangePasswordDto = z.object({
+  phone: bangladeshPhoneValidator,
+  otp: z.string().length(6, "OTP must be 6 digits"),
+  currentPassword: z.string().optional(), // Optional for OTP-based change
+  newPassword: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Must contain at least one number"),
+});
+
+export type ChangePasswordDto = z.infer<typeof zChangePasswordDto>;
+
+// Keep existing login/forgot/reset DTOs
 export const zAdminLoginDto = z
   .object({
     email: z.string().email().optional(),
@@ -44,33 +167,17 @@ export const zAdminLoginDto = z
   .refine((data) => (data.email || data.phone) && data.password, {
     message: "Must provide email/phone with password",
   });
+
 export type AdminLoginDto = z.infer<typeof zAdminLoginDto>;
 
-export const zAdminOtpRequestDto = z.object({
-  phone: bangladeshPhoneValidator,
-});
-
-/**
- * TypeScript type inferred from login schema.
- */
-export type AdminOtpRequestDto = z.infer<typeof zAdminOtpRequestDto>;
-
-/**
- * Forgot password schema
- */
 export const zAdminForgotPasswordDto = {
   body: z.object({ phone: bangladeshPhoneValidator }),
 };
 
-type AdminForgotPasswordBodyDto = z.infer<typeof zAdminForgotPasswordDto.body>;
-// combined type for usage / services or elsewhere
 export type AdminForgotPasswordDto = {
-  body: AdminForgotPasswordBodyDto;
+  body: z.infer<typeof zAdminForgotPasswordDto.body>;
 };
 
-/**
- * Reset password schema
- */
 export const zAdminResetPasswordDto = {
   body: z.object({
     otp: z.string().length(6, "OTP must be 6 digits"),
@@ -84,8 +191,15 @@ export const zAdminResetPasswordDto = {
   }),
 };
 
-type AdminResetPasswordBodyDto = z.infer<typeof zAdminResetPasswordDto.body>;
-// combined type for usage / services or elsewhere
 export type AdminResetPasswordDto = {
-  body: AdminResetPasswordBodyDto;
+  body: z.infer<typeof zAdminResetPasswordDto.body>;
 };
+
+/**
+ * Request OTP for various operations
+ */
+export const zRequestOtpDto = z.object({
+  phone: bangladeshPhoneValidator,
+});
+
+export type RequestOtpDto = z.infer<typeof zRequestOtpDto>;

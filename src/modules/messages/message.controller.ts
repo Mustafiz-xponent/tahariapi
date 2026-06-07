@@ -19,7 +19,7 @@ const messageIdSchema = z.coerce.bigint().refine((val) => val > 0n, {
  */
 export const createMessage = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const data = zCreateMessageDto.parse(req.body);
@@ -49,7 +49,7 @@ export const createMessage = async (
  */
 export const getAllMessages = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
@@ -58,7 +58,7 @@ export const getAllMessages = async (
     const page = Math.max(parseInt(req.query.page as string) || 1, 1);
     const limit = Math.min(
       Math.max(parseInt(req.query.limit as string) || 10, 1),
-      100
+      100,
     ); // Max 100 items per page
     const skip = (page - 1) * limit;
     const sort = req.query.sort === "asc" ? "asc" : "desc";
@@ -68,7 +68,7 @@ export const getAllMessages = async (
       userId,
       userRole,
       paginationParams,
-      receiverId
+      receiverId,
     );
     sendResponse<Message[]>(res, {
       success: true,
@@ -101,7 +101,7 @@ export const getAllMessages = async (
  */
 export const getMessageById = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const messageId = messageIdSchema.parse(req.params.id);
@@ -134,7 +134,7 @@ export const getMessageById = async (
  */
 export const updateMessage = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const messageId = req.params.id;
@@ -146,7 +146,7 @@ export const updateMessage = async (
       BigInt(messageId),
       message,
       userId,
-      userRole
+      userRole,
     );
     sendResponse<Message>(res, {
       success: true,
@@ -168,7 +168,7 @@ export const updateMessage = async (
  */
 export const deleteMessage = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const messageId = req.params.id;
@@ -192,7 +192,7 @@ export const deleteMessage = async (
 
 export const sendMessage = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { message, receiverId } = req.body;
@@ -225,7 +225,7 @@ export const sendMessage = async (
  */
 export const markMessageAsRead = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const userId = req.user?.userId;
@@ -247,6 +247,34 @@ export const markMessageAsRead = async (
       success: false,
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       message: "Failed to mark message as read",
+    });
+  }
+};
+
+/**
+ * Get total unread message count
+ */
+export const getTotalUnreadCount = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const userId = req.user?.userId;
+    const userRole = req.user?.role;
+
+    const count = await messageService.getTotalUnreadCount(userId, userRole);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Unread count fetched successfully",
+      data: { unreadCount: count },
+    });
+  } catch (error) {
+    sendResponse(res, {
+      success: false,
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      message: "Failed to fetch unread count",
     });
   }
 };

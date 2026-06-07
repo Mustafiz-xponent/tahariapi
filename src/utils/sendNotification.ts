@@ -1,39 +1,3 @@
-// import { getOnlineAdminSupportSockets, getSocketId, io } from "@/utils/socket";
-// import { NotificationType } from "@/generated/prisma/client";
-// import prisma from "@/prisma-client/prismaClient";
-// import { Prisma } from "@prisma/client";
-
-// export const sendNotification = async (
-//   message: string,
-//   type: NotificationType,
-//   notify: "CUSTOMER" | "ADMIN_SUPPORT",
-//   receiverId?: bigint | null,
-//   tx?: Prisma.TransactionClient
-// ) => {
-//   // pick transaction client if provided, otherwise use prisma
-//   const db = tx ?? prisma;
-//   const notification = await db.notification.create({
-//     data: {
-//       message: message.replace(/\s+/g, " ").trim(),
-//       receiverId: receiverId ? receiverId : null,
-//       type,
-//     },
-//   });
-//   if (notify === "CUSTOMER") {
-//     const receiverSocketId = getSocketId(String(receiverId));
-//     if (receiverSocketId) {
-//       io.to(receiverSocketId).emit("newNotification", notification);
-//     }
-//   }
-
-//   if (notify === "ADMIN_SUPPORT") {
-//     getOnlineAdminSupportSockets().forEach((socketId) => {
-//       io.to(socketId).emit("newNotification", notification);
-//     });
-//   }
-// };
-
-// ----------------------------- 222222222222 ------------
 import { getOnlineAdminSupportSockets, getSocketId, io } from "@/utils/socket";
 import { Prisma } from "@/generated/prisma/client";
 import { getErrorMessage } from "@/utils/errorHandler";
@@ -157,10 +121,10 @@ function getPushNotificationTitle(type: NotificationType): string {
     SUBSCRIPTION: "🔔 Subscription Update",
     INVENTORY: "📊 Inventory Alert",
     PROMOTION: "🎉 Special Offer",
-    SYSTEM_ALERT: "🔔 Tohori Foods",
+    SYSTEM_ALERT: "🔔 Tahari Foods",
     REFUND: "💸 Refund Processed",
   };
-  return titles[type] || "🔔 Tohori Foods";
+  return titles[type] || "🔔 Tahari Foods";
 }
 
 /**

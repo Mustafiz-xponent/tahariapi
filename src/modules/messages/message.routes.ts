@@ -31,7 +31,7 @@ router.put(
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.CUSTOMER),
   validator(zUpdateMessageDto),
-  MessageController.updateMessage
+  MessageController.updateMessage,
 );
 
 // Route to delete a message
@@ -40,7 +40,7 @@ router.delete(
   authMiddleware,
   authorizeRoles(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.CUSTOMER),
   validator(zDeleteMessageDto),
-  MessageController.deleteMessage
+  MessageController.deleteMessage,
 );
 
 // Route to send message
@@ -48,14 +48,21 @@ router.post(
   "/send",
   authMiddleware,
   validator(zSendMessageDto),
-  MessageController.sendMessage
+  MessageController.sendMessage,
 );
 // Route to mark message as read
 router.patch(
   "/read",
   authMiddleware,
   validator(zMarkMessageAsReadDto),
-  MessageController.markMessageAsRead
+  MessageController.markMessageAsRead,
+);
+
+// Add BEFORE other routes
+router.get(
+  "/unread-count",
+  authMiddleware,
+  MessageController.getTotalUnreadCount,
 );
 
 export default router;
